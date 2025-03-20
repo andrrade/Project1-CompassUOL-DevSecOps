@@ -120,6 +120,6 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 <p align="center">
   <br>
-  <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="350">
+  <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
 
