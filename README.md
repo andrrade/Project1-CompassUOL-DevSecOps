@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/projeto-logo.png" alt="Projeto Logo" width="600">
+</p>
+<br>
+
 # Documentação do Projeto DevSecOps ☁️
 
 ## Ferramentas Úteis
