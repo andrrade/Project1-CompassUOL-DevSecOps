@@ -3,7 +3,7 @@
 </p>
 <br>
 
-# Documentação do Projeto DevSecOps ☁️
+# Documentação do Projeto DevSecOps ♾️
 
 ## Ferramentas Úteis
 
@@ -30,7 +30,7 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 ---
 
-# Etapa 1: Configuração do Ambiente
+# Etapa 1: Configuração do Ambiente ☁️
 
 ## 1. Criar VPC
 A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde serão configurados os recursos do projeto.
@@ -121,7 +121,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-# Etapa 2: Configuração do Servidor Web
+# Etapa 2: Configuração do Servidor Web ☁️
 
 <p align="center">
   <br>
