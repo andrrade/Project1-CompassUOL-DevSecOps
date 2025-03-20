@@ -112,12 +112,14 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 9. O preview final ficará assim:
    
-   ![image1](assets/img8.png)
+   ![image8](assets/img8.png)
 
 ---
 
 # Etapa 2: Configuração do Servidor Web
 
 <p align="center">
+  <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="350">
 </p>
+
