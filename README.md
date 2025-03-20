@@ -3,7 +3,7 @@
 ## Ferramentas Úteis
 
 ### ZoomIt da Microsoft para Prints de Tela com Setas
-Para capturar telas com anotações, utilizamos o ZoomIt da Microsoft.
+Para capturar telas com anotações, utilizei o ZoomIt da Microsoft.
 
 - Documentação e instalação do ZoomIt: [ZoomIt - Sysinternals | Microsoft Learn](https://learn.microsoft.com/pt-br/sysinternals/downloads/zoomit)
 
@@ -32,31 +32,33 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ### Passos para criação:
 
-1. No console da tela inicial da AWS, vá até a lupa e pesquise por "VPC".
+1. No console da tela inicial da AWS, vá até a lupa e pesquise por "VPC" e clique em "Your VPCs".
+
    ![image1](assets/img1.png)
 
 2. Irá abrir a página de gerenciamento de VPCs. Clique em **"Create VPC"**.
    
-   ![image1](assets/img2.png)
+   ![image2](assets/img2.png)
 
-3. Nas configurações, selecione **"VPC and more"**.
+3. Nas configurações:
+   - Selecione **"VPC and more"**.
+   > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
    - Marque "Auto-generate"
+   > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
    - Defina um nome para sua VPC (exemplo: "project")
    - Defina o **IPv4 CIDR block** como **10.0.0.0/16**
-   
+   > 
    > **O que é IPv4 CIDR block?**
    > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
    
-   ![image1](assets/img3.png)
+   ![image3](assets/img3.png)
 
-4. Configure as seguintes opções:
-   - **IPv6 CIDR block**: "No IPv6 CIDR block"
-   
+4. Nas configurações:
+   - Selecione **No IPv6 CIDR block**
    > **O que é IPv6 CIDR block?**
-   > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optamos por não utilizar IPv6.
+   > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
    
    - **Tenancy**: "Default"
-   
    > **O que é Tenancy?**
    > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
    
@@ -65,23 +67,23 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    
    > **O que são Availability Zones (AZs)?**
    > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
-   
-   ![image1](assets/img4.png)
 
-5. Como o projeto exige, configure **duas subnets públicas e duas privadas**.
+   ![image4](assets/img4.png)
+
+5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
    
    > **O que são subnets públicas e privadas?**
    > - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
    > - **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
    
-   ![image1](assets/img5.png)
+   ![image5](assets/img5.png)
 
 6. Configure o CIDR block das subnets como **10.0.0.0/20**.
    
    > **O que significa CIDR block das subnets como 10.0.0.0/20?**
    > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
    
-   ![image1](assets/img6.png)
+   ![image6](assets/img6.png)
 
 7. Configure as opções adicionais:
    - **NAT Gateways ($):** "None"
@@ -114,5 +116,8 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-A próxima etapa será a configuração das tabelas de roteamento e internet gateway.
+# Etapa 2: Configuração do Servidor Web
 
+<p align="center">
+  <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="350">
+</p>
