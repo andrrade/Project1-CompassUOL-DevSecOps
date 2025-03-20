@@ -5,14 +5,14 @@
 
 # Documentação do 1º Projeto - DevSecOps ♾️
 
-## Ferramentas Úteis 🔧 
+## 🔧 Ferramentas Úteis  
 
 ### ZoomIt da Microsoft para Prints de Tela com Setas
 Para capturar telas com anotações, utilizei o ZoomIt da Microsoft.
 
 - Documentação e instalação do ZoomIt: [ZoomIt - Sysinternals | Microsoft Learn](https://learn.microsoft.com/pt-br/sysinternals/downloads/zoomit)
 
-## Pré-Requisitos 📌
+## 📌 Pré-Requisitos 
 Antes de iniciar a configuração, certifique-se de que possui os seguintes requisitos atendidos:
 
 - **Conta ativa na AWS**
