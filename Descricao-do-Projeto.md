@@ -23,6 +23,7 @@ Etapa 4: Testes e Documentação
 - Testar a implementação.
 - Fazer a documentação explicando o processo de instalação do Linux no Github.
 * Cuidado com dados que podem comprometer a segurança.
+
 Desafios Bônus:
 - A configuração da EC2 com o Nginx, página html e scripts de monitoramento são 
 injetados automaticamente via User Data, para inicializarem junto com a máquina.
