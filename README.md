@@ -39,11 +39,11 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 1. No console da tela inicial da AWS, vá até a lupa e pesquise por "VPC" e clique em "Your VPCs".
 
-   ![image1](assets/img1.png)
+   ![image01](assets/img01.png)
 
 2. Irá abrir a página de gerenciamento de VPCs. Clique em **"Create VPC"**.
    
-   ![image2](assets/img2.png)
+   ![image02](assets/img02.png)
 
 3. Nas configurações:
    - Selecione **"VPC and more"**.
@@ -56,7 +56,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    > **O que é IPv4 CIDR block?**
    > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
    
-   ![image3](assets/img3.png)
+   ![image03](assets/img03.png)
 
 4. Nas configurações:
    - Selecione **No IPv6 CIDR block**
@@ -73,7 +73,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    > **O que são Availability Zones (AZs)?**
    > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
 
-   ![image4](assets/img4.png)
+   ![image04](assets/img04.png)
 
 5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
    
@@ -81,14 +81,14 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    > - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
    > - **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
    
-   ![image5](assets/img5.png)
+   ![image05](assets/img05.png)
 
 6. Configure o CIDR block das subnets como **10.0.0.0/20**.
    
    > **O que significa CIDR block das subnets como 10.0.0.0/20?**
    > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
    
-   ![image6](assets/img6.png)
+   ![image06](assets/img06.png)
 
 7. Configure as opções adicionais:
    - **NAT Gateways ($):** "None"
@@ -113,13 +113,70 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    
 8. Clique em **"Create VPC"** para finalizar a configuração.
    
-   ![image1](assets/img7.png)
+   ![image07](assets/img07.png)
 
 9. O preview final ficará assim:
    
-   ![image8](assets/img8.png)
+   ![image08](assets/img08.png)
 
 ---
+
+## Criar Chave (Key pairs)
+No menu da AWS no ícone de pesquisar procure por "Key pairs" e depois clique.
+
+![image09](assets/img09.png)
+
+Clique em "Create key pair"
+
+![image10](assets/img10.png)
+
+Dê um nome para a chave, no meu exemplo foi "key-project"
+No tipo selecione "RSA"
+Selecione o formato ".pem"
+Clique em "create key pair"
+Salve a chave e lembre o local em que vc a guardou
+
+![image11](assets/img11.png)
+
+## Criar Security Group
+No menu da AWS no ícone de pesquisar procure por "security groups" e depois clique.
+
+![image12](assets/img12.png)
+
+Clique em "Create security group"
+
+![image13](assets/img13.png)
+
+Dê um nome ao security group, no meu exemplo "security-group-project"
+Dê uma descrição, no meu exemplo "teste"
+Em VPC, selecione a VPC já criada anteriormente, no meu caso "project-vpc"
+
+![image14](assets/img14.png)
+
+Em Inbound rules crie em add rule
+Nós iremos criar duas portas:
+SSH 22
+HTTP 80
+Ambas serão configuradas como MyIP
+Após tudo pronto, abriremos a porta http para 0.0.0.0, enquanto isso não é
+recomendado por causa de segurança (explique melhor)
+
+![image15](assets/img15.png)
+
+Em outbound rules em Type selecione "All traffic" e em Destination "Anywhere-IPv4"
+
+![image16](assets/img16.png)
+
+Nas Tags opcionais não adicionei nenhuma.
+Depois clique em "Create security group"
+
+![image17](assets/img17.png)
+
+TESTE1
+
+![image18](assets/img18.png)
+
+## Criar Instância EC2
 
 # Etapa 2: Configuração do Servidor Web
 
