@@ -230,7 +230,122 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 
    ![image18](assets/img18.png)
 
-## Criar Instância EC2
+---
+
+# 2. Criar Instância EC2
+
+A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem** que executará o Nginx e o script de monitoramento. Nesta seção, vamos criar uma instância utilizando o **Ubuntu Server** e configurá-la corretamente para rodar o ambiente de monitoramento.
+
+---
+
+## Passo 1: Acessar a Página de Instâncias
+
+1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
+2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
+
+   ![img19.png](assets/img19.png)
+
+---
+
+## Passo 2: Criar uma Nova Instância
+
+3. Na tela que abrir, clique em **"Launch Instances"** para iniciar o processo de criação de uma nova instância EC2.
+
+   ![img20.png](assets/img20.png)
+
+---
+
+## Passo 3: Configurar Detalhes da Instância
+
+### Tags (Opcional)
+
+> ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
+> No entanto, é **altamente recomendado** que você adicione suas próprias tags para facilitar a identificação dos recursos na AWS, especialmente em ambientes de produção.
+
+   ![img21.png](assets/img21.png)
+
+---
+
+### Passo 4: Escolher a Imagem do Sistema Operacional
+
+4. **Selecionar a AMI (Amazon Machine Image)**:  
+   - Escolha a imagem **Ubuntu Server 24.04 LTS**.
+   
+   > A **AMI (Amazon Machine Image)** é uma imagem pré-configurada que contém o sistema operacional e, opcionalmente, aplicativos necessários para iniciar a instância EC2. O **Ubuntu Server** foi escolhido devido à sua popularidade, leveza, segurança e suporte comunitário robusto. Além disso, a distribuição Ubuntu é amplamente utilizada em ambientes de produção, o que a torna uma escolha sólida para este projeto.
+
+   ![img22.png](assets/img22.png)
+
+---
+
+### Passo 5: Escolher o Tipo da Instância
+
+5. **Selecionar o Tipo de Instância**:  
+   - Escolha **t2.micro**.
+   
+   > A instância **t2.micro** é parte do **Free Tier da AWS**, permitindo que novos usuários utilizem esta instância gratuitamente por até **750 horas mensais**. Com **1 vCPU e 1 GiB de memória RAM**, essa instância é adequada para rodar um servidor web simples com Nginx e o script de monitoramento. A **família T2** também oferece **créditos de CPU burstável**, permitindo que a instância lide com picos de uso sem impactar o desempenho.
+
+   ![img24.png](assets/img24.png)
+
+---
+
+### Passo 6: Selecionar a Chave SSH
+
+6. **Selecionar a Key Pair**:  
+   - Escolha a **Key Pair** que foi criada anteriormente.  
+   - No meu caso, escolhi a chave **"key-project"**.
+   
+   > A **Key Pair** é necessária para acessar a instância via SSH. Sem essa chave, você não conseguirá realizar o login na instância.
+
+   ![img25.png](assets/img25.png)
+
+---
+
+### Passo 7: Configurar Rede (Networking)
+
+7. Em **Networking settings**, clique em **"Edit"**.
+
+8. Configure os seguintes parâmetros:
+
+   - **VPC**: Escolha a **VPC** criada anteriormente.  
+     - No meu caso, a VPC criada foi chamada **"project-vpc"**.
+   
+   - **Subnet**: Selecione a **sub-rede pública** correspondente à sua região principal.
+     > A **sub-rede pública** é fundamental, pois ela garante que sua instância EC2 tenha conectividade externa, o que é essencial para disponibilizar serviços como um servidor web acessível pela internet.
+
+     > No meu caso, a VPC foi criada nas regiões **Virgínia (us-east-1)** e **Ohio (us-east-2)**, então escolhi a sub-rede pública de Virgínia: `"public1-us-east-1a"`.
+
+   - **Auto-assign Public IP**: Marque **Enable**.
+     > Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
+
+9. Em **Firewall (Security Groups)**:
+
+   - Escolha a opção **"Select existing security group"**.
+   - Selecione o **Security Group** criado anteriormente, chamado **"security-group-project"**.
+   
+   > O **Security Group** age como um firewall virtual, controlando o tráfego de entrada e saída da instância EC2. Ele garante que apenas o tráfego autorizado, como acesso SSH, seja permitido.
+
+10. Em **Advanced networking configuration**, **não alterei nada** (deixei os valores padrão).
+
+   ![img27.png](assets/img27.png)
+
+---
+
+### Passo 8: Configurar o Armazenamento
+
+11. Em **Configure Storage**, defina o armazenamento para **1x8 GiB gp3**.
+   
+   > A **gp3** é uma opção de armazenamento sólido (SSD) com bom custo-benefício, adequada para a maioria dos casos de uso, incluindo servidores web simples.
+
+   ![img28.png](assets/img28.png)
+
+---
+
+### Passo 9: Criar a Instância
+
+12. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
+13. Aguarde alguns instantes até que a instância esteja ativa.
+
+---
 
 # Etapa 2: Configuração do Servidor Web
 
