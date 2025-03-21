@@ -28,6 +28,7 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 > **Observação:** Minha console está em inglês. Caso os nomes dos menus estejam diferentes na sua, pode ser devido ao idioma configurado.
 
+> Tudo que aparecer borrado foi para priorizar a segurança 
 ---
 
 # Etapa 1: Configuração do Ambiente ☁️
@@ -346,8 +347,117 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 # Etapa 2: Configuração do Servidor Web ☁️
 
+## Acessando a Instância EC2
+
+1. Abra o seu WSL e navegue até o diretório onde a chave de acesso (Key Pair) foi armazenada:
+
+   > Lembre-se de onde você armazenou a chave no começo
+   
+   No meu caso, foi:
+   ```sh
+   cd /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS
+   ```
+   
+2. Liste o conteúdo da pasta para confirmar que a chave está presente:
+   ```sh
+   ls
+   ```
+
+3. Copie a chave para o diretório home (usei esse diretório por ser mais fácil localizar, mas pode copiá-la para onde preferir):
+   ```sh
+   cp key-project.pem ~
+   ```
+
+4. Volte para o diretório home:
+   ```sh
+   cd
+   ```
+   Ou:
+   ```sh
+   cd ~
+   ```
+> Prefiro e utilizo o cd por ser mais rápido e dar mais agilidade
+5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
+   ```sh
+   ls
+   ```
+   ![img29.png](assets/img29.png)
+
+6. Verifique as permissões da chave:
+   ```sh
+   ls -lh key-project.pem
+   ```
+   
+   A saída inicial pode ser algo como:
+   ```
+   -rwxr-xr-x 1 root root ...
+   ```
+   > O primeiro conjunto de caracteres representa as permissões do arquivo:
+   > - `r` (read), `w` (write) e `x` (execute).
+   > - O padrão `-rwxr-xr-x` indica que o arquivo pode ser lido, escrito e executado pelo proprietário, e apenas lido e executado por outros usuários.
+
+7. Ajuste as permissões da chave para garantir segurança na conexão:
+   ```sh
+   chmod 400 key-project.pem
+   ```
+   > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
+
+8. Verifique novamente as permissões:
+   ```sh
+   ls -lh key-project.pem
+   ```
+   Saída esperada:
+   ```
+   -r-------- 1 root root ...
+   ```
+   ![img30.png](assets/img30.png)
+
+## Obtendo o Endereço IP da Instância
+
+1. Acesse o console da AWS e abra o painel de EC2.
+2. No menu lateral, clique em **Instances**.
+   ![img31.png](assets/img31.png)
+
+3. Selecione a instância criada.
+   ![img32.png](assets/img32.png)
+
+4. Na aba **Details**, copie o **Public IPv4 address**.
+   ![img33.png](assets/img33.png)
+
+## Testando a Conexão
+
+1. No WSL, teste a conexão com a porta 22 (SSH) usando telnet:
+   ```sh
+   telnet SEU_IP_AQUI 22
+   ```
+2. Se a conexão for bem-sucedida, aparecerá uma mensagem do tipo:
+   ```
+   Connected to SEU_IP_AQUI
+   ```
+3. Digite `q` e pressione **Enter** para sair.
+
+   ![img34.png](assets/img34.png)
+
+## Conectando-se à Instância via SSH
+
+1. Utilize o seguinte comando para conectar-se à instância:
+   ```sh
+   ssh -i key-project.pem ubuntu@SEU_IP_AQUI
+   ```
+2. Ao conectar pela primeira vez, digite `yes` para aceitar a chave do servidor.
+3. Se a conexão for bem-sucedida, a saída incluirá uma mensagem similar a:
+   ```
+   Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)
+   ```
+   ![img35.png](assets/img35.png)
+
 <p align="center">
   <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
 
+
+curl https://api.telegram.org/bot7726032205:AAF_Qd-xtf8wuI-vdefagsOzUbaYJy7CJ9s/getUpdates
+5740122051
+
+nano monitor_site.sh
