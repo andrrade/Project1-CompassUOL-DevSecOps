@@ -157,7 +157,6 @@ Em VPC, selecione a VPC já criada anteriormente, no meu caso "project-vpc"
 
 ![image15](assets/img15.png)
 
-
 Nós iremos criar duas portas:
 SSH 22
 HTTP 80
