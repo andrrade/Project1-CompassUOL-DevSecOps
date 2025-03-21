@@ -32,7 +32,7 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 # Etapa 1: Configuração do Ambiente ☁️
 
-## 1. Criar VPC
+## 🌐 1. Criar VPC   
 A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde serão configurados os recursos do projeto.
 
 ### Passos para criação:
@@ -121,7 +121,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-## Criar Chave (Key Pairs)  
+## 🔑 Criar Chave (Key Pairs)  
 
 As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2 com segurança via SSH. Elas consistem em:  
 - **Chave pública**: Fica armazenada na AWS e é associada à instância.  
@@ -156,7 +156,7 @@ a armazenar, pois ele será necessário para acessar a instância EC2 posteriorm
 
 ---
 
-## Criar Security Group  
+## 🔐 Criar Security Group  
 
 Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2. Eles controlam o tráfego de entrada e saída, permitindo apenas conexões autorizadas.  
 
@@ -232,7 +232,7 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 
 ---
 
-# 2. Criar Instância EC2
+# 🌐 2. Criar Instância EC2 
 
 A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem** que executará o Nginx e o script de monitoramento. Nesta seção, vamos criar uma instância utilizando o **Ubuntu Server** e configurá-la corretamente para rodar o ambiente de monitoramento.
 
@@ -336,18 +336,15 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    
    > A **gp3** é uma opção de armazenamento sólido (SSD) com bom custo-benefício, adequada para a maioria dos casos de uso, incluindo servidores web simples.
 
+12. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
+
+13. Aguarde alguns instantes até que a instância esteja ativa.
+
    ![img28.png](assets/img28.png)
 
 ---
 
-### Passo 9: Criar a Instância
-
-12. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
-13. Aguarde alguns instantes até que a instância esteja ativa.
-
----
-
-# Etapa 2: Configuração do Servidor Web
+# Etapa 2: Configuração do Servidor Web ☁️
 
 <p align="center">
   <br>
