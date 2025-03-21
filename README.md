@@ -232,7 +232,7 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 
 ---
 
-# 🌐 2. Criar Instância EC2 
+## 🌐 2. Criar Instância EC2 
 
 A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem** que executará o Nginx e o script de monitoramento. Nesta seção, vamos criar uma instância utilizando o **Ubuntu Server** e configurá-la corretamente para rodar o ambiente de monitoramento.
 
