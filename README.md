@@ -147,13 +147,17 @@ Clique em "Create security group"
 
 ![image13](assets/img13.png)
 
+Em Inbound rules crie em add rule
+
+![image14](assets/img14.png)
+
 Dê um nome ao security group, no meu exemplo "security-group-project"
 Dê uma descrição, no meu exemplo "teste"
 Em VPC, selecione a VPC já criada anteriormente, no meu caso "project-vpc"
 
-![image14](assets/img14.png)
+![image15](assets/img15.png)
 
-Em Inbound rules crie em add rule
+
 Nós iremos criar duas portas:
 SSH 22
 HTTP 80
@@ -161,18 +165,14 @@ Ambas serão configuradas como MyIP
 Após tudo pronto, abriremos a porta http para 0.0.0.0, enquanto isso não é
 recomendado por causa de segurança (explique melhor)
 
-![image15](assets/img15.png)
+![image16](assets/img16.png)
 
 Em outbound rules em Type selecione "All traffic" e em Destination "Anywhere-IPv4"
 
-![image16](assets/img16.png)
+![image17](assets/img17.png)
 
 Nas Tags opcionais não adicionei nenhuma.
 Depois clique em "Create security group"
-
-![image17](assets/img17.png)
-
-TESTE1
 
 ![image18](assets/img18.png)
 
