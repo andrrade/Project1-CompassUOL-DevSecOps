@@ -121,59 +121,114 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-## Criar Chave (Key pairs)
-No menu da AWS no ícone de pesquisar procure por "Key pairs" e depois clique.
+## Criar Chave (Key Pairs)  
 
-![image09](assets/img09.png)
+As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2 com segurança via SSH. Elas consistem em:  
+- **Chave pública**: Fica armazenada na AWS e é associada à instância.  
+- **Chave privada**: Deve ser baixada e armazenada localmente pelo usuário. Ela é necessária para autenticação SSH.  
 
-Clique em "Create key pair"
+> ⚠️ **Atenção**: Se você perder a chave privada, **não poderá acessar sua instância EC2**.  
 
-![image10](assets/img10.png)
+### Criando a Key Pair  
 
-Dê um nome para a chave, no meu exemplo foi "key-project"
-No tipo selecione "RSA"
-Selecione o formato ".pem"
-Clique em "create key pair"
-Salve a chave e lembre o local em que vc a guardou
+1. No menu da AWS, clique no ícone de pesquisa e digite **"Key Pairs"**. Em seguida, clique na opção correspondente.  
 
-![image11](assets/img11.png)
+   ![image09](assets/img09.png)
 
-## Criar Security Group
-No menu da AWS no ícone de pesquisar procure por "security groups" e depois clique.
+2. Clique em **"Create key pair"**.  
 
-![image12](assets/img12.png)
+   ![image10](assets/img10.png)
 
-Clique em "Create security group"
+3. Configure a chave com as seguintes opções:  
+   - **Nome**: Escolha um nome para a chave. No exemplo, usei `"key-project"`.  
+   - **Tipo de chave**: Selecione **"RSA"**, pois é um dos algoritmos de criptografia mais utilizados para SSH.  
+   - **Formato da chave privada**: Escolha **".pem"**. Esse formato é necessário para conexões SSH no Linux e Mac.  
 
-![image13](assets/img13.png)
+4. Clique em **"Create key pair"**.  
 
-Em Inbound rules crie em add rule
+5. O download da chave privada será feito automaticamente. 
+> ⚠️ **Guarde esse arquivo em um local seguro** e LEMBRE do lugar que você
+a armazenar, pois ele será necessário para acessar a instância EC2 posteriormente.  
 
-![image14](assets/img14.png)
+6. Não adicionei nenhuma tag
 
-Dê um nome ao security group, no meu exemplo "security-group-project"
-Dê uma descrição, no meu exemplo "teste"
-Em VPC, selecione a VPC já criada anteriormente, no meu caso "project-vpc"
+   ![image11](assets/img11.png)
 
-![image15](assets/img15.png)
+---
 
-Nós iremos criar duas portas:
-SSH 22
-HTTP 80
-Ambas serão configuradas como MyIP
-Após tudo pronto, abriremos a porta http para 0.0.0.0, enquanto isso não é
-recomendado por causa de segurança (explique melhor)
+## Criar Security Group  
 
-![image16](assets/img16.png)
+Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2. Eles controlam o tráfego de entrada e saída, permitindo apenas conexões autorizadas.  
 
-Em outbound rules em Type selecione "All traffic" e em Destination "Anywhere-IPv4"
+### Criando o Security Group  
 
-![image17](assets/img17.png)
+1. No menu da AWS, clique no ícone de pesquisa e digite **"Security Groups"**. Em seguida, clique na opção correspondente.  
 
-Nas Tags opcionais não adicionei nenhuma.
-Depois clique em "Create security group"
+   ![image12](assets/img12.png)
 
-![image18](assets/img18.png)
+2. Clique em **"Create security group"**.  
+
+   ![image13](assets/img13.png)
+
+3. Configure os seguintes campos:  
+   - **Nome**: Escolha um nome para o grupo. No exemplo, utilizei `"security-group-project"`.  
+   - **Descrição**: Insira uma breve descrição. No meu exemplo utilizei
+   `"teste"`.  
+   - **VPC**: Selecione a **VPC criada anteriormente**. No exemplo, `"project-vpc"`.  
+
+   ![image14](assets/img14.png)
+
+### Configuração das Regras de Entrada (Inbound Rules)  
+
+As **Inbound Rules** determinam quais conexões externas podem acessar a instância.  
+
+4. Clique em **"Add Rule"** para adicionar regras de entrada.  
+
+   ![image15](assets/img15.png)
+   
+5. Adicione as seguintes regras:  
+
+   - **SSH (porta 22)**  
+     - **Tipo**: SSH  
+     - **Protocolo**: TCP  
+     - **Port Range**: 22  
+     - **Source (Origem)**: **My IP** (recomendado por causa da seguraça)  
+     > Permite que **apenas o seu IP atual** acesse a instância via SSH. Isso evita acessos indesejados.  
+
+   - **HTTP (porta 80)**  
+     - **Tipo**: HTTP  
+     - **Protocolo**: TCP  
+     - **Port Range**: 80  
+     - **Source (Origem)**: **My IP** (inicialmente por causa da segurança,
+     após todas as configurações, deixaremos como **0.0.0.0/0**)  
+     > Permite apenas o seu IP acessar o servidor web (por enquanto).
+     Após todas as configurações será necessário mudar a origem do HTTP para
+     **0.0.0.0/0**, permitindo que qualquer usuário da internet acesse a página hospedada na instância.   
+ 
+   ![image16](assets/img16.png)
+   
+### Configuração das Regras de Saída (Outbound Rules)  
+
+As **Outbound Rules** definem quais conexões **a instância pode iniciar** para outros servidores.  
+
+7. Em **Outbound Rules**, configure:  
+   - **Tipo**: `"All traffic"`  
+   - **Protocolo**: `"All"`  
+   - **Port Range**: `"All"`  
+   - **Destination**: `"Anywhere - IPv4 (0.0.0.0/0)"`  
+
+   ![image17](assets/img17.png)
+
+   > Isso permite que a instância **acesse qualquer serviço na internet**, como atualizações de pacotes e APIs externas.  
+
+8. **Tags (Opcional)**  
+   Não adicionei nenhuma tag.
+   - Se desejar, adicione **tags** para melhor organização.  
+   > As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.  
+
+9. Clique em **"Create security group"**.  
+
+   ![image18](assets/img18.png)
 
 ## Criar Instância EC2
 
