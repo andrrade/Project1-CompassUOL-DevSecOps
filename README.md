@@ -346,6 +346,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 ---
 
 # Etapa 2: Configuração do Servidor Web ☁️
+Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML personalizada em nossa instância EC2, com todas as configurações adequadas para servir o conteúdo do site.
 
 ## Acessando a Instância EC2
 
@@ -451,13 +452,145 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    ```
    ![img35.png](assets/img35.png)
 
+# Instalando o Servidor Nginx na EC2
+
+Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
+
+```bash
+$ sudo apt update && sudo apt upgrade -y
+```
+
+![img36.png](assets/img36.png)
+> Obs: isso talvez demore um pouco
+
+Instalação do Nginx:
+
+```bash
+$ sudo apt install nginx -y
+```
+
+![img37.png](assets/img37.png)
+
+Após a atualização, verifique se o Nginx foi instalado corretamente:
+
+```bash
+$ nginx -v
+```
+
+![img38.png](assets/img38.png)
+
+> **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
+
+Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
+
+```bash
+$ sudo systemctl start nginx
+```
+
+Verifique o status do Nginx para garantir que ele está ativo:
+
+```bash
+$ sudo systemctl status nginx
+```
+
+Pressione `CTRL + C` para sair.
+
+![img39.png](assets/img39.png)
+> **Resultado esperado**: O Nginx deve estar ativo e em execução.
+
+---
+
+# Subindo o Site
+
+Eu deixei minha pasta com os arquivos do site na pasta:
+
+```
+/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/
+```
+
+Você pode criar o seu site como preferir e lembrar do local onde o guardou.
+Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
+
+Agora, copie recursivamente os arquivos da sua pasta para o diretório do Nginx:
+
+```bash
+cp -r /caminho/da/pasta/com/seu/site/ /var/www/html/
+```
+
+No meu caso, o comando foi:
+
+```bash
+cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/ /var/www/html/
+```
+
+Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
+
+```bash
+sudo nano /etc/nginx/sites-available/default
+```
+
+Apague o conteúdo existente e substitua pelo seguinte:
+
+```nginx
+server {
+    listen 80;
+    server_name localhost; # Nome do servidor (pode ser um domínio ou IP)
+
+    root /var/www/html/site-projeto1-compassuol; # Caminho onde os arquivos do site estão armazenados
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
+
+Agora, teste se a configuração do Nginx está correta:
+
+```bash
+sudo nginx -t
+```
+
+Se não houver erros, reinicie o Nginx para aplicar as alterações:
+
+```bash
+sudo systemctl restart nginx
+```
+
+Também é possível verificar se a página HTML está sendo servida corretamente utilizando o `curl`:
+
+```bash
+curl http://localhost
+```
+
+---
+
+# **Acessando o Site**
+
+Agora, você pode acessar sua página web digitando o **IP público** da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
+
+Se o servidor Nginx estiver em execução corretamente, você verá a página com as informações sobre o projeto.
+
+---
+
+# **Configurar o Nginx para iniciar automaticamente**
+
+Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
+
+```bash
+$ sudo systemctl enable nginx
+```
+
+Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
+
 <p align="center">
   <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
 
-
-curl https://api.telegram.org/bot7726032205:AAF_Qd-xtf8wuI-vdefagsOzUbaYJy7CJ9s/getUpdates
-5740122051
-
-nano monitor_site.sh
+<!-- curl https://api.telegram.org/bot7726032205:AAF_Qd-xtf8wuI-vdefagsOzUbaYJy7CJ9s/getUpdates
+5740122051 -->
+<!-- 
+nano monitor_site.sh -->
