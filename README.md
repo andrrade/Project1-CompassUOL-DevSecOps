@@ -31,6 +31,11 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 > Tudo que aparecer borrado foi para priorizar a segurança 
 ---
 
+<p align="center">
+  <a href="#etapa-1-configuração-do-ambiente">Etapa 1</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#etapa-2-configuração-do-servidor-web">Etapa 2</a>
+</p>
+
 # Etapa 1: Configuração do Ambiente ☁️
 
 ## 🌐 1. Criar VPC   
@@ -588,6 +593,7 @@ $ sudo systemctl enable nginx
 ```
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
+[🔼 Voltar ao topo](#)
 
 <p align="center">
   <br>
