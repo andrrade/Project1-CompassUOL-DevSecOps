@@ -5,7 +5,12 @@
 
 # Documentação do 1º Projeto - DevSecOps ♾️
 
+> Explicar os comandos usados na documentação.
+ 
+> Compartilhar prints dos testes
+
 <p align="center">
+  <a href="#-ferramentas-úteis">ferramentas-úteis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-ferramentas-úteis">ferramentas-úteis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-pré-requisitos">pré-requisitos</a>
 </p>
@@ -351,9 +356,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    ![img28.png](assets/img28.png)
 
 ---
-
-# Etapa 2: Configuração do Servidor Web ☁️
-Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML personalizada em nossa instância EC2, com todas as configurações adequadas para servir o conteúdo do site.
+## 🌐 3.Acessar a instância via SSH para realizar configurações futuras.
 
 ## Acessando a Instância EC2
 
@@ -463,7 +466,14 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
    ```
    ![img35.png](assets/img35.png)
 
-# Instalando o Servidor Nginx na EC2
+# Etapa 2: Configuração do Servidor Web ☁️
+>  Personalizar a página com informações sobre o projeto.
+
+> Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar
+
+Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML personalizada em nossa instância EC2, com todas as configurações adequadas para servir o conteúdo do site.
+
+## 🌐 1. Instalando o Servidor Nginx na EC2 
 
 Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
 
@@ -511,7 +521,7 @@ Pressione `CTRL + C` para sair.
 
 ---
 
-# Subindo o Site
+## 🌐 2. Criar uma página HTML simples para ser exibida pelo servidor.
 
 Eu deixei minha pasta com os arquivos do site na pasta:
 
@@ -533,6 +543,8 @@ No meu caso, o comando foi:
 ```bash
 cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/ /var/www/html/
 ```
+
+## 🌐 3. Configurar o Nginx para servir a página corretamente
 
 Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
 
@@ -586,7 +598,7 @@ Se o servidor Nginx estiver em execução corretamente, você verá a página co
 
 ---
 
-# **Configurar o Nginx para iniciar automaticamente**
+# **Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar**
 
 Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
 
@@ -596,6 +608,26 @@ $ sudo systemctl enable nginx
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
 [🔼 Voltar ao topo](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
+
+# Etapa 3: Monitoramento e Notificações
+> Usar curl no Bash ou requests no Python para testar a resposta do site
+> Configurar um bot do Telegram ou webhook do Discord/Slack para receber alertas
+
+## 🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.
+
+## 🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.
+
+## 🌐 2.2. O script deve criar logs das verificações em /var/log/monitoramento.log.
+
+## 🌐 2.3. O script deve enviar uma notificação via Discord, Telegram ou Slack se detectar indisponibilidade.
+
+## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron ou systemd timers.
+
+# Etapa 4:  Automação e Testes ☁️
+
+## 🌐 1.1 Testar a implementação: Verificar se o site está acessível via navegador.
+
+## 🌐 1.2 Testar a implementação: Parar o Nginx e verificar se o script detecta e envia alertas corretamente.
 
 <p align="center">
   <br>
