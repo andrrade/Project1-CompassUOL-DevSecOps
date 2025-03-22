@@ -5,9 +5,9 @@
 
 # Documentação do 1º Projeto - DevSecOps ♾️
 
-> Explicar os comandos usados na documentação.
- 
-> Compartilhar prints dos testes
+> Orientações:
+> * Explicar os comandos usados na documentação.
+> * Compartilhar prints dos testes
 
 <p align="center">
   <a href="#-ferramentas-úteis">ferramentas-úteis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -39,16 +39,16 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 > **Observação:** Minha console está em inglês. Caso os nomes dos menus estejam diferentes na sua, pode ser devido ao idioma configurado.
 
-> Tudo que aparecer borrado foi para priorizar a segurança 
----
+> Tudo que aparecer borrado foi para priorizar a segurança
 
+---
 
 # Etapa 1: Configuração do Ambiente ☁️
 
 ## 🌐 1. Criar VPC   
 A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde serão configurados os recursos do projeto.
 
-### Passos para criação:
+### Passo a passo:
 
 1. No console da tela inicial da AWS, vá até a lupa e pesquise por "VPC" e clique em "Your VPCs".
 
@@ -134,7 +134,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-## 🔑 Criar Chave (Key Pairs)  
+### 🔑 Criar Chave (Key Pairs)  
 
 As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2 com segurança via SSH. Elas consistem em:  
 - **Chave pública**: Fica armazenada na AWS e é associada à instância.  
@@ -142,7 +142,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 
 > ⚠️ **Atenção**: Se você perder a chave privada, **não poderá acessar sua instância EC2**.  
 
-### Criando a Key Pair  
+### Passo a passo::  
 
 1. No menu da AWS, clique no ícone de pesquisa e digite **"Key Pairs"**. Em seguida, clique na opção correspondente.  
 
@@ -169,11 +169,11 @@ a armazenar, pois ele será necessário para acessar a instância EC2 posteriorm
 
 ---
 
-## 🔐 Criar Security Group  
+### 🔐 Criar Security Group  
 
 Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2. Eles controlam o tráfego de entrada e saída, permitindo apenas conexões autorizadas.  
 
-### Criando o Security Group  
+### Passo a passo:
 
 1. No menu da AWS, clique no ícone de pesquisa e digite **"Security Groups"**. Em seguida, clique na opção correspondente.  
 
@@ -191,7 +191,7 @@ Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2
 
    ![image14](assets/img14.png)
 
-### Configuração das Regras de Entrada (Inbound Rules)  
+#### Configuração das Regras de Entrada (Inbound Rules)  
 
 As **Inbound Rules** determinam quais conexões externas podem acessar a instância.  
 
@@ -220,7 +220,7 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
  
    ![image16](assets/img16.png)
    
-### Configuração das Regras de Saída (Outbound Rules)  
+#### Configuração das Regras de Saída (Outbound Rules)  
 
 As **Outbound Rules** definem quais conexões **a instância pode iniciar** para outros servidores.  
 
@@ -251,27 +251,25 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-## Passo 1: Acessar a Página de Instâncias
-
-1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
-2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
+### Passo a passo:
+1.0. Acessar a Página de Instâncias
+1.1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
+1.2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
 
    ![img19.png](assets/img19.png)
 
 ---
 
-## Passo 2: Criar uma Nova Instância
+2.0. Criar uma Nova Instância
 
-3. Na tela que abrir, clique em **"Launch Instances"** para iniciar o processo de criação de uma nova instância EC2.
+2.1. Na tela que abrir, clique em **"Launch Instances"** para iniciar o processo de criação de uma nova instância EC2.
 
    ![img20.png](assets/img20.png)
 
 ---
 
-## Passo 3: Configurar Detalhes da Instância
-
-### Tags (Opcional)
-
+3.0. Configurar Detalhes da Instância
+Tags
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
 > No entanto, é **altamente recomendado** que você adicione suas próprias tags para facilitar a identificação dos recursos na AWS, especialmente em ambientes de produção.
 
@@ -279,9 +277,9 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-### Passo 4: Escolher a Imagem do Sistema Operacional
+4.0. Escolher a Imagem do Sistema Operacional
 
-4. **Selecionar a AMI (Amazon Machine Image)**:  
+4.1. **Selecionar a AMI (Amazon Machine Image)**:  
    - Escolha a imagem **Ubuntu Server 24.04 LTS**.
    
    > A **AMI (Amazon Machine Image)** é uma imagem pré-configurada que contém o sistema operacional e, opcionalmente, aplicativos necessários para iniciar a instância EC2. O **Ubuntu Server** foi escolhido devido à sua popularidade, leveza, segurança e suporte comunitário robusto. Além disso, a distribuição Ubuntu é amplamente utilizada em ambientes de produção, o que a torna uma escolha sólida para este projeto.
@@ -290,9 +288,9 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-### Passo 5: Escolher o Tipo da Instância
+5.0. Escolher o Tipo da Instância
 
-5. **Selecionar o Tipo de Instância**:  
+5.1. **Selecionar o Tipo de Instância**:  
    - Escolha **t2.micro**.
    
    > A instância **t2.micro** é parte do **Free Tier da AWS**, permitindo que novos usuários utilizem esta instância gratuitamente por até **750 horas mensais**. Com **1 vCPU e 1 GiB de memória RAM**, essa instância é adequada para rodar um servidor web simples com Nginx e o script de monitoramento. A **família T2** também oferece **créditos de CPU burstável**, permitindo que a instância lide com picos de uso sem impactar o desempenho.
@@ -301,9 +299,9 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-### Passo 6: Selecionar a Chave SSH
+6.0. Selecionar a Chave SSH
 
-6. **Selecionar a Key Pair**:  
+6.1. **Selecionar a Key Pair**:  
    - Escolha a **Key Pair** que foi criada anteriormente.  
    - No meu caso, escolhi a chave **"key-project"**.
    
@@ -313,11 +311,11 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-### Passo 7: Configurar Rede (Networking)
+7.0. Configurar Rede (Networking)
 
-7. Em **Networking settings**, clique em **"Edit"**.
+7.1. Em **Networking settings**, clique em **"Edit"**.
 
-8. Configure os seguintes parâmetros:
+7.2. Configure os seguintes parâmetros:
 
    - **VPC**: Escolha a **VPC** criada anteriormente.  
      - No meu caso, a VPC criada foi chamada **"project-vpc"**.
@@ -330,37 +328,38 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    - **Auto-assign Public IP**: Marque **Enable**.
      > Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
 
-9. Em **Firewall (Security Groups)**:
+7.3. Em **Firewall (Security Groups)**:
 
    - Escolha a opção **"Select existing security group"**.
    - Selecione o **Security Group** criado anteriormente, chamado **"security-group-project"**.
    
    > O **Security Group** age como um firewall virtual, controlando o tráfego de entrada e saída da instância EC2. Ele garante que apenas o tráfego autorizado, como acesso SSH, seja permitido.
 
-10. Em **Advanced networking configuration**, **não alterei nada** (deixei os valores padrão).
+7.4. Em **Advanced networking configuration**, **não alterei nada** (deixei os valores padrão).
 
    ![img27.png](assets/img27.png)
 
 ---
 
-### Passo 8: Configurar o Armazenamento
+8.0. Configurar o Armazenamento
 
-11. Em **Configure Storage**, defina o armazenamento para **1x8 GiB gp3**.
+8.1. Em **Configure Storage**, defina o armazenamento para **1x8 GiB gp3**.
    
    > A **gp3** é uma opção de armazenamento sólido (SSD) com bom custo-benefício, adequada para a maioria dos casos de uso, incluindo servidores web simples.
 
-12. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
+8.2. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
 
-13. Aguarde alguns instantes até que a instância esteja ativa.
+8.3. Aguarde alguns instantes até que a instância esteja ativa.
 
    ![img28.png](assets/img28.png)
 
 ---
 ## 🌐 3.Acessar a instância via SSH para realizar configurações futuras.
 
-## Acessando a Instância EC2
+### Passo a passo:
+1.0. Acessando a Instância EC2
 
-1. Abra o seu WSL e navegue até o diretório onde a chave de acesso (Key Pair) foi armazenada:
+1.1. Abra o seu WSL e navegue até o diretório onde a chave de acesso (Key Pair) foi armazenada:
 
    > Lembre-se de onde você armazenou a chave no começo
    
@@ -369,17 +368,17 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    cd /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS
    ```
    
-2. Liste o conteúdo da pasta para confirmar que a chave está presente:
+1.2. Liste o conteúdo da pasta para confirmar que a chave está presente:
    ```sh
    ls
    ```
 
-3. Copie a chave para o diretório home (usei esse diretório por ser mais fácil localizar, mas pode copiá-la para onde preferir):
+1.3. Copie a chave para o diretório home (usei esse diretório por ser mais fácil localizar, mas pode copiá-la para onde preferir):
    ```sh
    cp key-project.pem ~
    ```
 
-4. Volte para o diretório home:
+1.4. Volte para o diretório home:
    ```sh
    cd
    ```
@@ -388,13 +387,13 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    cd ~
    ```
 > Prefiro e utilizo o cd por ser mais rápido e dar mais agilidade
-5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
+1.5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
    ```sh
    ls
    ```
    ![img29.png](assets/img29.png)
 
-6. Verifique as permissões da chave:
+1.6. Verifique as permissões da chave:
    ```sh
    ls -lh key-project.pem
    ```
@@ -407,13 +406,13 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    > - `r` (read), `w` (write) e `x` (execute).
    > - O padrão `-rwxr-xr-x` indica que o arquivo pode ser lido, escrito e executado pelo proprietário, e apenas lido e executado por outros usuários.
 
-7. Ajuste as permissões da chave para garantir segurança na conexão:
+1.7. Ajuste as permissões da chave para garantir segurança na conexão:
    ```sh
    chmod 400 key-project.pem
    ```
    > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
 
-8. Verifique novamente as permissões:
+1.8. Verifique novamente as permissões:
    ```sh
    ls -lh key-project.pem
    ```
@@ -423,59 +422,59 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
    ```
    ![img30.png](assets/img30.png)
 
-## Obtendo o Endereço IP da Instância
+2.0. Obtendo o Endereço IP da Instância
 
-1. Acesse o console da AWS e abra o painel de EC2.
+2.1. Acesse o console da AWS e abra o painel de EC2.
 
-2. No menu lateral, clique em **Instances**.
+2.2. No menu lateral, clique em **Instances**.
 
    ![img31.png](assets/img31.png)
 
-3. Selecione a instância criada.
+2.3. Selecione a instância criada.
 
    ![img32.png](assets/img32.png)
 
-4. Na aba **Details**, copie o **Public IPv4 address**.
+2.4. Na aba **Details**, copie o **Public IPv4 address**.
 
    ![img33.png](assets/img33.png)
 
-## Testando a Conexão
+3.0. Testando a Conexão
 
-1. No WSL, teste a conexão com a porta 22 (SSH) usando telnet:
+3.1. No WSL, teste a conexão com a porta 22 (SSH) usando telnet:
    ```sh
    telnet SEU_IP_AQUI 22
    ```
-2. Se a conexão for bem-sucedida, aparecerá uma mensagem do tipo:
+3.2. Se a conexão for bem-sucedida, aparecerá uma mensagem do tipo:
    ```
    Connected to SEU_IP_AQUI
    ```
-3. Digite `q` e pressione **Enter** para sair.
+3.3. Digite `q` e pressione **Enter** para sair.
 
    ![img34.png](assets/img34.png)
 
-## Conectando-se à Instância via SSH
+4.0. Conectando-se à Instância via SSH
 
-1. Utilize o seguinte comando para conectar-se à instância:
+4.1. Utilize o seguinte comando para conectar-se à instância:
    ```sh
    ssh -i key-project.pem ubuntu@SEU_IP_AQUI
    ```
-2. Ao conectar pela primeira vez, digite `yes` para aceitar a chave do servidor.
-3. Se a conexão for bem-sucedida, a saída incluirá uma mensagem similar a:
+4.2. Ao conectar pela primeira vez, digite `yes` para aceitar a chave do servidor.
+4.3. Se a conexão for bem-sucedida, a saída incluirá uma mensagem similar a:
    ```
    Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)
    ```
    ![img35.png](assets/img35.png)
 
 # Etapa 2: Configuração do Servidor Web ☁️
->  Personalizar a página com informações sobre o projeto.
-
-> Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar
+> Orientações:
+> * Personalizar a página com informações sobre o projeto.
+> * Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar
 
 Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML personalizada em nossa instância EC2, com todas as configurações adequadas para servir o conteúdo do site.
 
 ## 🌐 1. Instalando o Servidor Nginx na EC2 
 
-Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
+1.1. Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
 
 ```bash
 $ sudo apt update && sudo apt upgrade -y
@@ -484,7 +483,7 @@ $ sudo apt update && sudo apt upgrade -y
 ![img36.png](assets/img36.png)
 > Obs: isso talvez demore um pouco
 
-Instalação do Nginx:
+2.0. Instalação do Nginx:
 
 ```bash
 $ sudo apt install nginx -y
@@ -492,7 +491,7 @@ $ sudo apt install nginx -y
 
 ![img37.png](assets/img37.png)
 
-Após a atualização, verifique se o Nginx foi instalado corretamente:
+2.1. Após a atualização, verifique se o Nginx foi instalado corretamente:
 
 ```bash
 $ nginx -v
@@ -502,19 +501,19 @@ $ nginx -v
 
 > **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
 
-Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
+2.3. Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
 
 ```bash
 $ sudo systemctl start nginx
 ```
 
-Verifique o status do Nginx para garantir que ele está ativo:
+2.4. Verifique o status do Nginx para garantir que ele está ativo:
 
 ```bash
 $ sudo systemctl status nginx
 ```
 
-Pressione `CTRL + C` para sair.
+2.5. Pressione `CTRL + C` para sair.
 
 ![img39.png](assets/img39.png)
 > **Resultado esperado**: O Nginx deve estar ativo e em execução.
@@ -532,7 +531,7 @@ Eu deixei minha pasta com os arquivos do site na pasta:
 Você pode criar o seu site como preferir e lembrar do local onde o guardou.
 Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
 
-Agora, copie recursivamente os arquivos da sua pasta para o diretório do Nginx:
+2.1. Agora, copie recursivamente os arquivos da sua pasta para o diretório do Nginx:
 
 ```bash
 cp -r /caminho/da/pasta/com/seu/site/ /var/www/html/
@@ -546,13 +545,13 @@ cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassu
 
 ## 🌐 3. Configurar o Nginx para servir a página corretamente
 
-Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
+3.1. Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
 
 ```bash
 sudo nano /etc/nginx/sites-available/default
 ```
 
-Apague o conteúdo existente e substitua pelo seguinte:
+3.2. Apague o conteúdo existente e substitua pelo seguinte:
 
 ```nginx
 server {
@@ -568,21 +567,21 @@ server {
 }
 ```
 
-Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
+3.3. Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
 
-Agora, teste se a configuração do Nginx está correta:
+3.4. Agora, teste se a configuração do Nginx está correta:
 
 ```bash
 sudo nginx -t
 ```
 
-Se não houver erros, reinicie o Nginx para aplicar as alterações:
+3.5. Se não houver erros, reinicie o Nginx para aplicar as alterações:
 
 ```bash
 sudo systemctl restart nginx
 ```
 
-Também é possível verificar se a página HTML está sendo servida corretamente utilizando o `curl`:
+3.6. Também é possível verificar se a página HTML está sendo servida corretamente utilizando o `curl`:
 
 ```bash
 curl http://localhost
@@ -590,23 +589,24 @@ curl http://localhost
 
 ---
 
-# **Acessando o Site**
+4.0. Acessando o Site
 
-Agora, você pode acessar sua página web digitando o **IP público** da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
+4.1. Agora, você pode acessar sua página web digitando o **IP público** da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
 
 Se o servidor Nginx estiver em execução corretamente, você verá a página com as informações sobre o projeto.
 
 ---
 
-# **Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar**
+5.0. **Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar**
 
-Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
+5.1. Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
 
 ```bash
 $ sudo systemctl enable nginx
 ```
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
+
 [🔼 Voltar ao topo](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 
 # Etapa 3: Monitoramento e Notificações
