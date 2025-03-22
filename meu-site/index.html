@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <link
+      rel="shortcut icon"
+      href="assets/icons/shopping-bag.svg"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1º Projeto</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,500;1,14..32,500&family=Montserrat:ital,wght@0,500;1,500&family=Syne:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="top">
+      <a href="#"
+        ><img
+          src="assets/logo.svg"
+          alt=""
+          title="ícone clicável da logo 'Snitap'"
+      /></a>
+      <a href="#"
+        ><img
+          src="assets/icons/shopping-bag.svg"
+          alt=""
+          title="Ícone clicável de uma sacola de compras"
+        />
+      </a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>
+          Primeiro Projeto
+          <div>
+            <span>DevSecOps</span>
+            <span>AWS</span>
+            <span>Linux</span>
+            <span>DevSecOps</span>
+          </div>
+        </h1>
+
+        <div class="buttons">
+          <a href="#" class="button buy shadow">
+            <img src="assets/icons/shopping-bag.svg" alt="" />
+            <strong>CompassUOL</strong>
+          </a>
+
+          <a href="#" class="button play">
+            <span class="shadow">
+              <img src="assets/icons/play.svg" alt="" />
+            </span>
+            <strong>AWS + Linux</strong>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="content">
+          <img src="assets/hero/ellipse.svg" alt="" />
+          <img src="assets/hero/patins-image.png" alt="" />
+          <img src="assets/hero/stars-1.svg" alt="" />
+          <img src="assets/hero/stars-2.svg" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <section class="banner">
+      <div class="scroller bg-gradient-animate">
+        <div class="rolling">
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+          <img src="assets/banner.svg" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery">
+      <header>
+        <span>PROJETO 1</span>
+        <h2>Atividade Linux + AWS</h2>
+      </header>
+
+      <main>
+        <h3>Sobre o Projeto</h3>
+        <p>
+          Este projeto tem como objetivo aplicar conceitos essenciais de
+          DevSecOps na prática, utilizando AWS para configuração de servidores,
+          automação e monitoramento. Durante sua execução, foram abordados
+          tópicos fundamentais como infraestrutura como código, segurança em
+          servidores Linux e automação de tarefas.
+        </p>
+
+        <h3>Etapas do Projeto</h3>
+
+        <h4>Etapa 1: Configuração do Ambiente</h4>
+        <ul>
+          <li>Criação de uma VPC com 2 sub-redes públicas e 2 privadas.</li>
+          <li>
+            Criação de uma instância EC2 na AWS, utilizando Ubuntu ou Amazon
+            Linux 2023, na sub-rede pública da VPC.
+          </li>
+        </ul>
+
+        <h4>Etapa 2: Configuração do Servidor Web</h4>
+        <ul>
+          <li>Instalação e configuração do servidor Nginx na instância EC2.</li>
+          <li>Criação de uma página HTML simples para exibição no servidor.</li>
+        </ul>
+
+        <h4>Etapa 3: Script de Monitoramento + Webhook</h4>
+        <ul>
+          <li>
+            Desenvolvimento de um script que verifica a disponibilidade do site
+            a cada 1 minuto.
+          </li>
+          <li>
+            Envio de notificações via Discord, Telegram ou Slack em caso de
+            falha.
+          </li>
+          <li>
+            Armazenamento dos logs de monitoramento em
+            <code>/var/log/meu_script.log</code>.
+          </li>
+        </ul>
+
+        <h4>Etapa 4: Testes e Documentação</h4>
+        <ul>
+          <li>Testes da implementação para garantir funcionamento adequado.</li>
+          <li>
+            Documentação detalhada do processo de instalação e configuração no
+            GitHub.
+          </li>
+        </ul>
+
+        <h3>Desafios Bônus</h3>
+        <ul>
+          <li>
+            Automatização da configuração da EC2, Nginx, página HTML e scripts
+            via User Data.
+          </li>
+          <li>
+            Criação de um arquivo CloudFormation para inicializar todo o
+            ambiente.
+          </li>
+        </ul>
+
+        <h3>Experiência e Aprendizado</h3>
+        <p>
+          A realização deste projeto foi uma jornada intensa de aprendizado.
+          Desde a configuração da infraestrutura até a automação de
+          monitoramento, cada etapa proporcionou desafios e oportunidades para
+          aprofundamento no mundo do DevSecOps. A prática com AWS, a
+          implementação de scripts e a segurança operacional foram aspectos
+          essenciais para o desenvolvimento de habilidades técnicas e
+          estratégicas.
+        </p>
+
+        <p>
+          Além disso, o trabalho em equipe e a resolução de problemas em um
+          ambiente realista trouxeram insights valiosos sobre a importância da
+          automação e da segurança na administração de servidores.
+        </p>
+
+        <h3>Conclusão</h3>
+        <p>
+          Este projeto reforçou a importância do DevSecOps no mundo atual e
+          mostrou como a prática é essencial para fixação do conhecimento. A
+          experiência adquirida será fundamental para desafios futuros na área
+          de tecnologia.
+        </p>
+      </main>
+    </section>
+
+    <footer>
+      <div class="logo">
+        <img src="assets/logo.svg" alt="" />
+        DevSecOps
+      </div>
+
+      <nav>
+        <a href="#">Feito por: <strong>Laura Andrade de Oliveira</strong></a>
+      </nav>
+    </footer>
+  </body>
+</html>
