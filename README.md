@@ -5,6 +5,12 @@
 
 # Documentação do 1º Projeto - DevSecOps ♾️
 
+<p align="center">
+  <a href="#-ferramentas-úteis">ferramentas-úteis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-pré-requisitos">pré-requisitos</a>
+</p>
+
+
 ## 🔧 Ferramentas Úteis  
 
 ### ZoomIt da Microsoft para Prints de Tela com Setas
@@ -31,10 +37,6 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 > Tudo que aparecer borrado foi para priorizar a segurança 
 ---
 
-<p align="center">
-  <a href="#etapa-1-configuração-do-ambiente">Etapa 1</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#etapa-2-configuração-do-servidor-web">Etapa 2</a>
-</p>
 
 # Etapa 1: Configuração do Ambiente ☁️
 
@@ -593,7 +595,7 @@ $ sudo systemctl enable nginx
 ```
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
-[🔼 Voltar ao topo](https://github.com/andrrade/Project1-CompassUOL-DevSecOps?tab=readme-ov-file#documenta%C3%A7%C3%A3o-do-1%C2%BA-projeto---devsecops-%EF%B8%8F)
+[🔼 Voltar ao topo](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 
 <p align="center">
   <br>
