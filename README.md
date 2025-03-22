@@ -45,7 +45,8 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 # Etapa 1: Configuração do Ambiente ☁️
 
-## 🌐 1. Criar VPC   
+## 🌐 1. Criar VPC
+[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde serão configurados os recursos do projeto.
 
 ### Passo a passo:
@@ -134,7 +135,8 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ---
 
-### 🔑 Criar Chave (Key Pairs)  
+### 🔑 Criar Chave (Key Pairs)
+[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 
 As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2 com segurança via SSH. Elas consistem em:  
 - **Chave pública**: Fica armazenada na AWS e é associada à instância.  
@@ -165,11 +167,12 @@ a armazenar, pois ele será necessário para acessar a instância EC2 posteriorm
 
 6. Não adicionei nenhuma tag
 
-   ![image11](assets/img11.png)
+  ![image11](assets/img11.png)
 
 ---
 
-### 🔐 Criar Security Group  
+### 🔐 Criar Security Group
+[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 
 Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2. Eles controlam o tráfego de entrada e saída, permitindo apenas conexões autorizadas.  
 
@@ -607,7 +610,7 @@ $ sudo systemctl enable nginx
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
 
-[🔼 Voltar ao topo](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
+[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
 
 # Etapa 3: Monitoramento e Notificações
 > Usar curl no Bash ou requests no Python para testar a resposta do site
