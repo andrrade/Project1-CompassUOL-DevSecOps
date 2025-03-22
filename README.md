@@ -416,13 +416,17 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 ## Obtendo o Endereço IP da Instância
 
 1. Acesse o console da AWS e abra o painel de EC2.
+
 2. No menu lateral, clique em **Instances**.
+
    ![img31.png](assets/img31.png)
 
 3. Selecione a instância criada.
+
    ![img32.png](assets/img32.png)
 
 4. Na aba **Details**, copie o **Public IPv4 address**.
+
    ![img33.png](assets/img33.png)
 
 ## Testando a Conexão
