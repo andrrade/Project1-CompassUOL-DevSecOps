@@ -10,24 +10,29 @@
 > - Explicar os comandos usados na documentação.
 > - Compartilhar prints dos testes
 
-# Sumário📝
+# Sumário 📝
 
-<p align="center">
-  <a href="#-ferramentas-úteis">Ferramentas Úteis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-pré-requisitos">Pré-Requisitos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#etapa-1-configuração-do-ambiente-%EF%B8%8F">Etapa 1: Configuração do Ambiente ☁️</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-1-criar-vpc">🌐 1. Criar VPC</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-criar-chave-key-pairs">🔑 Criar Chave (Key Pairs)</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-criar-security-group">🔐 Criar Security Group</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-2-criar-instância-ec2">🌐 2. Criar Instância EC2</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-3acessar-a-instância-via-ssh-para-realizar-configurações-futuras">🌐 3.Acessar a instância via SSH para realizar configurações futuras.</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#etapa-2-configuração-do-servidor-web-%EF%B8%8F">Etapa 2: Configuração do Servidor Web ☁️</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-1-instalando-o-servidor-nginx-na-ec2">🌐 1. Instalando o Servidor Nginx na EC2</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-2-criar-uma-página-html-simples-para-ser-exibida-pelo-servidor">🌐 2. Criar uma página HTML simples para ser exibida pelo servidor.</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-3-configurar-o-nginx-para-servir-a-página-corretamente">🌐 3. Configurar o Nginx para servir a página corretamente</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#etapa-3-monitoramento-e-notificações">Etapa 3: Monitoramento e Notificações</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-pré-requisitos">pré-requisitos</a>
-</p>
+## 🔧 Ferramentas Úteis
+- [Ferramentas Necessárias](#-ferramentas-úteis)
+
+## 📌 Pré-Requisitos
+- [Pré-Requisitos](#-pré-requisitos)
+
+## ☁️ Etapa 1: Configuração do Ambiente
+1. [🌐 Criar VPC](#-1-criar-vpc)
+2. [🔑 Criar Chave (Key Pairs)](#-criar-chave-key-pairs)
+3. [🔐 Criar Security Group](#-criar-security-group)
+4. [🌐 Criar Instância EC2](#-2-criar-instância-ec2)
+5. [🌐 Acessar a Instância via SSH para Configurações Futuras](#-3-acessar-a-instância-via-ssh-para-realizar-configurações-futuras)
+
+## 🌍 Etapa 2: Configuração do Servidor Web
+1. [🌐 Instalando o Servidor Nginx na EC2](#-1-instalando-o-servidor-nginx-na-ec2)
+2. [🌐 Criar uma Página HTML Simples](#-2-criar-uma-página-html-simples-para-ser-exibida-pelo-servidor)
+3. [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
+
+## 📊 Etapa 3: Monitoramento e Notificações
+- [Monitoramento e Notificações](#etapa-3-monitoramento-e-notificações)
+
 
 ## 🔧 Ferramentas Úteis
 
