@@ -296,7 +296,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ### Passo a passo:
 
-1.0. Acessar a Página de Instâncias
+##### 1.0. Acessar a Página de Instâncias
 1.1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
 1.2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
 
@@ -304,7 +304,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-2.0. Criar uma Nova Instância
+##### 2.0. Criar uma Nova Instância
 
 2.1. Na tela que abrir, clique em **"Launch Instances"** para iniciar o processo de criação de uma nova instância EC2.
 
@@ -312,7 +312,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ---
 
-3.0. Configurar Detalhes da Instância
+##### 3.0. Configurar Detalhes da Instância
 Tags
 
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
@@ -322,7 +322,7 @@ Tags
 
 ---
 
-4.0. Escolher a Imagem do Sistema Operacional
+##### 4.0. Escolher a Imagem do Sistema Operacional
 
 4.1. **Selecionar a AMI (Amazon Machine Image)**:
 
@@ -334,7 +334,7 @@ Tags
 
 ---
 
-5.0. Escolher o Tipo da Instância
+##### 5.0. Escolher o Tipo da Instância
 
 5.1. **Selecionar o Tipo de Instância**:
 
@@ -346,7 +346,7 @@ Tags
 
 ---
 
-6.0. Selecionar a Chave SSH
+##### 6.0. Selecionar a Chave SSH
 
 6.1. **Selecionar a Key Pair**:
 
@@ -359,7 +359,7 @@ Tags
 
 ---
 
-7.0. Configurar Rede (Networking)
+##### 7.0. Configurar Rede (Networking)
 
 7.1. Em **Networking settings**, clique em **"Edit"**.
 
@@ -392,7 +392,7 @@ Tags
 
 ---
 
-8.0. Configurar o Armazenamento
+##### 8.0. Configurar o Armazenamento
 
 8.1. Em **Configure Storage**, defina o armazenamento para **1x8 GiB gp3**.
 
@@ -412,7 +412,7 @@ Tags
 
 ### Passo a passo:
 
-1.0. Acessando a Instância EC2
+##### 1.0. Acessando a Instância EC2
 
 1.1. Abra o seu WSL e navegue até o diretório onde a chave de acesso (Key Pair) foi armazenada:
 
@@ -496,7 +496,7 @@ Saída esperada:
 
 ![img30.png](assets/img30.png)
 
-2.0. Obtendo o Endereço IP da Instância
+##### 2.0. Obtendo o Endereço IP da Instância
 
 2.1. Acesse o console da AWS e abra o painel de EC2.
 
@@ -512,7 +512,7 @@ Saída esperada:
 
 ![img33.png](assets/img33.png)
 
-3.0. Testando a Conexão
+##### 3.0. Testando a Conexão
 
 3.1. No WSL, teste a conexão com a porta 22 (SSH) usando telnet:
 
@@ -530,7 +530,7 @@ Connected to SEU_IP_AQUI
 
 ![img34.png](assets/img34.png)
 
-4.0. Conectando-se à Instância via SSH
+##### 4.0. Conectando-se à Instância via SSH
 
 4.1. Utilize o seguinte comando para conectar-se à instância:
 
@@ -572,7 +572,7 @@ $ sudo apt update && sudo apt upgrade -y
 
 > Obs: isso talvez demore um pouco
 
-2.0. Instalação do Nginx:
+##### 2.0. Instalação do Nginx:
 
 ```bash
 $ sudo apt install nginx -y
@@ -683,7 +683,7 @@ curl http://localhost
 
 ---
 
-4.0. Acessando o Site
+##### 4.0. Acessando o Site
 
 4.1. Agora, você pode acessar sua página web digitando o **IP público** da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
 
@@ -691,7 +691,7 @@ Se o servidor Nginx estiver em execução corretamente, você verá a página co
 
 ---
 
-5.0. **Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar**
+##### 5.0. Criar um serviço systemd para garantir que o Nginx reinicie automaticamente se parar
 
 5.1. Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
 
