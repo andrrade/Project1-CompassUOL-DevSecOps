@@ -35,6 +35,7 @@
 
 
 ## 🔧 Ferramentas Úteis
+[🔼 Voltar ao Sumário](#sumário-)
 
 ### ZoomIt da Microsoft para Prints de Tela com Setas
 
@@ -43,6 +44,7 @@ Para capturar telas com anotações, utilizei o ZoomIt da Microsoft.
 - Documentação e instalação do ZoomIt: [ZoomIt - Sysinternals | Microsoft Learn](https://learn.microsoft.com/pt-br/sysinternals/downloads/zoomit)
 
 ## 📌 Pré-Requisitos
+[🔼 Voltar ao Sumário](#sumário-)
 
 Antes de iniciar a configuração, certifique-se de que possui os seguintes requisitos atendidos:
 
@@ -69,7 +71,8 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 ## 🌐 1. Criar VPC
 
-[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
+[🔼 Voltar ao Sumário](#sumário-)
+
 A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde serão configurados os recursos do projeto.
 
 ### Passo a passo:
@@ -165,7 +168,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 ### 🔑 Criar Chave (Key Pairs)
 
-[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
+[🔼 Voltar ao Sumário](#sumário-)
 
 As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2 com segurança via SSH. Elas consistem em:
 
@@ -205,7 +208,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 
 ### 🔐 Criar Security Group
 
-[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
+[🔼 Voltar ao Sumário](#sumário-)
 
 Os **Security Groups** atuam como **firewalls virtuais** para as instâncias EC2. Eles controlam o tráfego de entrada e saída, permitindo apenas conexões autorizadas.
 
@@ -286,6 +289,8 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 ---
 
 ## 🌐 2. Criar Instância EC2
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem** que executará o Nginx e o script de monitoramento. Nesta seção, vamos criar uma instância utilizando o **Ubuntu Server** e configurá-la corretamente para rodar o ambiente de monitoramento.
 
@@ -404,6 +409,8 @@ Tags
 ---
 
 ## 🌐 3.Acessar a instância via SSH para realizar configurações futuras.
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 ### Passo a passo:
 
@@ -544,6 +551,8 @@ Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)
 
 # Etapa 2: Configuração do Servidor Web ☁️
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 > Orientações:
 >
 > - Personalizar a página com informações sobre o projeto.
@@ -552,6 +561,8 @@ Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)
 Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML personalizada em nossa instância EC2, com todas as configurações adequadas para servir o conteúdo do site.
 
 ## 🌐 1. Instalando o Servidor Nginx na EC2
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 1.1. Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
 
@@ -603,6 +614,8 @@ $ sudo systemctl status nginx
 
 ## 🌐 2. Criar uma página HTML simples para ser exibida pelo servidor.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 Eu deixei minha pasta com os arquivos do site na pasta:
 
 ```
@@ -625,6 +638,8 @@ cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassu
 ```
 
 ## 🌐 3. Configurar o Nginx para servir a página corretamente
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 3.1. Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
 
@@ -688,28 +703,44 @@ $ sudo systemctl enable nginx
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
 
-[🔼 Voltar ao Sumário](#documentação-do-1º-projeto---devsecops-%EF%B8%8F)
-
 # Etapa 3: Monitoramento e Notificações
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 > Usar curl no Bash ou requests no Python para testar a resposta do site
 > Configurar um bot do Telegram ou webhook do Discord/Slack para receber alertas
 
 ## 🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 ## 🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 ## 🌐 2.2. O script deve criar logs das verificações em /var/log/monitoramento.log.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 ## 🌐 2.3. O script deve enviar uma notificação via Discord, Telegram ou Slack se detectar indisponibilidade.
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 ## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron ou systemd timers.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 # Etapa 4: Automação e Testes ☁️
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 ## 🌐 1.1 Testar a implementação: Verificar se o site está acessível via navegador.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 ## 🌐 1.2 Testar a implementação: Parar o Nginx e verificar se o script detecta e envia alertas corretamente.
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 <p align="center">
   <br>
