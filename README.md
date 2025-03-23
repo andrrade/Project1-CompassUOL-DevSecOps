@@ -31,7 +31,7 @@
 3. [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
 
 ## Etapa 3: Monitoramento e Notificações
-- [Monitoramento e Notificações](#etapa-3-monitoramento-e-notificações)
+
 
 
 ## 🔧 Ferramentas Úteis
@@ -408,7 +408,7 @@ Tags
 
 ---
 
-## 🌐 3.Acessar a instância via SSH para realizar configurações futuras.
+## 🌐 3. Acessar a instância via SSH para realizar configurações futuras.
 
 [🔼 Voltar ao Sumário](#sumário-)
 
