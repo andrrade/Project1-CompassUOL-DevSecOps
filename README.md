@@ -647,10 +647,10 @@ cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassu
 
 [🔼 Voltar ao Sumário](#sumário-)
 
-3.1. Agora, edite o arquivo de configuração padrão do Nginx para apontar para sua página:
+3.1. Edite o arquivo de configuração padrão do Nginx para apontar para sua página:
 
 ```bash
-sudo nano /etc/nginx/sites-available/default
+   sudo nano /etc/nginx/sites-available/default
 ```
 
 3.2. Apague o conteúdo existente e substitua pelo seguinte:
@@ -674,13 +674,13 @@ server {
 3.4. Agora, teste se a configuração do Nginx está correta:
 
 ```bash
-sudo nginx -t
+   sudo nginx -t
 ```
 
 3.5. Se não houver erros, reinicie o Nginx para aplicar as alterações:
 
 ```bash
-sudo systemctl restart nginx
+   sudo systemctl restart nginx
 ```
 
 3.6. Também é possível verificar se a página HTML está sendo servida corretamente utilizando o `curl`:
@@ -693,7 +693,7 @@ curl http://localhost
 
 ### 4.0. Acessando o Site
 
-4.1. Agora, você pode acessar sua página web digitando o **IP público** da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
+4.1. Agora, você pode acessar sua página web digitando o `IP público` da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
 
 Se o servidor Nginx estiver em execução corretamente, você verá a página com as informações sobre o projeto.
 
@@ -704,7 +704,7 @@ Se o servidor Nginx estiver em execução corretamente, você verá a página co
 5.1. Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
 
 ```bash
-$ sudo systemctl enable nginx
+   sudo systemctl enable nginx
 ```
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
@@ -712,20 +712,20 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
 5.2. Habilite o Nginx para iniciar automaticamente ao ligar a instância:
 
 ```bash
-$ sudo systemctl enable nginx
+   sudo systemctl enable nginx
 ```
 
 5.3. Configuração para Reinício Automático do Nginx em Caso de Falha:
 
 - Edite o arquivo de serviço do Nginx:
-  ```shell
-  sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
+  ```bash
+   sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
   ```
 - Adicione as seguintes linhas à seção `[Service]`:
 
-  ```shell
-  Restart=always
-  RestartSec=30
+  ```bash
+   Restart=always
+   RestartSec=30
   ```
 
     <!-- ![img39.png](assets/img39.png) -->
@@ -775,31 +775,33 @@ Mate o processo do Nginx (simulando uma falha) com o comando:
 
 [🔼 Voltar ao Sumário](#sumário-)
 
-#### 1.1. Criação das Pastas de Logs
+### 1.1. Criação das Pastas de Logs
 Criando a pasta `monitoramento` dentro de `/var/log`
 
 ```bash
 sudo mkdir -p /var/log/monitoramento
 ```
 
-- Criando os três arquivos de log: 
-1. Arquivo `servico_online.log`,  
+Criando os três arquivos de log: 
+1. Arquivo `servico_online.log`: 
 
 ```bash
-sudo touch /var/log/monitoramento/servico_online.log
+   sudo touch /var/log/monitoramento/servico_online.log
 ```
 
-2. Arquivo `servico_offline.log`
+2. Arquivo `servico_offline.log`:
+
 ```bash
-sudo touch /var/log/monitoramento/servico_offline.log
+   sudo touch /var/log/monitoramento/servico_offline.log
 ```
 
-3. Arquivo `geral.log`.
+3. Arquivo `geral.log`:
+
 ```bash
-sudo touch /var/log/monitoramento/geral.log
+   sudo touch /var/log/monitoramento/geral.log
 ```
 
-#### 1.2. Listagem e Verificação das Permissões
+### 1.2. Listagem e Verificação das Permissões
 
 Listando os arquivos dentro do diretório `/var/log/monitoramento` para verificar se eles existem.
 
@@ -837,7 +839,7 @@ Criando o arquivo de script `monitorar_site.sh`.
 sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
-Script que verifica se o serviço está online ou offline e grava a informação no log
+Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 ```bash
 #!/usr/bin/env bash
@@ -1038,7 +1040,7 @@ sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 [🔼 Voltar ao Sumário](#sumário-)
 
  ```shell
-    sudo yum install cronie -y
+    sudo install cronie -y
 ```
 
 Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
