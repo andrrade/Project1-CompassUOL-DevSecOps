@@ -179,4 +179,3 @@ enviar_alerta "$MENSAGEM"
 
 # Exibe as informações no terminal
 exibir_saida_terminal
-```
