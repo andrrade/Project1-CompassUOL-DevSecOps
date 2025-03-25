@@ -937,23 +937,23 @@ enviar_alerta() {
 # Função para verificar o status do site
 verificar_status_site() {
    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-   VA_TIME=$(date "+%d-%m-%Y %H:%M:%S") # Hora de Virginia
-   BRA_TIME=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S") # Hora do Brasil
+   TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
+   TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")  # Hora no Brasil
    
    case $STATUS in
       200)
-            SITE_STATUS="${COR_OK}✅ O site está ONLINE!${COR_RESET}"
-            # Registro no log de online com hora de Virginia e Brasil e cores
-            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOG_ONLINE"
-            # Registro no log geral com hora de Virginia e Brasil e cores
-            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOGS"
+            SITE_STATUS="✅ O site está ONLINE!"
+            # Registro no log de online com cor
+            echo -e "${COR_OK}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOG_ONLINE"
+            # Registro no log geral com cor
+            echo -e "${COR_OK}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOGS"
             ;;
       *)
-            SITE_STATUS="${COR_ALERTA}⛔ O serviço está OFFLINE! Status: $STATUS${COR_RESET}"
-            # Registro no log de offline com hora de Virginia e Brasil e cores
-            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOG_OFFLINE"
-            # Registro no log geral com hora de Virginia e Brasil e cores
-            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOGS"
+            SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
+            # Registro no log de offline com cor
+            echo -e "${COR_ALERTA}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOG_OFFLINE"
+            # Registro no log geral com cor
+            echo -e "${COR_ALERTA}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOGS"
             ;;
    esac
 }
@@ -962,48 +962,48 @@ verificar_status_site() {
 verificar_portas() {
    # Verifica a porta 80 (HTTP)
    if nc -zv 127.0.0.1 80 &> /dev/null; then
-      PORTA_80="${COR_OK}✅ Porta 80 (HTTP) está FUNCIONANDO${COR_RESET}"
+      PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
    else
-      PORTA_80="${COR_ALERTA}⛔ Porta 80 (HTTP) está INDISPONÍVEL${COR_RESET}"
+      PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
    fi
 
    # Verifica a porta 443 (HTTPS)
    if nc -zv 127.0.0.1 443 &> /dev/null; then
-      PORTA_443="${COR_OK}✅ Porta 443 (HTTPS) está FUNCIONANDO${COR_RESET}"
+      PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
    else
-      PORTA_443="${COR_ALERTA}⛔ Porta 443 (HTTPS) está INDISPONÍVEL${COR_RESET}"
+      PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
    fi
 }
 
 # Função para reiniciar o Nginx
 reiniciar_nginx() {
    if ! sudo systemctl is-active --quiet nginx; then
-      NGINX_STATUS="${COR_ALERTA}⛔ Nginx está INATIVO ou com problema!${COR_RESET}"
-      echo -e "$NGINX_STATUS"
+      NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
+      echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
       
       # Tenta reiniciar o Nginx
       echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
       if sudo systemctl restart nginx > /dev/null 2>&1; then
-            NGINX_REINICIADO="${COR_OK}✅ Nginx foi REINICIADO com SUCESSO!${COR_RESET}"
-            echo -e "$NGINX_REINICIADO"
+            NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
+            echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
             verificar_portas  # Verifica as portas novamente após reiniciar
             verificar_status_site  # Verifica o status do site novamente após reiniciar
       else
-            NGINX_REINICIADO="${COR_ALERTA}⛔ Não foi possível reiniciar o Nginx!${COR_RESET}"
-            echo -e "$NGINX_REINICIADO"
+            NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
+            echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
       fi
    else
-      NGINX_STATUS="${COR_OK}✅ Nginx está ATIVO e funcionando!${COR_RESET}"
-      echo -e "$NGINX_STATUS"
-      NGINX_REINICIADO="${COR_OK}😁 Não foi necessário reiniciar o Nginx.${COR_RESET}"
-      echo -e "$NGINX_REINICIADO"
+      NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
+      echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
+      NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
+      echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
    fi
 }
 
 # Função para verificar o status do Nginx
 verificar_status_nginx() {
    NGINX_STATUS=""
-   NGINX_REINICIADO=""
+
    reiniciar_nginx
 }
 
@@ -1022,14 +1022,7 @@ criar_pastas_arquivos() {
 
 # Função para exibir saída no terminal de forma organizada
 exibir_saida_terminal() {
-   # Hora de Virginia
-   VA_TIME=$(date "+%d-%m-%Y %H:%M:%S")
-   # Hora do Brasil (Brasília)
-   BRA_TIME=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")
-   
-   echo -e "${COR_INFO}🕒 Hora (Virginia): $VA_TIME${COR_RESET}"
-   echo -e "${COR_INFO}🕒 Hora (Brasil): $BRA_TIME${COR_RESET}"
-
+   echo -e "${COR_INFO}🕒 Data e Hora (Virginia): $TIME_VIRGINIA | Data e Hora (Brasil): $TIME_BRASIL${COR_RESET}"
    echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
    echo -e "$SITE_STATUS"
 
@@ -1065,8 +1058,8 @@ executar_script
 
 # Criando o texto consolidado para enviar ao Telegram sem cores
 MENSAGEM="
-🕒 Hora (Virginia): $(date "+%d-%m-%Y %H:%M:%S")
-🕒 Hora (Brasil): $(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")
+🕒 Hora (Virginia): $TIME_VIRGINIA
+🕒 Hora (Brasil): $TIME_BRASIL
 
 🌐 Status do Site:
 $SITE_STATUS
