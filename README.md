@@ -457,7 +457,8 @@ Ou:
 ```
 
 > Prefiro e utilizo o cd por ser mais rápido e dar mais agilidade
-> 1.5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
+
+1.5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
 
 ```sh
 ls
@@ -589,14 +590,12 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 ![img37.png](assets/img37.png)
 
 2.1. Após a atualização, verifique se o Nginx foi instalado corretamente:
+> **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
 
 ```bash
    nginx -v
 ```
 
-![img38.png](assets/img38.png)
-
-> **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
 
 2.3. Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
 
@@ -612,7 +611,7 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 
 2.5. Pressione `CTRL + C` para sair.
 
-![img39.png](assets/img39.png)
+![img38.png](assets/img38.png)
 
 > **Resultado esperado**: O Nginx deve estar ativo e em execução.
 
@@ -624,24 +623,36 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 
 Eu deixei minha pasta com os arquivos do site na pasta:
 
-```bash
-   /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/
-```
+`/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/`
 
-Você pode criar o seu site como preferir e lembrar do local onde o guardou.
-Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
+> Você pode criar o seu site como preferir e lembrar do local onde o guardou.
+>
+> Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
 
-2.1. Agora, copie recursivamente os arquivos da sua pasta para o diretório do Nginx:
-
-```bash
-   cp -r /caminho/da/pasta/com/seu/site/ /var/www/html/
-```
-
-No meu caso, o comando foi:
+2.1. Abra seu WSL sem ser o que tem a instância, o da sua
+máquina mesmo.
 
 ```bash
-   cp -r /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/ /var/www/html/
+   scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/" ubuntu@SEU_IP:/home/ubuntu/
 ```
+
+![img39.png](assets/img39.png)
+
+2.2. Volte para o terminal conectado à instância e execute os comando:
+
+```bash
+sudo mv /home/ubuntu/site-projeto1-compassuol/* /var/www/html/
+```
+
+```bash
+cd /var/www/html
+```
+
+```bash
+ls
+```
+
+![img40.png](assets/img40.png)
 
 ## 🌐 3. Configurar o Nginx para servir a página corretamente
 
@@ -656,18 +667,20 @@ No meu caso, o comando foi:
 3.2. Apague o conteúdo existente e substitua pelo seguinte:
 
 ```bash
-   server {
-      listen 80;
-      server_name localhost; # Nome do servidor (pode ser um domínio ou IP)
+server {
+   listen 80;
+   server_name localhost; # Nome do servidor (pode ser um domínio ou IP)
 
-      root /var/www/html/site-projeto1-compassuol; # Caminho onde os arquivos do site estão armazenados
-      index index.html;
+   root /var/www/html; # Caminho onde os arquivos do site estão armazenados
+   index index.html;
 
-      location / {
-         try_files $uri $uri/ =404;
-      }
+   location / {
+      try_files $uri $uri/ =404;
    }
+}
 ```
+
+![img41.png](assets/img41.png)
 
 3.3. Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
 
@@ -689,6 +702,8 @@ No meu caso, o comando foi:
    curl http://localhost
 ```
 
+![img42.png](assets/img42.png)
+
 ---
 
 ### 4.0. Acessando o Site
@@ -696,6 +711,8 @@ No meu caso, o comando foi:
 4.1. Agora, você pode acessar sua página web digitando o `IP público` da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
 
 Se o servidor Nginx estiver em execução corretamente, você verá a página com as informações sobre o projeto.
+
+![img43.png](assets/img43.png)
 
 ---
 
@@ -709,18 +726,16 @@ Se o servidor Nginx estiver em execução corretamente, você verá a página co
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
 
-5.2. Habilite o Nginx para iniciar automaticamente ao ligar a instância:
-
-```bash
-   sudo systemctl enable nginx
-```
-
 5.3. Configuração para Reinício Automático do Nginx em Caso de Falha:
 
 - Edite o arquivo de serviço do Nginx:
+
   ```bash
    sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
   ```
+
+  ![img44.png](assets/img44.png)
+
 - Adicione as seguintes linhas à seção `[Service]`:
 
   ```bash
@@ -728,7 +743,7 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
    RestartSec=30
   ```
 
-    <!-- ![img39.png](assets/img39.png) -->
+  ![img45.png](assets/img45.png)
 
   > **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
   >
@@ -764,6 +779,11 @@ Mate o processo do Nginx (simulando uma falha) com o comando:
    sudo systemctl status nginx
   ```
 
+![img46.png](assets/img46.png)
+
+Enquanto isso, a página HTML ficará fora do ar.
+Assim que a reinicialização estiver completa, o Nginx voltará a ficar ativo e a página HTML será exibida novamente.
+
 # Etapa 3: Monitoramento e Notificações
 
 [🔼 Voltar ao Sumário](#sumário-)
@@ -788,13 +808,20 @@ segurança.
 Clique em `Start`
 ![img-bot3.png](assets/img-bot3.png)
 
-No Ubuntu execute o comando:
+No Ubuntu execute os comandos:
+
 ```bash
-   sudo apt install jq -y
-   curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
+   sudo apt install jq -y 
 ```
+
+```bash
+curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
+```
+
 Sua mensagem pode sair algo tipo: 
 {"ok":true,"result":[]}
+
+![img47.png](assets/img47.png)
 
 Mande uma mensagem de teste para iniciar o chat do seu bot
 ![img-bot4.png](assets/img-bot4.png)
@@ -804,8 +831,9 @@ Volte par o terminal e refaça o comando:
 curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
 ```
 
-Agora nessa saída, grave o chat_id 
-![img-bot5.png](assets/img-bot5.png)
+Agora nessa saída aparecerá o chat_id:
+
+![img48](assets/img48.png)
 > ⚠️ SALVA o chat_id, no meu caso está borrado por
 segurança.
 
@@ -862,6 +890,8 @@ Verifique novamente os arquivos e permissões:
    ls -l /var/log/monitoramento/
 ```
 
+![img49](assets/img49.png)
+
 #### 1.3. Criação da Pasta para Scripts
 
 Criando a pasta onde você armazenará os scripts de monitoramento: pasta `/usr/local/bin/monitoramento/scripts`
@@ -881,189 +911,189 @@ Criando o arquivo de script `monitorar_site.sh`.
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 ```bash
-   #!/usr/bin/env bash
+#!/usr/bin/env bash
 
-   # Defina as variáveis de configuração
-   BOT_TOKEN="" # PREENCHA AQUI O TOKEN GERADO PELO BOT
-   CHAT_ID="" # PREENCHA SEU CHAT_ID
-   LOGS="/var/log/monitoramento/geral.log"
-   LOG_ONLINE="/var/log/monitoramento/servico_online.log"
-   LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
+# Defina as variáveis de configuração
+BOT_TOKEN="" # PREENCHA AQUI O TOKEN GERADO PELO BOT
+CHAT_ID="" # PREENCHA SEU CHAT_ID
+LOGS="/var/log/monitoramento/geral.log"
+LOG_ONLINE="/var/log/monitoramento/servico_online.log"
+LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
 
-   # Defina as variáveis de cor
-   COR_OK="\033[32m"
-   COR_ALERTA="\033[31m"
-   COR_INFO="\033[34m"
-   COR_RESET="\033[0m"
+# Defina as variáveis de cor
+COR_OK="\033[32m"
+COR_ALERTA="\033[31m"
+COR_INFO="\033[34m"
+COR_RESET="\033[0m"
 
-   # Função para verificar se o token e chat_id estão preenchidos corretamente
-   verificar_configuracao() {
-      if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ "$BOT_TOKEN" == "PREENCHA AQUI O TOKEN GERADO PELO BOT" ] || [ "$CHAT_ID" == "PREENCHA SEU CHAT_ID" ]; then
-         echo -e "${COR_ALERTA}⛔ Erro: BOT_TOKEN ou CHAT_ID não estão preenchidos corretamente.${COR_RESET}"
-         exit 1
-      fi
-   }
+# Função para verificar se o token e chat_id estão preenchidos corretamente
+verificar_configuracao() {
+   if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ "$BOT_TOKEN" == "PREENCHA AQUI O TOKEN GERADO PELO BOT" ] || [ "$CHAT_ID" == "PREENCHA SEU CHAT_ID" ]; then
+      echo -e "${COR_ALERTA}⛔ Erro: BOT_TOKEN ou CHAT_ID não estão preenchidos corretamente.${COR_RESET}"
+      exit 1
+   fi
+}
 
-   # Função para enviar alerta para o Telegram
-   enviar_alerta() {
-      local MENSAGEM="$1"
-      echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"
-      curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
-         -d "chat_id=$CHAT_ID" \
-         -d "text=$MENSAGEM" > /dev/null 2>&1
-   }
+# Função para enviar alerta para o Telegram
+enviar_alerta() {
+   local MENSAGEM="$1"
+   echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"
+   curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+      -d "chat_id=$CHAT_ID" \
+      -d "text=$MENSAGEM" > /dev/null 2>&1
+}
 
-   # Função para verificar o status do site
-   verificar_status_site() {
-      STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-      TIME=$(date "+%d-%m-%Y %H:%M:%S")
+# Função para verificar o status do site
+verificar_status_site() {
+   STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
+   TIME=$(date "+%d-%m-%Y %H:%M:%S")
+   
+   case $STATUS in
+      200)
+            SITE_STATUS="✅ O site está ONLINE!"
+            # Registro no log de online com cor
+            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOG_ONLINE"
+            # Registro no log geral com cor
+            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            ;;
+      *)
+            SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
+            # Registro no log de offline com cor
+            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOG_OFFLINE"
+            # Registro no log geral com cor
+            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            ;;
+   esac
+}
+
+# Função para verificar as portas
+verificar_portas() {
+   # Verifica a porta 80 (HTTP)
+   if nc -zv 127.0.0.1 80 &> /dev/null; then
+      PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
+   else
+      PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
+   fi
+
+   # Verifica a porta 443 (HTTPS)
+   if nc -zv 127.0.0.1 443 &> /dev/null; then
+      PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
+   else
+      PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
+   fi
+}
+
+# Função para reiniciar o Nginx
+reiniciar_nginx() {
+   if ! sudo systemctl is-active --quiet nginx; then
+      NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
+      echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
       
-      case $STATUS in
-         200)
-               SITE_STATUS="✅ O site está ONLINE!"
-               # Registro no log de online com cor
-               echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOG_ONLINE"
-               # Registro no log geral com cor
-               echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
-               ;;
-         *)
-               SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
-               # Registro no log de offline com cor
-               echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOG_OFFLINE"
-               # Registro no log geral com cor
-               echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
-               ;;
-      esac
-   }
-
-   # Função para verificar as portas
-   verificar_portas() {
-      # Verifica a porta 80 (HTTP)
-      if nc -zv 127.0.0.1 80 &> /dev/null; then
-         PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
+      # Tenta reiniciar o Nginx
+      echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
+      if sudo systemctl restart nginx > /dev/null 2>&1; then
+            NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
+            echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+            verificar_portas  # Verifica as portas novamente após reiniciar
+            verificar_status_site  # Verifica o status do site novamente após reiniciar
       else
-         PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
+            NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
+            echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
       fi
+   else
+      NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
+      echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
+      NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
+      echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+   fi
+}
 
-      # Verifica a porta 443 (HTTPS)
-      if nc -zv 127.0.0.1 443 &> /dev/null; then
-         PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
-      else
-         PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
+# Função para verificar o status do Nginx
+verificar_status_nginx() {
+   NGINX_STATUS=""
+   NGINX_REINICIADO=""
+   reiniciar_nginx
+}
+
+# Função para criar pastas e arquivos faltantes
+criar_pastas_arquivos() {
+   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
+      if [ ! -e "$log_file" ]; then
+            dir_name=$(dirname "$log_file")
+            if [ ! -d "$dir_name" ]; then
+               mkdir -p "$dir_name"  # Cria o diretório
+            fi
+            touch "$log_file"      # Cria o arquivo
       fi
-   }
+   done
+}
 
-   # Função para reiniciar o Nginx
-   reiniciar_nginx() {
-      if ! sudo systemctl is-active --quiet nginx; then
-         NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
-         echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
-         
-         # Tenta reiniciar o Nginx
-         echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
-         if sudo systemctl restart nginx > /dev/null 2>&1; then
-               NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
-               echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
-               verificar_portas  # Verifica as portas novamente após reiniciar
-               verificar_status_site  # Verifica o status do site novamente após reiniciar
-         else
-               NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
-               echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
-         fi
-      else
-         NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
-         echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
-         NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
-         echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
-      fi
-   }
+# Função para exibir saída no terminal de forma organizada
+exibir_saida_terminal() {
+   echo -e "${COR_INFO}🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")${COR_RESET}"
+   echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
+   echo -e "$SITE_STATUS"
 
-   # Função para verificar o status do Nginx
-   verificar_status_nginx() {
-      NGINX_STATUS=""
-      NGINX_REINICIADO=""
-      reiniciar_nginx
-   }
+   echo -e "${COR_INFO}\n⚙️ Status das Portas:${COR_RESET}"
+   echo -e "$PORTA_80"
+   echo -e "$PORTA_443"
 
-   # Função para criar pastas e arquivos faltantes
-   criar_pastas_arquivos() {
-      for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
-         if [ ! -e "$log_file" ]; then
-               dir_name=$(dirname "$log_file")
-               if [ ! -d "$dir_name" ]; then
-                  mkdir -p "$dir_name"  # Cria o diretório
-               fi
-               touch "$log_file"      # Cria o arquivo
-         fi
-      done
-   }
+   echo -e "${COR_INFO}\n🔧 Status do Nginx:${COR_RESET}"
+   echo -e "$NGINX_STATUS"
 
-   # Função para exibir saída no terminal de forma organizada
-   exibir_saida_terminal() {
-      echo -e "${COR_INFO}🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")${COR_RESET}"
-      echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
-      echo -e "$SITE_STATUS"
+   echo -e "${COR_INFO}\n🔄 Reinício do Nginx:${COR_RESET}"
+   echo -e "$NGINX_REINICIADO"
 
-      echo -e "${COR_INFO}\n⚙️ Status das Portas:${COR_RESET}"
-      echo -e "$PORTA_80"
-      echo -e "$PORTA_443"
+   echo -e "${COR_INFO}\n📂 Logs:${COR_RESET}"
+   echo -e "- Geral: $LOGS"
+   echo -e "- Online: $LOG_ONLINE"
+   echo -e "- Offline: $LOG_OFFLINE"
 
-      echo -e "${COR_INFO}\n🔧 Status do Nginx:${COR_RESET}"
-      echo -e "$NGINX_STATUS"
+   echo -e "${COR_INFO}🎉 Script executado com SUCESSO! Veja os logs para mais detalhes.${COR_RESET}"
+}
 
-      echo -e "${COR_INFO}\n🔄 Reinício do Nginx:${COR_RESET}"
-      echo -e "$NGINX_REINICIADO"
+# Função para iniciar o processo completo
+executar_script() {
+   verificar_configuracao
+   criar_pastas_arquivos
+   verificar_status_site
+   verificar_portas
+   verificar_status_nginx
+}
 
-      echo -e "${COR_INFO}\n📂 Logs:${COR_RESET}"
-      echo -e "- Geral: $LOGS"
-      echo -e "- Online: $LOG_ONLINE"
-      echo -e "- Offline: $LOG_OFFLINE"
+# Chama a função principal para executar o script
+executar_script
 
-      echo -e "${COR_INFO}🎉 Script executado com SUCESSO! Veja os logs para mais detalhes.${COR_RESET}"
-   }
+# Criando o texto consolidado para enviar ao Telegram sem cores
+MENSAGEM="
+🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")
 
-   # Função para iniciar o processo completo
-   executar_script() {
-      verificar_configuracao
-      criar_pastas_arquivos
-      verificar_status_site
-      verificar_portas
-      verificar_status_nginx
-   }
+🌐 Status do Site:
+$SITE_STATUS
 
-   # Chama a função principal para executar o script
-   executar_script
+⚙️ Status das Portas:
+$PORTA_80
+$PORTA_443
 
-   # Criando o texto consolidado para enviar ao Telegram sem cores
-   MENSAGEM="
-   🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")
+🔧 Status do Nginx:
+$NGINX_STATUS
 
-   🌐 Status do Site:
-   $SITE_STATUS
+🔄 Reinício do Nginx:
+$NGINX_REINICIADO
 
-   ⚙️ Status das Portas:
-   $PORTA_80
-   $PORTA_443
+📂 Logs:
+- Geral: $LOGS
+- Online: $LOG_ONLINE
+- Offline: $LOG_OFFLINE
 
-   🔧 Status do Nginx:
-   $NGINX_STATUS
+🎉 Script executado com SUCESSO!
+"
 
-   🔄 Reinício do Nginx:
-   $NGINX_REINICIADO
+# Enviar a mensagem consolidada para o Telegram
+enviar_alerta "$MENSAGEM"
 
-   📂 Logs:
-   - Geral: $LOGS
-   - Online: $LOG_ONLINE
-   - Offline: $LOG_OFFLINE
-
-   🎉 Script executado com SUCESSO!
-   "
-
-   # Enviar a mensagem consolidada para o Telegram
-   enviar_alerta "$MENSAGEM"
-
-   # Exibe as informações no terminal
-   exibir_saida_terminal
+# Exibe as informações no terminal
+exibir_saida_terminal
 ```
 
 #### 2.2. Dando Permissões de Execução ao Script
@@ -1072,40 +1102,73 @@ Script que verifica se o serviço está online ou offline e grava a informação
    sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
+Chame o script para testar:
+```bash
+   sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+```
+
+![img50](assets/img50.png)
+
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 ## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron ou systemd timers.
 
 [🔼 Voltar ao Sumário](#sumário-)
 
- ```bash
-    sudo install cronie -y
+```bash
+    sudo apt install cron -y
 ```
 
 Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
     
 ```bash
-   sudo systemctl start crond
-   sudo systemctl enable crond
+ sudo systemctl enable cron
 ```
 
-- Verifique se está funcionando corretamente:
-    
+Verifique se está funcionando corretamente:
+
 ```bash
-   sudo systemctl status crond
+   sudo systemctl status cron
 ```
 
-- Agora, edite o arquivo **crontab** para adicionar o agendamento de execução do script a cada minuto:
+![img51](assets/img51.png)
+ 
+Edite o arquivo **crontab** para adicionar o agendamento de execução do script a cada minuto:
 
 ```bash
    crontab -e
 ```
+
+Vai aparecer uma mensagem. Você digitará `1` e irá apertar `enter`:
+
+![img52](assets/img52.png)
 
 Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme sua necessidade):
 
 ```bash
    */1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+
+![img53](assets/img53.png)
+
+Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
+
+⚠️ Deixar HTTP do security group como 0.0.0.0/0
+Agora que as configurações já foram feitas, podemos deixar o
+aberto para todos.
+
+Na página da AWS pesquise por security groups, clique no que
+você criou para esse projeto, depois clique com o botão direito e selecione a opção `Edite inbound rules`
+
+![img54](assets/img54.png)
+
+No HTTP vc vai mudar para `Anywhere iPv4` e salvar a mudança.
+
+![img55](assets/img55.png)
+
+Agora tente acessar, por exemplo, do seu celular, abrindo o navegador e digitando:
+http://IP_DA_INSTANCIA
 
 # Etapa 4: Automação e Testes ☁️
 
