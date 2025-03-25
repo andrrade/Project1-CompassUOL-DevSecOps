@@ -13,12 +13,15 @@
 # Sumário 📝
 
 ## Ferramentas Úteis
+
 - [Ferramentas Necessárias](#-ferramentas-úteis)
 
 ## Pré-Requisitos
+
 - [Pré-Requisitos](#-pré-requisitos)
 
 ## Etapa 1: Configuração do Ambiente
+
 - [🌐 Criar VPC](#-1-criar-vpc)
 - [🔑 Criar Chave (Key Pairs)](#-criar-chave-key-pairs)
 - [🔐 Criar Security Group](#-criar-security-group)
@@ -26,6 +29,7 @@
 - [🌐 Acessar a Instância via SSH para Configurações Futuras](#-3-acessar-a-instância-via-ssh-para-realizar-configurações-futuras)
 
 ## Etapa 2: Configuração do Servidor Web
+
 - [🌐 Instalando o Servidor Nginx na EC2](#-1-instalando-o-servidor-nginx-na-ec2)
 - [🌐 Criar uma Página HTML Simples](#-2-criar-uma-página-html-simples-para-ser-exibida-pelo-servidor)
 - [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
@@ -33,6 +37,7 @@
 ## Etapa 3: Monitoramento e Notificações
 
 ## 🔧 Ferramentas Úteis
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 ### ZoomIt da Microsoft para Prints de Tela com Setas
@@ -42,6 +47,7 @@ Para capturar telas com anotações, utilizei o ZoomIt da Microsoft.
 - Documentação e instalação do ZoomIt: [ZoomIt - Sysinternals | Microsoft Learn](https://learn.microsoft.com/pt-br/sysinternals/downloads/zoomit)
 
 ## 📌 Pré-Requisitos
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 Antes de iniciar a configuração, certifique-se de que possui os seguintes requisitos atendidos:
@@ -297,6 +303,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 ### Passo a passo:
 
 ### 1.0. Acessar a Página de Instâncias
+
 1.1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
 1.2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
 
@@ -313,6 +320,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 ---
 
 ### 3.0. Configurar Detalhes da Instância
+
 Tags
 
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
@@ -701,6 +709,61 @@ $ sudo systemctl enable nginx
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
 
+5.2. Habilite o Nginx para iniciar automaticamente ao ligar a instância:
+
+```bash
+$ sudo systemctl enable nginx
+```
+
+5.3. Configuração para Reinício Automático do Nginx em Caso de Falha:
+
+- Edite o arquivo de serviço do Nginx:
+  ```shell
+  sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
+  ```
+- Adicione as seguintes linhas à seção `[Service]`:
+
+  ```shell
+  Restart=always
+  RestartSec=30
+  ```
+
+    <!-- ![img39.png](assets/img39.png) -->
+
+  > **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
+  >
+  > **RestartSec=30**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
+
+Recarregue o sistema para aplicar as alterações:
+
+```shell
+   sudo systemctl daemon-reload
+```
+
+5.4. Teste se a reinicialização automática funcionou simulando uma falha da seguinte maneira:
+
+- Obtenha o ID do processo (PID) do Nginx com o comando:
+  ```shell
+  ps aux | grep nginx
+  ```
+- O PID do processo mestre do Nginx será o número exibido antes de `nginx: master process`.
+
+   <!-- ![img39.png](assets/img39.png) -->
+
+Mate o processo do Nginx (simulando uma falha) com o comando:
+
+   ```shell
+      sudo kill -9 <PID>
+   ```
+> Explicar o kill -9
+
+- Substitua `<PID>` pelo ID do processo mestre do Nginx.
+- Verifique o status do Nginx:
+
+  ```shell
+   sudo systemctl status nginx
+  ```
+
 # Etapa 3: Monitoramento e Notificações
 
 [🔼 Voltar ao Sumário](#sumário-)
@@ -712,21 +775,296 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
 
 [🔼 Voltar ao Sumário](#sumário-)
 
+#### 1.1. Criação das Pastas de Logs
+Criando a pasta `monitoramento` dentro de `/var/log`
+
+```bash
+sudo mkdir -p /var/log/monitoramento
+```
+
+- Criando os três arquivos de log: 
+1. Arquivo `servico_online.log`,  
+
+```bash
+sudo touch /var/log/monitoramento/servico_online.log
+```
+
+2. Arquivo `servico_offline.log`
+```bash
+sudo touch /var/log/monitoramento/servico_offline.log
+```
+
+3. Arquivo `geral.log`.
+```bash
+sudo touch /var/log/monitoramento/geral.log
+```
+
+#### 1.2. Listagem e Verificação das Permissões
+
+Listando os arquivos dentro do diretório `/var/log/monitoramento` para verificar se eles existem.
+
+```bash
+ls -l /var/log/monitoramento/
+```
+
+Mudando a propriedade dos arquivos e pastas para o usuário atual.
+
+```bash
+sudo chmod -R 755 /var/log/monitoramento
+```
+
+> Altera as permissões para garantir que você tenha permissão para ler, escrever e executar arquivos nessa pasta, enquanto outros usuários podem apenas ler e executar.
+
+Verifique novamente os arquivos e permissões:
+
+```bash
+ls -l /var/log/monitoramento/
+```
+
+#### 1.3. Criação da Pasta para Scripts
+
+Criando a pasta onde você armazenará os scripts de monitoramento: pasta `/usr/local/bin/monitoramento/scripts`
+
+```bash
+sudo mkdir -p /usr/local/bin/monitoramento/scripts
+```
+
 ## 🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.
 
-[🔼 Voltar ao Sumário](#sumário-)
+Criando o arquivo de script `monitorar_site.sh`.
 
-## 🌐 2.2. O script deve criar logs das verificações em /var/log/monitoramento.log.
+```bash
+sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+```
 
-[🔼 Voltar ao Sumário](#sumário-)
+Script que verifica se o serviço está online ou offline e grava a informação no log
 
-## 🌐 2.3. O script deve enviar uma notificação via Discord, Telegram ou Slack se detectar indisponibilidade.
+```bash
+#!/usr/bin/env bash
+
+# Defina as variáveis de configuração
+BOT_TOKEN="" # PREENCHA AQUI O TOKEN GERADO PELO BOT
+CHAT_ID="" # PREENCHA SEU CHAT_ID
+LOGS="/var/log/monitoramento/geral.log"
+LOG_ONLINE="/var/log/monitoramento/servico_online.log"
+LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
+
+# Defina as variáveis de cor
+COR_OK="\033[32m"
+COR_ALERTA="\033[31m"
+COR_INFO="\033[34m"
+COR_RESET="\033[0m"
+
+# Função para verificar se o token e chat_id estão preenchidos corretamente
+verificar_configuracao() {
+    if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ "$BOT_TOKEN" == "PREENCHA AQUI O TOKEN GERADO PELO BOT" ] || [ "$CHAT_ID" == "PREENCHA SEU CHAT_ID" ]; then
+        echo -e "${COR_ALERTA}⛔ Erro: BOT_TOKEN ou CHAT_ID não estão preenchidos corretamente.${COR_RESET}"
+        exit 1
+    fi
+}
+
+# Função para enviar alerta para o Telegram
+enviar_alerta() {
+    local MENSAGEM="$1"
+    echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+        -d "chat_id=$CHAT_ID" \
+        -d "text=$MENSAGEM" > /dev/null 2>&1
+}
+
+# Função para verificar o status do site
+verificar_status_site() {
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
+    TIME=$(date "+%d-%m-%Y %H:%M:%S")
+    
+    case $STATUS in
+        200)
+            SITE_STATUS="✅ O site está ONLINE!"
+            # Registro no log de online com cor
+            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOG_ONLINE"
+            # Registro no log geral com cor
+            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            ;;
+        *)
+            SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
+            # Registro no log de offline com cor
+            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOG_OFFLINE"
+            # Registro no log geral com cor
+            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            ;;
+    esac
+}
+
+# Função para verificar as portas
+verificar_portas() {
+    # Verifica a porta 80 (HTTP)
+    if nc -zv 127.0.0.1 80 &> /dev/null; then
+        PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
+    else
+        PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
+    fi
+
+    # Verifica a porta 443 (HTTPS)
+    if nc -zv 127.0.0.1 443 &> /dev/null; then
+        PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
+    else
+        PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
+    fi
+}
+
+# Função para reiniciar o Nginx
+reiniciar_nginx() {
+    if ! sudo systemctl is-active --quiet nginx; then
+        NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
+        echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
+        
+        # Tenta reiniciar o Nginx
+        echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
+        if sudo systemctl restart nginx > /dev/null 2>&1; then
+            NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
+            echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+            verificar_portas  # Verifica as portas novamente após reiniciar
+            verificar_status_site  # Verifica o status do site novamente após reiniciar
+        else
+            NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
+            echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
+        fi
+    else
+        NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
+        echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
+        NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
+        echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+    fi
+}
+
+# Função para verificar o status do Nginx
+verificar_status_nginx() {
+    NGINX_STATUS=""
+    NGINX_REINICIADO=""
+    reiniciar_nginx
+}
+
+# Função para criar pastas e arquivos faltantes
+criar_pastas_arquivos() {
+    for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
+        if [ ! -e "$log_file" ]; then
+            dir_name=$(dirname "$log_file")
+            if [ ! -d "$dir_name" ]; then
+                mkdir -p "$dir_name"  # Cria o diretório
+            fi
+            touch "$log_file"      # Cria o arquivo
+        fi
+    done
+}
+
+# Função para exibir saída no terminal de forma organizada
+exibir_saida_terminal() {
+    echo -e "${COR_INFO}🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")${COR_RESET}"
+    echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
+    echo -e "$SITE_STATUS"
+
+    echo -e "${COR_INFO}\n⚙️ Status das Portas:${COR_RESET}"
+    echo -e "$PORTA_80"
+    echo -e "$PORTA_443"
+
+    echo -e "${COR_INFO}\n🔧 Status do Nginx:${COR_RESET}"
+    echo -e "$NGINX_STATUS"
+
+    echo -e "${COR_INFO}\n🔄 Reinício do Nginx:${COR_RESET}"
+    echo -e "$NGINX_REINICIADO"
+
+    echo -e "${COR_INFO}\n📂 Logs:${COR_RESET}"
+    echo -e "- Geral: $LOGS"
+    echo -e "- Online: $LOG_ONLINE"
+    echo -e "- Offline: $LOG_OFFLINE"
+
+    echo -e "${COR_INFO}🎉 Script executado com SUCESSO! Veja os logs para mais detalhes.${COR_RESET}"
+}
+
+# Função para iniciar o processo completo
+executar_script() {
+    verificar_configuracao
+    criar_pastas_arquivos
+    verificar_status_site
+    verificar_portas
+    verificar_status_nginx
+}
+
+# Chama a função principal para executar o script
+executar_script
+
+# Criando o texto consolidado para enviar ao Telegram sem cores
+MENSAGEM="
+🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")
+
+🌐 Status do Site:
+$SITE_STATUS
+
+⚙️ Status das Portas:
+$PORTA_80
+$PORTA_443
+
+🔧 Status do Nginx:
+$NGINX_STATUS
+
+🔄 Reinício do Nginx:
+$NGINX_REINICIADO
+
+📂 Logs:
+- Geral: $LOGS
+- Online: $LOG_ONLINE
+- Offline: $LOG_OFFLINE
+
+🎉 Script executado com SUCESSO!
+"
+
+# Enviar a mensagem consolidada para o Telegram
+enviar_alerta "$MENSAGEM"
+
+# Exibe as informações no terminal
+exibir_saida_terminal
+```
+
+#### 2.2. Dando Permissões de Execução ao Script
+
+```bash
+sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+```
 
 [🔼 Voltar ao Sumário](#sumário-)
 
 ## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron ou systemd timers.
 
 [🔼 Voltar ao Sumário](#sumário-)
+
+ ```shell
+    sudo yum install cronie -y
+```
+
+Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
+    
+```shell
+   sudo systemctl start crond
+   sudo systemctl enable crond
+```
+
+- Verifique se está funcionando corretamente:
+    
+```shell
+   sudo systemctl status crond
+```
+
+- Agora, edite o arquivo **crontab** para adicionar o agendamento de execução do script a cada minuto:
+
+```bash
+   crontab -e
+```
+
+Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme sua necessidade):
+
+```bash
+*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+```
 
 # Etapa 4: Automação e Testes ☁️
 
