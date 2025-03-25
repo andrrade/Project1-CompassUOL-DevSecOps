@@ -429,31 +429,31 @@ Tags
 No meu caso, foi:
 
 ```bash
-   cd /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS
+cd /mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS
 ```
 
 1.2. Liste o conteúdo da pasta para confirmar que a chave está presente:
 
 ```bash
-   ls
+ls
 ```
 
 1.3. Copie a chave para o diretório home (usei esse diretório por ser mais fácil localizar, mas pode copiá-la para onde preferir):
 
 ```bash
-   cp key-project.pem ~
+cp key-project.pem ~
 ```
 
 1.4. Volte para o diretório home:
 
 ```bash
-   cd
+cd
 ```
 
 Ou:
 
 ```bash
-   cd ~
+cd ~
 ```
 
 > Prefiro e utilizo o cd por ser mais rápido e dar mais agilidade
@@ -469,13 +469,13 @@ ls
 1.6. Verifique as permissões da chave:
 
 ```bash
-   ls -lh key-project.pem
+ls -lh key-project.pem
 ```
 
 A saída inicial pode ser algo como:
 
 ```bash
-   -rwxr-xr-x 1 root root ...
+-rwxr-xr-x 1 root root ...
 ```
 
 > O primeiro conjunto de caracteres representa as permissões do arquivo:
@@ -486,7 +486,7 @@ A saída inicial pode ser algo como:
 1.7. Ajuste as permissões da chave para garantir segurança na conexão:
 
 ```bash
-   chmod 400 key-project.pem
+chmod 400 key-project.pem
 ```
 
 > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
@@ -494,13 +494,13 @@ A saída inicial pode ser algo como:
 1.8. Verifique novamente as permissões:
 
 ```bash
-   ls -lh key-project.pem
+ls -lh key-project.pem
 ```
 
 Saída esperada:
 
 ```bash
-   -r-------- 1 root root ...
+-r-------- 1 root root ...
 ```
 
 ![img30.png](assets/img30.png)
@@ -526,14 +526,12 @@ Saída esperada:
 3.1. No WSL, teste a conexão com a porta 22 (SSH) usando telnet:
 
 ```bash
-   telnet SEU_IP_AQUI 22
+telnet SEU_IP_AQUI 22
 ```
 
 3.2. Se a conexão for bem-sucedida, aparecerá uma mensagem do tipo:
 
-```bash
-   Connected to SEU_IP_AQUI
-```
+```Connected to SEU_IP_AQUI```
 
 3.3. Digite `q` e pressione **Enter** para sair.
 
@@ -544,15 +542,14 @@ Saída esperada:
 4.1. Utilize o seguinte comando para conectar-se à instância:
 
 ```bash
-   ssh -i key-project.pem ubuntu@SEU_IP_AQUI
+ssh -i key-project.pem ubuntu@SEU_IP_AQUI
 ```
 
 4.2. Ao conectar pela primeira vez, digite `yes` para aceitar a chave do servidor.
+
 4.3. Se a conexão for bem-sucedida, a saída incluirá uma mensagem similar a:
 
-```bash
-   Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)
-```
+```Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)```
 
 ![img35.png](assets/img35.png)
 
@@ -574,7 +571,7 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 1.1. Primeiro, vamos atualizar os pacotes do sistema e instalar o servidor Nginx:
 
 ```bash
-   sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
 
 ![img36.png](assets/img36.png)
@@ -584,7 +581,7 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 ### 2.0. Instalação do Nginx:
 
 ```bash
-   sudo apt install nginx -y
+sudo apt install nginx -y
 ```
 
 ![img37.png](assets/img37.png)
@@ -593,20 +590,20 @@ Nesta etapa, vamos configurar um servidor web Nginx para exibir uma página HTML
 > **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
 
 ```bash
-   nginx -v
+nginx -v
 ```
 
 
 2.3. Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
 
 ```bash
-   sudo systemctl start nginx
+sudo systemctl start nginx
 ```
 
 2.4. Verifique o status do Nginx para garantir que ele está ativo:
 
 ```bash
-   sudo systemctl status nginx
+sudo systemctl status nginx
 ```
 
 2.5. Pressione `CTRL + C` para sair.
@@ -633,7 +630,7 @@ Eu deixei minha pasta com os arquivos do site na pasta:
 máquina mesmo.
 
 ```bash
-   scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/" ubuntu@SEU_IP:/home/ubuntu/
+scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/" ubuntu@SEU_IP:/home/ubuntu/
 ```
 
 ![img39.png](assets/img39.png)
@@ -661,7 +658,7 @@ ls
 3.1. Edite o arquivo de configuração padrão do Nginx para apontar para sua página:
 
 ```bash
-   sudo nano /etc/nginx/sites-available/default
+sudo nano /etc/nginx/sites-available/default
 ```
 
 3.2. Apague o conteúdo existente e substitua pelo seguinte:
@@ -687,19 +684,19 @@ server {
 3.4. Agora, teste se a configuração do Nginx está correta:
 
 ```bash
-   sudo nginx -t
+sudo nginx -t
 ```
 
 3.5. Se não houver erros, reinicie o Nginx para aplicar as alterações:
 
 ```bash
-   sudo systemctl restart nginx
+sudo systemctl restart nginx
 ```
 
 3.6. Também é possível verificar se a página HTML está sendo servida corretamente utilizando o `curl`:
 
 ```bash
-   curl http://localhost
+curl http://localhost
 ```
 
 ![img42.png](assets/img42.png)
@@ -721,7 +718,7 @@ Se o servidor Nginx estiver em execução corretamente, você verá a página co
 5.1. Para garantir que o Nginx sempre inicie ao ligar a instância, execute o seguinte comando:
 
 ```bash
-   sudo systemctl enable nginx
+sudo systemctl enable nginx
 ```
 
 Isso assegura que o serviço seja inicializado automaticamente no boot do sistema.
@@ -730,18 +727,18 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
 
 - Edite o arquivo de serviço do Nginx:
 
-  ```bash
-   sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
-  ```
+```bash
+sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
+```
 
   ![img44.png](assets/img44.png)
 
 - Adicione as seguintes linhas à seção `[Service]`:
 
-  ```bash
-   Restart=always
-   RestartSec=30
-  ```
+```bash
+Restart=always
+RestartSec=30
+```
 
   ![img45.png](assets/img45.png)
 
@@ -752,32 +749,30 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
 Recarregue o sistema para aplicar as alterações:
 
 ```bash
-   sudo systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 5.4. Teste se a reinicialização automática funcionou simulando uma falha da seguinte maneira:
 
 - Obtenha o ID do processo (PID) do Nginx com o comando:
-  ```bash
-  ps aux | grep nginx
-  ```
+```bash
+ps aux | grep nginx
+```
 - O PID do processo mestre do Nginx será o número exibido antes de `nginx: master process`.
-
-   <!-- ![img39.png](assets/img39.png) -->
 
 Mate o processo do Nginx (simulando uma falha) com o comando:
 
-   ```bash
-      sudo kill -9 <PID>
-   ```
+```bash
+sudo kill -9 <PID>
+```
 > Explicar o kill -9
 
 - Substitua `<PID>` pelo ID do processo mestre do Nginx.
 - Verifique o status do Nginx:
 
-  ```bash
-   sudo systemctl status nginx
-  ```
+```bash
+sudo systemctl status nginx
+```
 
 ![img46.png](assets/img46.png)
 
@@ -811,7 +806,7 @@ Clique em `Start`
 No Ubuntu execute os comandos:
 
 ```bash
-   sudo apt install jq -y 
+sudo apt install jq -y 
 ```
 
 ```bash
@@ -846,26 +841,16 @@ segurança.
 Criando a pasta `monitoramento` dentro de `/var/log`
 
 ```bash
-   sudo mkdir -p /var/log/monitoramento
+sudo mkdir -p /var/log/monitoramento
 ```
 
 Criando os três arquivos de log: 
 1. Arquivo `servico_online.log`: 
-
-```bash
-   sudo touch /var/log/monitoramento/servico_online.log
-```
-
 2. Arquivo `servico_offline.log`:
-
-```bash
-   sudo touch /var/log/monitoramento/servico_offline.log
-```
-
 3. Arquivo `geral.log`:
 
 ```bash
-   sudo touch /var/log/monitoramento/geral.log
+sudo touch /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log /var/log/monitoramento/geral.log
 ```
 
 ### 1.2. Listagem e Verificação das Permissões
@@ -873,13 +858,13 @@ Criando os três arquivos de log:
 Listando os arquivos dentro do diretório `/var/log/monitoramento` para verificar se eles existem.
 
 ```bash
-   ls -l /var/log/monitoramento/
+ls -l /var/log/monitoramento/
 ```
 
 Mudando a propriedade dos arquivos e pastas para o usuário atual.
 
 ```bash
-   sudo chmod -R 755 /var/log/monitoramento
+sudo chmod -R 755 /var/log/monitoramento
 ```
 
 > Altera as permissões para garantir que você tenha permissão para ler, escrever e executar arquivos nessa pasta, enquanto outros usuários podem apenas ler e executar.
@@ -887,17 +872,23 @@ Mudando a propriedade dos arquivos e pastas para o usuário atual.
 Verifique novamente os arquivos e permissões:
 
 ```bash
-   ls -l /var/log/monitoramento/
+ls -l /var/log/monitoramento/
 ```
 
 ![img49](assets/img49.png)
+
+Mude também a permissão dos arquivos:
+
+``` bash
+sudo chmod 666 /var/log/monitoramento/geral.log /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log
+```
 
 #### 1.3. Criação da Pasta para Scripts
 
 Criando a pasta onde você armazenará os scripts de monitoramento: pasta `/usr/local/bin/monitoramento/scripts`
 
 ```bash
-   sudo mkdir -p /usr/local/bin/monitoramento/scripts
+sudo mkdir -p /usr/local/bin/monitoramento/scripts
 ```
 
 ## 🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.
@@ -905,7 +896,7 @@ Criando a pasta onde você armazenará os scripts de monitoramento: pasta `/usr/
 Criando o arquivo de script `monitorar_site.sh`.
 
 ```bash
-   sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 Script que verifica se o serviço está online ou offline e grava a informação no log:
@@ -946,22 +937,23 @@ enviar_alerta() {
 # Função para verificar o status do site
 verificar_status_site() {
    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-   TIME=$(date "+%d-%m-%Y %H:%M:%S")
+   VA_TIME=$(date "+%d-%m-%Y %H:%M:%S") # Hora de Virginia
+   BRA_TIME=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S") # Hora do Brasil
    
    case $STATUS in
       200)
-            SITE_STATUS="✅ O site está ONLINE!"
-            # Registro no log de online com cor
-            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOG_ONLINE"
-            # Registro no log geral com cor
-            echo -e "\033[32m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            SITE_STATUS="${COR_OK}✅ O site está ONLINE!${COR_RESET}"
+            # Registro no log de online com hora de Virginia e Brasil e cores
+            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOG_ONLINE"
+            # Registro no log geral com hora de Virginia e Brasil e cores
+            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOGS"
             ;;
       *)
-            SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
-            # Registro no log de offline com cor
-            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOG_OFFLINE"
-            # Registro no log geral com cor
-            echo -e "\033[31m$TIME - $SITE_STATUS\033[0m" >> "$LOGS"
+            SITE_STATUS="${COR_ALERTA}⛔ O serviço está OFFLINE! Status: $STATUS${COR_RESET}"
+            # Registro no log de offline com hora de Virginia e Brasil e cores
+            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOG_OFFLINE"
+            # Registro no log geral com hora de Virginia e Brasil e cores
+            echo -e "$VA_TIME (Virginia) | $BRA_TIME (Brasil) - $SITE_STATUS" >> "$LOGS"
             ;;
    esac
 }
@@ -970,41 +962,41 @@ verificar_status_site() {
 verificar_portas() {
    # Verifica a porta 80 (HTTP)
    if nc -zv 127.0.0.1 80 &> /dev/null; then
-      PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
+      PORTA_80="${COR_OK}✅ Porta 80 (HTTP) está FUNCIONANDO${COR_RESET}"
    else
-      PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
+      PORTA_80="${COR_ALERTA}⛔ Porta 80 (HTTP) está INDISPONÍVEL${COR_RESET}"
    fi
 
    # Verifica a porta 443 (HTTPS)
    if nc -zv 127.0.0.1 443 &> /dev/null; then
-      PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
+      PORTA_443="${COR_OK}✅ Porta 443 (HTTPS) está FUNCIONANDO${COR_RESET}"
    else
-      PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
+      PORTA_443="${COR_ALERTA}⛔ Porta 443 (HTTPS) está INDISPONÍVEL${COR_RESET}"
    fi
 }
 
 # Função para reiniciar o Nginx
 reiniciar_nginx() {
    if ! sudo systemctl is-active --quiet nginx; then
-      NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
-      echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
+      NGINX_STATUS="${COR_ALERTA}⛔ Nginx está INATIVO ou com problema!${COR_RESET}"
+      echo -e "$NGINX_STATUS"
       
       # Tenta reiniciar o Nginx
       echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
       if sudo systemctl restart nginx > /dev/null 2>&1; then
-            NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
-            echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+            NGINX_REINICIADO="${COR_OK}✅ Nginx foi REINICIADO com SUCESSO!${COR_RESET}"
+            echo -e "$NGINX_REINICIADO"
             verificar_portas  # Verifica as portas novamente após reiniciar
             verificar_status_site  # Verifica o status do site novamente após reiniciar
       else
-            NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
-            echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
+            NGINX_REINICIADO="${COR_ALERTA}⛔ Não foi possível reiniciar o Nginx!${COR_RESET}"
+            echo -e "$NGINX_REINICIADO"
       fi
    else
-      NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
-      echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
-      NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
-      echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
+      NGINX_STATUS="${COR_OK}✅ Nginx está ATIVO e funcionando!${COR_RESET}"
+      echo -e "$NGINX_STATUS"
+      NGINX_REINICIADO="${COR_OK}😁 Não foi necessário reiniciar o Nginx.${COR_RESET}"
+      echo -e "$NGINX_REINICIADO"
    fi
 }
 
@@ -1030,7 +1022,14 @@ criar_pastas_arquivos() {
 
 # Função para exibir saída no terminal de forma organizada
 exibir_saida_terminal() {
-   echo -e "${COR_INFO}🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")${COR_RESET}"
+   # Hora de Virginia
+   VA_TIME=$(date "+%d-%m-%Y %H:%M:%S")
+   # Hora do Brasil (Brasília)
+   BRA_TIME=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")
+   
+   echo -e "${COR_INFO}🕒 Hora (Virginia): $VA_TIME${COR_RESET}"
+   echo -e "${COR_INFO}🕒 Hora (Brasil): $BRA_TIME${COR_RESET}"
+
    echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
    echo -e "$SITE_STATUS"
 
@@ -1066,7 +1065,8 @@ executar_script
 
 # Criando o texto consolidado para enviar ao Telegram sem cores
 MENSAGEM="
-🕒 Data e Hora: $(date "+%d-%m-%Y %H:%M:%S")
+🕒 Hora (Virginia): $(date "+%d-%m-%Y %H:%M:%S")
+🕒 Hora (Brasil): $(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")
 
 🌐 Status do Site:
 $SITE_STATUS
@@ -1099,12 +1099,12 @@ exibir_saida_terminal
 #### 2.2. Dando Permissões de Execução ao Script
 
 ```bash
-   sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 Chame o script para testar:
 ```bash
-   sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 ![img50](assets/img50.png)
@@ -1117,19 +1117,19 @@ Chame o script para testar:
 [🔼 Voltar ao Sumário](#sumário-)
 
 ```bash
-    sudo apt install cron -y
+sudo apt install cron -y
 ```
 
 Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
     
 ```bash
- sudo systemctl enable cron
+sudo systemctl enable cron
 ```
 
 Verifique se está funcionando corretamente:
 
 ```bash
-   sudo systemctl status cron
+sudo systemctl status cron
 ```
 
 ![img51](assets/img51.png)
@@ -1137,7 +1137,7 @@ Verifique se está funcionando corretamente:
 Edite o arquivo **crontab** para adicionar o agendamento de execução do script a cada minuto:
 
 ```bash
-   crontab -e
+crontab -e
 ```
 
 Vai aparecer uma mensagem. Você digitará `1` e irá apertar `enter`:
@@ -1147,7 +1147,7 @@ Vai aparecer uma mensagem. Você digitará `1` e irá apertar `enter`:
 Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme sua necessidade):
 
 ```bash
-   */1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 ![img53](assets/img53.png)
@@ -1187,7 +1187,4 @@ http://IP_DA_INSTANCIA
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
 
-<!-- curl https://api.telegram.org/bot7726032205:AAF_Qd-xtf8wuI-vdefagsOzUbaYJy7CJ9s/getUpdates
-5740122051 -->
-<!--
-nano monitor_site.sh -->
+
