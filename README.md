@@ -49,7 +49,7 @@
 
 ## Etapa Bônus
 - [❗Explicação do UserData](#explicação-do-userdata)
-- []()
+- [💡 Como usar o UserData](#-como-usar-o-userdata)
 
 ## Experiência sobre o Projeto
 - []()
@@ -1685,7 +1685,7 @@ tail -f /var/log/monitoramento/geral.log
 # Etapa Bônus: Automação com UserData 🎁 
 
 ## ❗Explicação do UserData
-[🦘 Pular para o fim da Explicação](#21-finalização)
+[🦘 Pular para o fim da Explicação](#-como-usar-o-userdata)
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/userdata.sh" target="_blank">📎 Arquivo UserData</a>
 
@@ -1900,7 +1900,7 @@ só criar a instância.
 
 ![img-ud2](assets/img-ud2.png)
 
-## 🎉 Conclusão
+## 📈 Experiência sobre o Projeto
 
 Gostei bastante de participar do Projeto 1 da trilha! Foi uma experiência bastante desafiadora, mas extremamente gratificante. Durante o projeto, tive a oportunidade de aprender muitas coisas novas, especialmente sobre a configuração de servidores, monitoramento e automação de processos, que eram áreas com as quais eu ainda não tinha muita familiaridade.
 
