@@ -46,7 +46,7 @@
 - [2.2. Dando Permissões de Execução ao Script](#22-dando-permissões-de-execução-ao-script)
 - [🌐 3. Configurar o script para rodar automaticamente](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron-ou-systemd-timers)
 
-## Etapa 4: Autmoação e Testes
+## Etapa 4: Automação e Testes
 - [🌐 Automação](#-automação)
 - [🌐 Testes](#-testes)
 
