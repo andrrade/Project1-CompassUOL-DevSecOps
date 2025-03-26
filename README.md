@@ -981,39 +981,69 @@ http://IP_DA_INSTANCIA
 
 [🔼 Voltar ao Sumário](#sumário-)
 
-## 🌐 1.1 Testar a implementação: Verificar se o site está acessível via navegador.
+## 🌐 Automação:
 
-[🔼 Voltar ao Sumário](#sumário-)
+> Obs: O Script já está automatizado, eu só chamei o arquivo de monitoramento
+do script para poder tirar os prints das telas de forma mais rápida e não ter
+que ficar esperando 1 minuto todas as vezes.
+
+> Se você fizer esses passos e quiser ver a automação, é só esperar 1 minuto em
+cada teste.
+
+## 🌐 Testes:
+
+### 1. Não preenchi os campos de BOT_TOKEN e CHAT_ID:
 
 ![img-teste01](assets/img-teste01.png)
 
+### 2. Preenchi os campos de BOT_TOKEN e CHAT_ID com as informações erradas:
+
 ![img-teste02](assets/img-teste02.png)
 
+### 3. Não criei o diretório nem os arquivos de log:
 ![img-teste03](assets/img-teste03.png)
+
+### 4. Não criei apenas os arquivos de log:
 
 ![img-teste04](assets/img-teste04.png)
 
+### 5. Deixei a pasta com apenas 1 arquivo de log faltando:
+
 ![img-teste05](assets/img-teste05.png)
+
+### 6.1. Verifiquei se o site está acessível (habilitando o nginx e conferindo seu status)
 
 ![img-teste06](assets/img-teste06.png)
 
+### 6.2. A notificação recebida pelo Telegram
 ![img-teste07](assets/img-teste07.png)
 
+### 6.3. A mensagem que aparece no Telegram:
 ![img-teste08](assets/img-teste08.png)
+
+### 7.1. Removi os arquivos de log da pasta do nginx para ele não ser capaz de reiniciar
 
 ![img-teste09](assets/img-teste09.png)
 
+### 7.2. Mensagem recebida no Telegram
+
 ![img-teste10](assets/img-teste10.png)
+
+### 8.1. Para corrigir o erro acima, desinstalei o nginx e instalei novamente.
+Após isso, parei o serviço para testar:
 
 ![img-teste11](assets/img-teste11.png)
 
+### 8.2. Mensagem recebida pelo Telegram
 ![img-teste12](assets/img-teste12.png)
 
+### 9. Verificando os arquivos de log em tempo real
+
+```bash
+tail -f /var/log/monitoramento/geral.log
+```
+
 ![img-teste13](assets/img-teste13.png)
-
-## 🌐 1.2 Testar a implementação: Parar o Nginx e verificar se o script detecta e envia alertas corretamente.
-
-[🔼 Voltar ao Sumário](#sumário-)
 
 # Etapa Bônus: Automação com UserData 🎁 
 
