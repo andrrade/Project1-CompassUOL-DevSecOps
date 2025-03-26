@@ -11,6 +11,9 @@
 > - Explicar os comandos usados na documentação.
 > - Compartilhar prints dos testes
 
+> [!NOTE]
+> Os prints das notificações do Telegram e de logs foram tirados antes da alteração do script para ajustar os horários. Por isso, nos prints, tanto o Brasil quanto Virginia aparecem com horários iguais. Após a alteração, o script agora está configurado para mostrar corretamente o horário de Virginia (com o fuso horário `America/New_York`), levando em consideração o horário de verão.
+
 # Sumário 📝
 
 ## Ferramentas Úteis
@@ -43,7 +46,7 @@
 - [2.2. Dando Permissões de Execução ao Script](#22-dando-permissões-de-execução-ao-script)
 - [🌐 3. Configurar o script para rodar automaticamente](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron-ou-systemd-timers)
 
-## Etapa 4: Autmoação e Testes
+## Etapa 4: Automação e Testes
 - [🌐 Automação](#-automação)
 - [🌐 Testes](#-testes)
 

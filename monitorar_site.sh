@@ -58,7 +58,7 @@ enviar_alerta() {
 # Função para verificar o status do site
 verificar_status_site() {
    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-   TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
+   TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
    TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")  # Hora no Brasil
    
    case $STATUS in
