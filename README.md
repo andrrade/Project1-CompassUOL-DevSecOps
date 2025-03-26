@@ -71,14 +71,12 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 - **Conta ativa na AWS**
 
   > [!NOTE]\
-  > **O que é AWS?**
-  > Amazon Web Services (AWS) é uma plataforma de computação em nuvem que fornece infraestrutura sob demanda, como servidores, armazenamento e bancos de dados, permitindo que desenvolvedores criem e escalem aplicações rapidamente.
+  > **O que é AWS?** Amazon Web Services (AWS) é uma plataforma de computação em nuvem que fornece infraestrutura sob demanda, como servidores, armazenamento e bancos de dados, permitindo que desenvolvedores criem e escalem aplicações rapidamente.
 
 - **WSL instalado no PC (caso esteja utilizando Windows)**
 
   > [!NOTE]\
-  > **O que é WSL?**
-  > O Windows Subsystem for Linux (WSL) permite rodar um ambiente Linux diretamente no Windows sem precisar de uma máquina virtual, facilitando o desenvolvimento e administração de servidores remotos.
+  > **O que é WSL?** O Windows Subsystem for Linux (WSL) permite rodar um ambiente Linux diretamente no Windows sem precisar de uma máquina virtual, facilitando o desenvolvimento e administração de servidores remotos.
 
 - Guia de instalação do Ubuntu no Windows: [How to install Ubuntu on Windows 10 from Microsoft Store](https://www.youtube.com/watch?v=La8jIAAANSA&t=203s)
 - Documentação do WSL: [Documentação do Subsistema Windows para Linux | Microsoft Learn](https://learn.microsoft.com/pt-br/windows/wsl/)
@@ -112,20 +110,21 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 3. Nas configurações:
 
    - Selecione **"VPC and more"**.
-     > [!NOTE]\
-     > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
+
+   > [!NOTE]\
+   > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
 
    - Marque "Auto-generate"
 
-     > [!NOTE]\
-     > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
+   > [!NOTE]\
+   > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
 
    - Defina um nome para sua VPC (exemplo: "project")
    - Defina o **IPv4 CIDR block** como **10.0.0.0/16**
 
-     > [!NOTE]\
-     > **O que é IPv4 CIDR block?**
-     > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
+   > [!NOTE]\
+   > **O que é IPv4 CIDR block?**
+   > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
 
    ![image03](assets/img03.png)
 
@@ -133,14 +132,14 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - Selecione **No IPv6 CIDR block**
 
-     > [!NOTE]\
-     > **O que é IPv6 CIDR block?**
-     > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
+   > [!NOTE]\
+   > **O que é IPv6 CIDR block?**
+   > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
 
    - **Tenancy**: "Default"
-     > [!NOTE]\
-     > **O que é Tenancy?**
-     > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
+   > [!NOTE]\
+   > **O que é Tenancy?**
+   > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
 
    - **Número de AZs (Availability Zones)**: 2
    - Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
@@ -153,19 +152,19 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
 
-   > [!NOTE]\
-   > **O que são subnets públicas e privadas?**
-   >
-   > - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
-   > - **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
+> [!NOTE]\
+> - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
+
+> [!NOTE]\
+> - **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
 
    ![image05](assets/img05.png)
 
 6. Configure o CIDR block das subnets como **10.0.0.0/20**.
 
-   > [!NOTE]\
-   > **O que significa CIDR block das subnets como 10.0.0.0/20?**
-   > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
+> [!NOTE]\
+> **O que significa CIDR block das subnets como 10.0.0.0/20?**
+> Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
 
    ![image06](assets/img06.png)
 
@@ -173,27 +172,27 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - **NAT Gateways ($):** "None"
 
-   > [!NOTE]\
-   > **O que é NAT Gateway?**
-   > Um NAT Gateway permite que instâncias em subnets privadas acessem a internet sem serem diretamente acessíveis por ela.
+> [!NOTE]\
+> **O que é NAT Gateway?**
+> Um NAT Gateway permite que instâncias em subnets privadas acessem a internet sem serem diretamente acessíveis por ela.
 
    - **VPC Endpoints:** Selecione "S3 Gateway"
 
-   > [!NOTE]\
-   > **O que são VPC Endpoints e S3 Gateway?**
-   > Um **VPC Endpoint** permite que recursos dentro da VPC se comuniquem com serviços da AWS sem passar pela internet. O **S3 Gateway** é um tipo de endpoint usado para acessar o Amazon S3 de forma segura e eficiente.
+> [!NOTE]\
+> **O que são VPC Endpoints e S3 Gateway?**
+> Um **VPC Endpoint** permite que recursos dentro da VPC se comuniquem com serviços da AWS sem passar pela internet. O **S3 Gateway** é um tipo de endpoint usado para acessar o Amazon S3 de forma segura e eficiente.
 
    - **Habilitar DNS:** Marque as opções "Enable DNS hostnames" e "Enable DNS resolution"
 
-   > [!NOTE]\
-   > **O que é DNS e por que habilitá-lo?**
-   > O DNS (Domain Name System) traduz endereços IP em nomes legíveis. Habilitá-lo permite que instâncias dentro da VPC se comuniquem mais facilmente usando nomes ao invés de IPs.
+> [!NOTE]\
+> **O que é DNS e por que habilitá-lo?**
+> O DNS (Domain Name System) traduz endereços IP em nomes legíveis. Habilitá-lo permite que instâncias dentro da VPC se comuniquem mais facilmente usando nomes ao invés de IPs.
 
    - **Tags:** Não adicionei tags extras
 
-   > [!NOTE]\
-   > **O que são Tags?**
-   > Tags são rótulos personalizáveis usados para organizar e identificar recursos dentro da AWS, facilitando a administração.
+> [!NOTE]\
+> **O que são Tags?**
+> Tags são rótulos personalizáveis usados para organizar e identificar recursos dentro da AWS, facilitando a administração.
 
 8. Clique em **"Create VPC"** para finalizar a configuração.
 
@@ -214,7 +213,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 - **Chave pública**: Fica armazenada na AWS e é associada à instância.
 - **Chave privada**: Deve ser baixada e armazenada localmente pelo usuário. Ela é necessária para autenticação SSH.
 
-> [!ALERT]\
+> [!WARNING]\
 > ⚠️ **Atenção**: Se você perder a chave privada, **não poderá acessar sua instância EC2**.
 
 ### Passo a passo::
@@ -237,7 +236,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 
 5. O download da chave privada será feito automaticamente.
 
-   > [!ALERT]\
+   > [!WARNING]\
    > ⚠️ **Guarde esse arquivo em um local seguro** e LEMBRE do lugar que você
    > a armazenar, pois ele será necessário para acessar a instância EC2 posteriormente.
 
@@ -317,15 +316,15 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 
    ![image17](assets/img17.png)
 
-   > [!NOTE]\
-   > Isso permite que a instância **acesse qualquer serviço na internet**, como atualizações de pacotes e APIs externas.
+> [!NOTE]\
+> Isso permite que a instância **acesse qualquer serviço na internet**, como atualizações de pacotes e APIs externas.
 
 8. **Tags (Opcional)**  
    Não adicionei nenhuma tag.
 
    - Se desejar, adicione **tags** para melhor organização.
-     > [!NOTE]\
-     > As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.
+> [!NOTE]\
+> As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.
 
 9. Clique em **"Create security group"**.
 
@@ -364,7 +363,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 Tags
 
-> [!ALERT]\
+> [!WARNING]\
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
 > No entanto, é **altamente recomendado** que você adicione suas próprias tags para facilitar a identificação dos recursos na AWS, especialmente em ambientes de produção.
 
