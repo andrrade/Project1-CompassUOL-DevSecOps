@@ -49,7 +49,11 @@
 
 ## Etapa Bônus
 - [❗Explicação do UserData](#explicação-do-userdata)
-como usar o userdata
+- []()
+
+## Experiência sobre o Projeto
+- []()
+
 --- 
 
 ## 🔧 Ferramentas Úteis
@@ -1690,7 +1694,7 @@ Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL
 código abaixo, mas explicando cada detalhe. Então se quiser
 copiar ou baixar, abra o link.
 
-O script `userdata` descrito é utilizado para configurar um servidor Linux (Ubuntu) com Nginx e preparar a infraestrutura para monitoramento de um site. A seguir, explico passo a passo o que o script realiza:
+O script `userdata` descrito é utilizado para configurar um servidor Linux (Ubuntu) com Nginx e preparar a infraestrutura para monitoramento de um site.
 
 ---
 
@@ -1885,13 +1889,26 @@ echo "Configuração completa. O servidor está pronto."
 ```
 - **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
 
+### ## Como usar o UserData?
+Na hora que você estiver criando a instância EC2, a Última opção será ´Advanced details´.
+Abra essa opção:
+
+![img-ud1](assets/img-ud1.png)
+
+Vá até o final dela e escolha subir um arquivo ou colar ele, e está pronto, é
+só criar a instância.
+
+![img-ud2](assets/img-ud2.png)
+
 ## Conclusão
+
+Gostei bastante de participar do Projeto 1 da trilha! Foi uma experiência bastante desafiadora, mas extremamente gratificante. Durante o projeto, tive a oportunidade de aprender muitas coisas novas, especialmente sobre a configuração de servidores, monitoramento e automação de processos, que eram áreas com as quais eu ainda não tinha muita familiaridade.
+
+O projeto me incentivou a estudar mais e a buscar entender cada detalhe do processo. Cada desafio foi uma oportunidade de aprofundar meu conhecimento e de aplicar novas habilidades de forma prática. Também percebi como a documentação é essencial, então me dediquei a detalhar cada passo do processo para garantir que tudo fosse bem compreendido, tanto por mim quanto por outras pessoas que possam acompanhar o projeto no futuro. Detalhar cada etapa me ajudou a consolidar o que aprendi e a criar um material útil para futuras implementações ou ajustes.
+
+Esse projeto realmente despertou em mim a vontade de continuar estudando e explorando novas tecnologias e soluções. 
 
 <p align="center">
   <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
-
-[!IMPORTANT]\
-[!WARNING]\
-[!NOTE]\
