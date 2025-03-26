@@ -1585,6 +1585,8 @@ Esse bloco finaliza o processo, garantindo que a execução do script seja concl
 ```bash
 sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+> [!NOTE]\
+> O comando `sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh` torna o script `monitorar_site.sh` executável, concedendo permissão de execução (`+x`) ao arquivo.
 
 Chame o script para testar:
 ```bash
@@ -1593,16 +1595,22 @@ sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 
 ![img50](assets/img50.png)
 
+> [!NOTE]\
+> Dá para ver que o script funciona corretamente e que o Telegram notifica.
+
 
 [🔼 Voltar ao Sumário](#sumário-)
 
-## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron ou systemd timers.
+## 🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron.
 
 [🔼 Voltar ao Sumário](#sumário-)
 
 ```bash
 sudo apt install cron -y
 ```
+
+> [!NOTE]\
+> O **cron** é uma ferramenta no Linux usada para agendar a execução automática de tarefas ou comandos em horários específicos ou intervalos regulares, como backups, atualizações ou scripts, sem a necessidade de intervenção manual.
 
 Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
     
@@ -1624,6 +1632,9 @@ Edite o arquivo **crontab** para adicionar o agendamento de execução do scri
 crontab -e
 ```
 
+> [!NOTE]\
+> O comando `crontab -e` abre o editor de texto para editar o arquivo de agendamentos de tarefas (crontab) do usuário atual, permitindo adicionar, remover ou modificar tarefas agendadas para execução automática.
+
 Vai aparecer uma mensagem. Você digitará `1` e irá apertar `enter`:
 
 ![img52](assets/img52.png)
@@ -1633,6 +1644,10 @@ Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme 
 ```bash
 */1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+
+> [!NOTE]\
+> O comando `*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh` agenda a execução do script
+> `monitorar_site.sh` a cada 1 minuto.
 
 ![img53](assets/img53.png)
 
@@ -1654,7 +1669,7 @@ No HTTP vc vai mudar para `Anywhere iPv4` e salvar a mudança.
 ![img55](assets/img55.png)
 
 Agora tente acessar, por exemplo, do seu celular, abrindo o navegador e digitando:
-http://IP_DA_INSTANCIA
+`http://IP_DA_INSTANCIA`
 
 # Etapa 4: Automação e Testes ☁️
 
