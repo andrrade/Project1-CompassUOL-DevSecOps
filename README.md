@@ -35,6 +35,8 @@
 - [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
 
 ## Etapa 3: Monitoramento e Notificações
+## Etapa 4: Autmoação e Testes
+## Etapa Bônus
 
 ## 🔧 Ferramentas Úteis
 
@@ -898,9 +900,8 @@ Criando o arquivo de script `monitorar_site.sh`.
 ```bash
 sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
-## <details>
-   <summary> ❗Explicação do Script </summary>
 
+## ❗Explicação do Script
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
@@ -1444,10 +1445,6 @@ Esse bloco finaliza o processo, garantindo que a execução do script seja concl
 
 **`exibir_saida_terminal`**: Exibe as informações consolidadas no terminal, incluindo status das portas, do Nginx, do site e dos logs.
 
-</details>
-
-
-
 #### 2.2. Dando Permissões de Execução ao Script
 
 ```bash
@@ -1600,12 +1597,209 @@ Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL
 código abaixo, mas explicando cada detalhe. Então se quiser
 copiar ou baixar, abra o link.
 
+O script `userdata` descrito é utilizado para configurar um servidor Linux (Ubuntu) com Nginx e preparar a infraestrutura para monitoramento de um site. A seguir, explico passo a passo o que o script realiza:
+
+---
+
+### **1. Atualizar o Sistema e Instalar Pacotes Necessários**
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+- **Objetivo:** Atualiza a lista de pacotes disponíveis (`apt update`) e instala as atualizações de pacotes (`apt upgrade -y`) para garantir que o sistema esteja com as versões mais recentes de todos os pacotes.
+
+---
+
+### **2. Instalar o Nginx**
+```bash
+sudo apt install nginx -y
+```
+- **Objetivo:** Instala o servidor web Nginx no sistema. O `-y` permite que a instalação seja realizada sem solicitar confirmação.
+
+---
+
+### **3. Iniciar o Nginx**
+```bash
+sudo systemctl start nginx
+```
+- **Objetivo:** Inicia o serviço Nginx, permitindo que ele comece a responder às requisições HTTP.
+
+---
+
+### **4. Configurar o Git para Sparse-Checkout**
+```bash
+cd /tmp
+git init
+git remote add origin https://github.com/andrrade/Project1-CompassUOL-DevSecOps.git
+git config core.sparseCheckout true
+```
+- **Objetivo:** Prepara o ambiente para fazer o **sparse-checkout**, uma técnica que permite fazer o download de uma parte específica de um repositório Git, em vez de todo o repositório.
+  - `git init`: Inicializa um repositório Git local.
+  - `git remote add origin`: Adiciona o repositório remoto do GitHub.
+  - `git config core.sparseCheckout true`: Habilita o sparse-checkout.
+
+---
+
+### **5. Garantir que o conteúdo da pasta `meu-site/` seja baixado**
+```bash
+echo "meu-site/*" >> .git/info/sparse-checkout
+```
+- **Objetivo:** Especifica que o conteúdo dentro do diretório `meu-site/` deve ser baixado do repositório Git.
+
+---
+
+### **6. Baixar os Arquivos da Branch Main**
+```bash
+git pull origin main
+```
+- **Objetivo:** Baixa os arquivos da branch `main` do repositório Git e os coloca no diretório local do repositório.
+
+---
+
+### **7. Mover os Arquivos para o Diretório do Nginx**
+```bash
+sudo mv /tmp/meu-site/* /var/www/html/
+```
+- **Objetivo:** Move os arquivos do diretório `meu-site/` (baixados do repositório) para o diretório padrão do Nginx (`/var/www/html/`), onde os arquivos de site são armazenados.
+
+---
+
+### **8. Configurar o Nginx para Servir os Arquivos**
+```bash
+sudo nano /etc/nginx/sites-available/default <<EOF
+server {
+   listen 80;
+   server_name localhost;
+
+   root /var/www/html;
+   index index.html;
+
+   location / {
+      try_files \$uri \$uri/ =404;
+   }
+}
+EOF
+```
+- **Objetivo:** Configura o Nginx para servir o conteúdo do diretório `/var/www/html/`, incluindo a configuração de escuta na porta 80 e a tentativa de resolver arquivos e diretórios solicitados.
+
+---
+
+### **9. Reiniciar o Nginx para Aplicar as Configurações**
+```bash
+sudo systemctl restart nginx
+```
+- **Objetivo:** Reinicia o serviço Nginx para aplicar as novas configurações feitas no arquivo de configuração.
+
+---
+
+### **10. Habilitar o Nginx para Iniciar no Boot**
+```bash
+sudo systemctl enable nginx
+```
+- **Objetivo:** Configura o Nginx para iniciar automaticamente sempre que o sistema for reiniciado.
+
+---
+
+### **11. Configurar o Nginx para Reiniciar Automaticamente em Caso de Falhas**
+```bash
+sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service <<EOF
+[Service]
+Restart=always
+RestartSec=30
+EOF
+```
+- **Objetivo:** Configura o Nginx para reiniciar automaticamente caso ocorra uma falha. O parâmetro `RestartSec=30` define um intervalo de 30 segundos antes da tentativa de reinício.
+
+---
+
+### **12. Atualizar o Sistema de Serviços**
+```bash
+sudo systemctl daemon-reload
+```
+- **Objetivo:** Atualiza o sistema de serviços para que ele reconheça as novas configurações do Nginx.
+
+---
+
+### **13. Criar Diretórios e Arquivos de Log**
+```bash
+sudo mkdir -p /var/log/monitoramento
+sudo touch /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log /var/log/monitoramento/geral.log
+```
+- **Objetivo:** Cria diretórios e arquivos de log necessários para monitoramento do serviço, como logs de status online e offline do site.
+
+---
+
+### **14. Ajustar Permissões dos Arquivos de Log**
+```bash
+sudo chmod -R 755 /var/log/monitoramento
+sudo chmod 666 /var/log/monitoramento/geral.log /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log
+```
+- **Objetivo:** Ajusta as permissões dos diretórios e arquivos de log para garantir que o sistema possa escrever nesses arquivos.
+
+---
+
+### **15. Criar Diretório para Scripts de Monitoramento**
+```bash
+sudo mkdir -p /usr/local/bin/monitoramento/scripts
+```
+- **Objetivo:** Cria um diretório onde scripts de monitoramento serão armazenados.
+
+---
+
+### **16. Baixar o Script de Monitoramento**
+```bash
+cd /tmp
+curl -o /usr/local/bin/monitoramento/scripts/monitorar_site.sh https://raw.githubusercontent.com/andrrade/Project1-CompassUOL-DevSecOps/main/monitorar_site.sh
+```
+- **Objetivo:** Baixa o script de monitoramento a partir do repositório GitHub e o salva no diretório `/usr/local/bin/monitoramento/scripts/`.
+
+---
+
+### **17. Tornar o Script Executável**
+```bash
+sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+```
+- **Objetivo:** Torna o script de monitoramento executável.
+
+---
+
+### **18. Instalar o Cron**
+```bash
+sudo apt install cron -y
+```
+- **Objetivo:** Instala o serviço de agendamento de tarefas `cron` no sistema, permitindo agendar a execução de tarefas repetitivas.
+
+---
+
+### **19. Habilitar o Serviço Cron para Iniciar no Boot**
+```bash
+sudo systemctl enable cron
+```
+- **Objetivo:** Configura o cron para iniciar automaticamente quando o sistema for reiniciado.
+
+---
+
+### **20. Configurar o Cron para Executar o Script a Cada 1 Minuto**
+```bash
+echo "*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh" | sudo crontab -
+```
+- **Objetivo:** Configura o cron para executar o script de monitoramento a cada 1 minuto.
+
+---
+
+### **21. Finalização**
+```bash
+echo "Configuração completa. O servidor está pronto."
+```
+- **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
+
+---
+
+Esse é o passo a passo completo do que o script faz! Se precisar de mais alguma explicação, estou à disposição.
 
 <p align="center">
   <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
 </p>
-
 
 [!IMPORTANT]\
 [!WARNING]\
