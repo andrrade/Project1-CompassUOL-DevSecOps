@@ -925,6 +925,31 @@ verificar_configuracao() {
    fi
 }
 
+# Função para verificar a conexão com a API do Telegram
+verificar_conexao_telegram() {
+   local TESTE_CONEXAO=$(curl -s -o /dev/null -w "%{http_code}" "https://api.telegram.org/bot$BOT_TOKEN/getMe")
+   if [ "$TESTE_CONEXAO" != "200" ]; then
+      echo -e "${COR_ALERTA}⛔ Erro: Não foi possível conectar à API do Telegram. Verifique o BOT_TOKEN.${COR_RESET}"
+      exit 1
+   fi
+}
+
+criar_pastas_arquivos() {
+   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
+      if [ ! -e "$log_file" ]; then
+            dir_name=$(dirname "$log_file")
+            if [ ! -d "$dir_name" ]; then
+               echo "⚠️ Diretório ausente: $dir_name"
+               mkdir -p "$dir_name"
+               echo "✅ Diretório criado: $dir_name"
+            fi
+            echo "⚠️ Arquivo ausente: $log_file"
+            touch "$log_file"
+            echo "✅ Arquivo criado: $log_file"
+      fi
+   done
+}
+   
 # Função para enviar alerta para o Telegram
 enviar_alerta() {
    local MENSAGEM="$1"
@@ -979,24 +1004,19 @@ verificar_portas() {
 reiniciar_nginx() {
    if ! sudo systemctl is-active --quiet nginx; then
       NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
-      echo -e "${COR_ALERTA}$NGINX_STATUS${COR_RESET}"
       
       # Tenta reiniciar o Nginx
       echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
       if sudo systemctl restart nginx > /dev/null 2>&1; then
             NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
-            echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
             verificar_portas  # Verifica as portas novamente após reiniciar
             verificar_status_site  # Verifica o status do site novamente após reiniciar
       else
             NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
-            echo -e "${COR_ALERTA}$NGINX_REINICIADO${COR_RESET}"
       fi
    else
       NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
-      echo -e "${COR_OK}$NGINX_STATUS${COR_RESET}"
       NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
-      echo -e "${COR_OK}$NGINX_REINICIADO${COR_RESET}"
    fi
 }
 
@@ -1007,24 +1027,9 @@ verificar_status_nginx() {
    reiniciar_nginx
 }
 
-# Função para criar pastas e arquivos faltantes
-criar_pastas_arquivos() {
-   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
-      if [ ! -e "$log_file" ]; then
-            dir_name=$(dirname "$log_file")
-            if [ ! -d "$dir_name" ]; then
-               mkdir -p "$dir_name"  # Cria o diretório
-            fi
-            touch "$log_file"      # Cria o arquivo
-      fi
-   done
-}
-
 # Função para exibir saída no terminal de forma organizada
 exibir_saida_terminal() {
    echo -e "${COR_INFO}🕒 Data e Hora (Virginia): $TIME_VIRGINIA | Data e Hora (Brasil): $TIME_BRASIL${COR_RESET}"
-   echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
-   echo -e "$SITE_STATUS"
 
    echo -e "${COR_INFO}\n⚙️ Status das Portas:${COR_RESET}"
    echo -e "$PORTA_80"
@@ -1035,6 +1040,9 @@ exibir_saida_terminal() {
 
    echo -e "${COR_INFO}\n🔄 Reinício do Nginx:${COR_RESET}"
    echo -e "$NGINX_REINICIADO"
+
+   echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
+   echo -e "$SITE_STATUS"
 
    echo -e "${COR_INFO}\n📂 Logs:${COR_RESET}"
    echo -e "- Geral: $LOGS"
@@ -1047,6 +1055,7 @@ exibir_saida_terminal() {
 # Função para iniciar o processo completo
 executar_script() {
    verificar_configuracao
+   verificar_conexao_telegram
    criar_pastas_arquivos
    verificar_status_site
    verificar_portas
@@ -1061,9 +1070,6 @@ MENSAGEM="
 🕒 Hora (Virginia): $TIME_VIRGINIA
 🕒 Hora (Brasil): $TIME_BRASIL
 
-🌐 Status do Site:
-$SITE_STATUS
-
 ⚙️ Status das Portas:
 $PORTA_80
 $PORTA_443
@@ -1073,6 +1079,9 @@ $NGINX_STATUS
 
 🔄 Reinício do Nginx:
 $NGINX_REINICIADO
+
+🌐 Status do Site:
+$SITE_STATUS
 
 📂 Logs:
 - Geral: $LOGS
@@ -1170,6 +1179,32 @@ http://IP_DA_INSTANCIA
 ## 🌐 1.1 Testar a implementação: Verificar se o site está acessível via navegador.
 
 [🔼 Voltar ao Sumário](#sumário-)
+
+![img-teste01](assets/img-teste01.png)
+
+![img-teste02](assets/img-teste02.png)
+
+![img-teste03](assets/img-teste03.png)
+
+![img-teste04](assets/img-teste04.png)
+
+![img-teste05](assets/img-teste05.png)
+
+![img-teste06](assets/img-teste06.png)
+
+![img-teste07](assets/img-teste07.png)
+
+![img-teste08](assets/img-teste08.png)
+
+![img-teste09](assets/img-teste09.png)
+
+![img-teste10](assets/img-teste10.png)
+
+![img-teste11](assets/img-teste11.png)
+
+![img-teste12](assets/img-teste12.png)
+
+![img-teste13](assets/img-teste13.png)
 
 ## 🌐 1.2 Testar a implementação: Parar o Nginx e verificar se o script detecta e envia alertas corretamente.
 
