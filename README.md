@@ -899,9 +899,549 @@ Criando o arquivo de script `monitorar_site.sh`.
 sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
+## ❗Explicação do Script
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
+
+> O código completo está nesse link, eu vou colocar todo o
+código abaixo, mas explicando cada detalhe. Então se quiser
+copiar ou baixar, abra o link.
+
+### 1️⃣ - `Shebang` e `variáveis de configuração`
+
+```bash
+#!/usr/bin/env bash
+
+# Defina as variáveis de configuração
+BOT_TOKEN="" # PREENCHA AQUI O TOKEN GERADO PELO BOT
+CHAT_ID="" # PREENCHA SEU CHAT_ID
+LOGS="/var/log/monitoramento/geral.log"
+LOG_ONLINE="/var/log/monitoramento/servico_online.log"
+LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
+```
+
+#### 📌 Passo a passo:
+1. Shebang `#!/usr/bin/env bash`
+- Isso define qual interpretador será usado para executar o script.  
+- Neste caso, ele usa **`bash`**, e o comando `env` garante que o shell correto seja encontrado no ambiente, independentemente do caminho exato do `bash` no sistema.  
+
+2. Definição das `variáveis de configuração`
+O script define algumas variáveis importantes que serão usadas mais tarde.
+
+##### 🔹 **Variáveis do Telegram**  
+- **`BOT_TOKEN`**: Token de autenticação do bot no Telegram (fornecido pelo BotFather).  
+- **`CHAT_ID`**: ID do chat ou grupo onde os alertas serão enviados.  
+
+Se esses valores não forem preenchidos corretamente, o script não conseguirá enviar mensagens para o Telegram.
+
+##### 🔹 **Variáveis de logs**  
+- **`LOGS`**: Arquivo principal de log, onde todas as verificações serão registradas.  
+- **`LOG_ONLINE`**: Guarda apenas os registros quando o site estiver **online**.  
+- **`LOG_OFFLINE`**: Guarda apenas os registros quando o site estiver **offline**.  
+
+Esses arquivos serão criados automaticamente se não existirem.
+
+### 2️⃣ - `variáveis de cor` e Função `verificar_configuracao`
+```bash
+# Defina as variáveis de cor
+COR_OK="\033[32m"
+COR_ALERTA="\033[31m"
+COR_INFO="\033[34m"
+COR_RESET="\033[0m"
+
+# Função para verificar se o token e chat_id estão preenchidos corretamente
+verificar_configuracao() {
+   if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ "$BOT_TOKEN" == "PREENCHA AQUI O TOKEN GERADO PELO BOT" ] || [ "$CHAT_ID" == "PREENCHA SEU CHAT_ID" ]; then
+      echo -e "${COR_ALERTA}⛔ Erro: BOT_TOKEN ou CHAT_ID não estão preenchidos corretamente.${COR_RESET}"
+      exit 1
+   fi
+}
+```
+
+#### 📌 Passo a passo:
+1. Definição das `Variáveis de Cor`
+
+Essas variáveis são **códigos de escape ANSI** que definem cores para exibir mensagens coloridas no terminal.  
+Cada uma representa uma cor diferente:
+
+- **`COR_OK="\033[32m"`** → **Verde** (usado para mensagens de sucesso ✅)  
+- **`COR_ALERTA="\033[31m"`** → **Vermelho** (usado para erros ⚠️)  
+- **`COR_INFO="\033[34m"`** → **Azul** (usado para informações ℹ️)  
+- **`COR_RESET="\033[0m"`** → **Restaura a cor original do terminal**  
+
+Exemplo de uso:  
+
+```bash
+echo -e "${COR_OK}Tudo certo!${COR_RESET}"
+```
+A razão para usar duas variáveis de cor (${COR_OK} e ${COR_RESET}) é garantir que somente o texto desejado fique colorido, sem afetar o restante do terminal.
+
+${COR_OK} → Muda a cor do texto para verde (\033[32m).
+
+"Tudo certo!" → Essa string será exibida na cor verde.
+
+${COR_RESET} → Restaura a cor padrão do terminal (\033[0m), garantindo que qualquer texto exibido depois volte à cor original.
+
+2. Função `verificar_configuracao()`
+
+🔍 **O que essa função faz?**  
+- **Verifica se as variáveis `BOT_TOKEN` e `CHAT_ID` estão preenchidas corretamente.**
+- Se **alguma delas estiver vazia** (`-z "$VARIAVEL"` verifica se a variável está vazia) **ou ainda contiver o valor padrão** (`PREENCHA AQUI O TOKEN GERADO PELO BOT`), significa que o usuário esqueceu de configurar as credenciais.
+- Nesse caso, o script exibe uma mensagem de erro em **vermelho** (`COR_ALERTA`) e finaliza a execução com `exit 1`.
+
+Esse erro impede que o script continue, garantindo que as credenciais estejam corretas antes de tentar enviar mensagens.
+
+### 3️⃣ - Função `verificar_conexao_telegram` e `criar_pastas_arquivos`
+```bash
+# Função para verificar a conexão com a API do Telegram
+verificar_conexao_telegram() {
+   local TESTE_CONEXAO=$(curl -s -o /dev/null -w "%{http_code}" "https://api.telegram.org/bot$BOT_TOKEN/getMe")
+   if [ "$TESTE_CONEXAO" != "200" ]; then
+      echo -e "${COR_ALERTA}⛔ Erro: Não foi possível conectar à API do Telegram. Verifique o BOT_TOKEN.${COR_RESET}"
+      exit 1
+   fi
+}
+
+criar_pastas_arquivos() {
+   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
+      if [ ! -e "$log_file" ]; then
+            dir_name=$(dirname "$log_file")
+            if [ ! -d "$dir_name" ]; then
+               echo "⚠️ Diretório ausente: $dir_name"
+               mkdir -p "$dir_name"
+               echo "✅ Diretório criado: $dir_name"
+            fi
+            echo "⚠️ Arquivo ausente: $log_file"
+            touch "$log_file"
+            echo "✅ Arquivo criado: $log_file"
+      fi
+   done
+}
+```
+
+
+### 1. Função `verificar_conexao_telegram`
+
+Essa função verifica se a conexão com a API do Telegram está funcionando corretamente.
+
+📌 **Passo a passo**:
+1. **`curl -s -o /dev/null -w "%{http_code}"`** → Faz uma requisição HTTP para a API do Telegram sem exibir a saída no terminal.
+   - `-s` → Modo silencioso (sem exibir detalhes).
+   - `-o /dev/null` → Descarta a resposta da API, já que só queremos o código HTTP.
+   - `-w "%{http_code}"` → Exibe apenas o código de resposta HTTP.
+2. **Se o código for diferente de 200**, significa que a API não respondeu corretamente.
+   - Exibe uma mensagem de erro em vermelho (`${COR_ALERTA}`).
+   - Sai do script (`exit 1`), impedindo que ele continue.
+
+🔹 **Objetivo**: Garantir que o BOT_TOKEN seja válido antes de seguir para outras etapas.
+
+### 2. Função `criar_pastas_arquivos`
+Essa função garante que os diretórios e arquivos de log existam antes de serem usados.
+
+📌 **Passo a passo**:
+1. **Loop sobre os arquivos de log**  
+   - `$LOGS`, `$LOG_ONLINE` e `$LOG_OFFLINE` são verificados um por um.
+
+2. **Verifica se o arquivo existe (`! -e "$log_file"`)**  
+   - Se **não** existir, continua a execução.
+
+3. **Obtém o diretório do arquivo**  
+   - `dirname "$log_file"` pega apenas o caminho do diretório (sem o nome do arquivo).
+
+4. **Verifica se o diretório existe (`! -d "$dir_name"`)**  
+   - Se **não** existir, exibe uma mensagem ⚠️ e cria o diretório com `mkdir -p`.
+
+5. **Cria o arquivo de log se necessário**  
+   - Se o arquivo de log não existir, ele é criado com `touch "$log_file"`.
+
+🔹 **Objetivo**:  
+- Evitar erros por falta de arquivos ou diretórios.  
+- Criar os arquivos/diretórios dinamicamente, garantindo que o script rode sem problemas.  
+
+### 4️⃣ - Função `enviar alerta`
+```bash
+# Função para enviar alerta para o Telegram
+enviar_alerta() {
+   local MENSAGEM="$1"
+   echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"
+   curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+      -d "chat_id=$CHAT_ID" \
+      -d "text=$MENSAGEM" > /dev/null 2>&1
+}
+```
+
+Esse bloco contém a função **`enviar_alerta`**, que é responsável por enviar mensagens de alerta para um chat no Telegram.
+
+📌 **Passo a passo**:
+
+1. **`local MENSAGEM="$1"`**  
+   - O primeiro argumento passado para a função (`$1`) é armazenado na variável `MENSAGEM`. Essa será a mensagem que será enviada para o Telegram.
+
+2. **`echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"`**  
+   - Antes de enviar a mensagem, a função exibe uma mensagem de status informando que o alerta está sendo enviado para o Telegram.
+   - A cor da mensagem é azul (definido por `${COR_INFO}`), e o reset de cor é feito no final com `${COR_RESET}`.
+
+3. **`curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage"`**  
+   - Utiliza o `curl` para fazer uma requisição `POST` para a API do Telegram.
+   - O `-s` faz com que o `curl` rode de forma silenciosa (sem mostrar detalhes da requisição).
+
+4. **Parâmetros da requisição**:
+   - **`-d "chat_id=$CHAT_ID"`**: Envia o ID do chat para o qual a mensagem será enviada.
+   - **`-d "text=$MENSAGEM"`**: Envia o texto da mensagem (definido pela variável `MENSAGEM`).
+   
+5. **`> /dev/null 2>&1`**  
+   - Essa parte redireciona a saída da requisição para `/dev/null`, ou seja, descarta qualquer saída ou erro gerado pela requisição do `curl`.
+
+🔹 **Objetivo**:  
+Enviar um alerta para o Telegram no chat definido, com a mensagem fornecida à função.
+
+### 5️⃣ Função `verificar_status_site`
+```bash
+# Função para verificar o status do site
+verificar_status_site() {
+   STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
+   TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
+   TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")  # Hora no Brasil
+   
+   case $STATUS in
+      200)
+            SITE_STATUS="✅ O site está ONLINE!"
+            # Registro no log de online com cor
+            echo -e "${COR_OK}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOG_ONLINE"
+            # Registro no log geral com cor
+            echo -e "${COR_OK}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOGS"
+            ;;
+      *)
+            SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"
+            # Registro no log de offline com cor
+            echo -e "${COR_ALERTA}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOG_OFFLINE"
+            # Registro no log geral com cor
+            echo -e "${COR_ALERTA}$TIME_VIRGINIA (Virginia) | $TIME_BRASIL (Brasil) - $SITE_STATUS${COR_RESET}" >> "$LOGS"
+            ;;
+   esac
+}
+```
+
+Esse bloco define a função **`verificar_status_site`**, responsável por verificar o status de um site e registrar as informações de status e tempo nos logs.
+
+📌 **Passo a passo**:
+
+1. **`STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)`**  
+   - O comando `curl` verifica a resposta do site no endereço `http://localhost`. 
+   - O parâmetro `-s` silencia a saída, enquanto `-o /dev/null` descarta o conteúdo do site.
+   - A opção `-w "%{http_code}"` faz com que o `curl` retorne apenas o código HTTP da resposta (por exemplo, `200` para sucesso ou outros códigos de erro).
+
+2. **`TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")`**  
+   - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` (hora de Virginia, sem fuso horário especificado).
+
+3. **`TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")`**  
+   - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` no fuso horário de São Paulo (Brasil), definindo o `TZ` para o fuso horário de São Paulo.
+
+4. **`case $STATUS in`**  
+   - A estrutura `case` verifica o código de status HTTP recebido.
+
+5. **Se o status for `200`** (site online):
+   - Define a variável `SITE_STATUS="✅ O site está ONLINE!"`.
+   - Registra a mensagem nos logs de "online" e "geral", incluindo a hora de Virginia e Brasil, com cor verde definida pela variável `${COR_OK}`.
+
+6. **Se o status for diferente de `200`** (site offline ou erro):
+   - Define a variável `SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"`, onde o código de status é mostrado.
+   - Registra a mensagem nos logs de "offline" e "geral", com cor vermelha (alerta) definida por `${COR_ALERTA}`.
+
+### **Resumindo**:
+✔ **`verificar_status_site`** → Verifica o status do site `localhost`, obtém as horas em Virginia e Brasil, e registra o status nos logs de online ou offline.
+  - Se o status for `200`, o site está online e a mensagem é registrada em verde.
+  - Se o status for outro código, o site está offline e a mensagem é registrada em vermelho.
+  - A data e a hora são registradas tanto em Virginia quanto no Brasil.
+
+Esse bloco funciona para monitorar a disponibilidade de um site e manter um histórico no formato de logs!
+
+### 6️⃣ - Funções `verificar_portas` e `reiniciar_nginx`
+
+### **Função `verificar_portas`**
+```bash
+verificar_portas() {
+   # Verifica a porta 80 (HTTP)
+   if nc -zv 127.0.0.1 80 &> /dev/null; then
+      PORTA_80="✅ Porta 80 (HTTP) está FUNCIONANDO"
+   else
+      PORTA_80="⛔ Porta 80 (HTTP) está INDISPONÍVEL"
+   fi
+
+   # Verifica a porta 443 (HTTPS)
+   if nc -zv 127.0.0.1 443 &> /dev/null; then
+      PORTA_443="✅ Porta 443 (HTTPS) está FUNCIONANDO"
+   else
+      PORTA_443="⛔ Porta 443 (HTTPS) está INDISPONÍVEL"
+   fi
+}
+```
+
+📌 **Passo a passo**:
+
+1. **`nc -zv 127.0.0.1 80 &> /dev/null`**  
+   - O comando `nc` (Netcat) é usado para verificar se a porta 80 (HTTP) está aberta e acessível na máquina local (`127.0.0.1`).
+   - O parâmetro `-z` verifica se a porta está aberta, e `-v` torna a execução mais verbosa. A saída é redirecionada para `/dev/null` para não mostrar nada no terminal.
+
+2. **Estrutura de verificação**:
+   - Se a porta 80 estiver aberta, a variável `PORTA_80` é definida com a mensagem "✅ Porta 80 (HTTP) está FUNCIONANDO".
+   - Caso contrário, é definida como "⛔ Porta 80 (HTTP) está INDISPONÍVEL".
+   
+3. O mesmo processo é feito para a **porta 443 (HTTPS)**:
+   - Verifica se a porta 443 está aberta e acessível.
+   - Dependendo do resultado, a variável `PORTA_443` é atualizada com a mensagem correspondente.
+
+Essas verificações são úteis para garantir que as portas essenciais para comunicação web estejam abertas e funcionando corretamente!
+
+### **Função `reiniciar_nginx`**
+```bash
+reiniciar_nginx() {
+   if ! sudo systemctl is-active --quiet nginx; then
+      NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
+      
+      # Tenta reiniciar o Nginx
+      echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
+      if sudo systemctl restart nginx > /dev/null 2>&1; then
+            NGINX_REINICIADO="✅ Nginx foi REINICIADO com SUCESSO!"
+            verificar_portas  # Verifica as portas novamente após reiniciar
+            verificar_status_site  # Verifica o status do site novamente após reiniciar
+      else
+            NGINX_REINICIADO="⛔ Não foi possível reiniciar o Nginx!"
+      fi
+   else
+      NGINX_STATUS="✅ Nginx está ATIVO e funcionando!"
+      NGINX_REINICIADO="😁 Não foi necessário reiniciar o Nginx."
+   fi
+}
+```
+
+📌 **Passo a passo**:
+
+1. **Verificar se o Nginx está ativo**:
+   - **`if ! sudo systemctl is-active --quiet nginx`**: 
+     - Verifica se o serviço do Nginx está ativo. O comando `systemctl is-active --quiet nginx` retorna um status silencioso.
+     - Se o serviço não estiver ativo, o comando dentro do `if` é executado.
+
+2. **Se o Nginx estiver inativo ou com problema**:
+   - Define a variável `NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"`.
+   - Em seguida, tenta reiniciar o Nginx com o comando `sudo systemctl restart nginx`.
+   - Se o reinício for bem-sucedido, a variável `NGINX_REINICIADO` é atualizada para "✅ Nginx foi REINICIADO com SUCESSO!".
+     - Após o reinício, as funções **`verificar_portas`** e **`verificar_status_site`** são chamadas novamente para garantir que as portas e o site estejam funcionando corretamente.
+
+3. **Se o Nginx já estiver ativo**:
+   - Caso o Nginx esteja ativo, a variável `NGINX_STATUS` é definida como "✅ Nginx está ATIVO e funcionando!".
+   - A variável `NGINX_REINICIADO` é atualizada para "😁 Não foi necessário reiniciar o Nginx.".
+
+Essa função garante que o serviço do Nginx esteja sempre funcionando corretamente e, se necessário, tenta reiniciar o serviço para restaurar a funcionalidade.
+
+Essas funções ajudam a manter a infraestrutura web operando corretamente, reiniciando o Nginx e verificando o estado das portas essenciais. 
+
+### 7️⃣ - Funções `verificar_status_nginx` e `exibir_saida_terminal`
+
+### **Função `verificar_status_nginx`**
+```bash
+verificar_status_nginx() {
+   NGINX_STATUS=""
+
+   reiniciar_nginx
+}
+```
+
+📌 **Passo a passo**:
+
+- **Objetivo**: A função `verificar_status_nginx` chama a função `reiniciar_nginx` para garantir que o status do serviço do Nginx seja verificado e, caso necessário, reiniciado.
+  
+- **Variável `NGINX_STATUS`**:
+  - A variável `NGINX_STATUS` é inicialmente limpa para garantir que o status mais recente seja exibido.
+  
+- **Chamada de função**:
+  - A função `reiniciar_nginx` é chamada para:
+    - Verificar se o Nginx está ativo ou não.
+    - Tentar reiniciar o serviço caso esteja inativo ou com problema.
+    - Realizar verificações posteriores de status do site e das portas.
+
+### **Função `exibir_saida_terminal`**
+```bash
+exibir_saida_terminal() {
+   echo -e "${COR_INFO}🕒 Data e Hora (Virginia): $TIME_VIRGINIA | Data e Hora (Brasil): $TIME_BRASIL${COR_RESET}"
+
+   echo -e "${COR_INFO}\n⚙️ Status das Portas:${COR_RESET}"
+   echo -e "$PORTA_80"
+   echo -e "$PORTA_443"
+
+   echo -e "${COR_INFO}\n🔧 Status do Nginx:${COR_RESET}"
+   echo -e "$NGINX_STATUS"
+
+   echo -e "${COR_INFO}\n🔄 Reinício do Nginx:${COR_RESET}"
+   echo -e "$NGINX_REINICIADO"
+
+   echo -e "${COR_INFO}\n🌐 Status do Site:${COR_RESET}"
+   echo -e "$SITE_STATUS"
+
+   echo -e "${COR_INFO}\n📂 Logs:${COR_RESET}"
+   echo -e "- Geral: $LOGS"
+   echo -e "- Online: $LOG_ONLINE"
+   echo -e "- Offline: $LOG_OFFLINE"
+
+   echo -e "${COR_INFO}🎉 Script executado com SUCESSO! Veja os logs para mais detalhes.${COR_RESET}"
+}
+```
+
+📌 **Passo a passo**:
+
+1. **Exibição da Data e Hora**:
+   - Exibe as datas e horas atuais em Virginia e no Brasil.
+   - Utiliza as variáveis `TIME_VIRGINIA` e `TIME_BRASIL` que são formatadas anteriormente.
+
+2. **Status das Portas**:
+   - Exibe o status das portas 80 (HTTP) e 443 (HTTPS), armazenados nas variáveis `PORTA_80` e `PORTA_443`.
+   - A função `verificar_portas` deve ter sido chamada anteriormente para definir essas variáveis.
+
+3. **Status do Nginx**:
+   - Exibe o status do Nginx, armazenado na variável `NGINX_STATUS`. 
+   - Esta variável é atualizada com base na verificação feita pela função `reiniciar_nginx`.
+
+4. **Reinício do Nginx**:
+   - Exibe o status do reinício do Nginx, com base na variável `NGINX_REINICIADO`. 
+   - Essa variável é definida dentro da função `reiniciar_nginx`, dependendo de o Nginx ter sido ou não reiniciado com sucesso.
+
+5. **Status do Site**:
+   - Exibe o status do site, armazenado na variável `SITE_STATUS`. 
+   - Essa variável é preenchida pela função `verificar_status_site`.
+
+6. **Logs**:
+   - Exibe os caminhos para os arquivos de log, utilizando as variáveis `LOGS`, `LOG_ONLINE`, e `LOG_OFFLINE`.
+
+7. **Mensagem de Sucesso**:
+   - Exibe uma mensagem indicando que o script foi executado com sucesso e sugere verificar os logs para mais detalhes.
+
+---
+
+### 8️⃣ - Função `executar_script` e `mensagem para o Telegram`
+
+### **Função `executar_script`**
+```bash
+executar_script() {
+   verificar_configuracao
+   verificar_conexao_telegram
+   criar_pastas_arquivos
+   verificar_status_site
+   verificar_portas
+   verificar_status_nginx
+}
+```
+
+📌 **Passo a passo**:
+
+- **Objetivo**: A função `executar_script` chama todas as funções anteriores em sequência para realizar a execução completa do processo de verificação e configuração.
+  
+  - **Funções chamadas**:
+    - **`verificar_configuracao`**: Verifica a configuração do ambiente.
+    - **`verificar_conexao_telegram`**: Verifica a conexão com a API do Telegram.
+    - **`criar_pastas_arquivos`**: Cria os diretórios e arquivos de log necessários, caso não existam.
+    - **`verificar_status_site`**: Verifica o status do site.
+    - **`verificar_portas`**: Verifica o status das portas 80 (HTTP) e 443 (HTTPS).
+    - **`verificar_status_nginx`**: Verifica o status do serviço Nginx.
+
+---
+
+### **Chamada da Função Principal**
+```bash
+# Chama a função principal para executar o script
+executar_script
+```
+
+📌 **Objetivo**: A linha abaixo chama a função `executar_script`, iniciando o processo completo de verificação e configuração do sistema. Ao ser executada, todas as funções dentro da `executar_script` serão acionadas sequencialmente.
+
+---
+
+### **Criação da Mensagem Consolidada para o Telegram**
+```bash
+MENSAGEM="
+🕒 Hora (Virginia): $TIME_VIRGINIA
+🕒 Hora (Brasil): $TIME_BRASIL
+
+⚙️ Status das Portas:
+$PORTA_80
+$PORTA_443
+
+🔧 Status do Nginx:
+$NGINX_STATUS
+
+🔄 Reinício do Nginx:
+$NGINX_REINICIADO
+
+🌐 Status do Site:
+$SITE_STATUS
+
+📂 Logs:
+- Geral: $LOGS
+- Online: $LOG_ONLINE
+- Offline: $LOG_OFFLINE
+
+🎉 Script executado com SUCESSO!
+"
+```
+
+📌 **Passo a passo**:
+
+- **Objetivo**: Aqui, uma mensagem consolidada é criada para enviar ao Telegram. 
+- **Variáveis utilizadas**:
+  - **`$TIME_VIRGINIA`** e **`$TIME_BRASIL`**: Exibem as horas de Virginia e Brasil, respectivamente.
+  - **`$PORTA_80`** e **`$PORTA_443`**: Exibem o status das portas 80 (HTTP) e 443 (HTTPS).
+  - **`$NGINX_STATUS`**: Exibe o status atual do Nginx.
+  - **`$NGINX_REINICIADO`**: Exibe o status de reinício do Nginx.
+  - **`$SITE_STATUS`**: Exibe o status do site.
+  - **`$LOGS`, `$LOG_ONLINE`, `$LOG_OFFLINE`**: Exibem os caminhos dos arquivos de log.
+  
+  O texto é formatado com emojis e informações para facilitar a leitura do alerta enviado.
+
+### **Envio da Mensagem para o Telegram**
+```bash
+# Enviar a mensagem consolidada para o Telegram
+enviar_alerta "$MENSAGEM"
+```
+
+📌 **Objetivo**: Aqui, a função `enviar_alerta` é chamada para enviar a mensagem consolidada ao Telegram. A variável `$MENSAGEM` criada anteriormente é passada como parâmetro para essa função.
+
+### **Exibição das Informações no Terminal**
+```bash
+# Exibe as informações no terminal
+exibir_saida_terminal
+```
+
+📌 **Objetivo**: Após enviar o alerta para o Telegram, a função `exibir_saida_terminal` é chamada para exibir as informações no terminal de forma organizada e detalhada. Essa função mostrará todas as informações de status e log geradas durante a execução do script.
+
+Esse bloco finaliza o processo, garantindo que a execução do script seja concluída com sucesso e que o usuário seja notificado tanto no terminal quanto no Telegram.
+
+### **🔥 Resumo**:
+- **`verificar_configuracao`**: Verifica se as variáveis essenciais (`BOT_TOKEN` e `CHAT_ID`) estão corretamente preenchidas.
+
+
+**`verificar_conexao_telegram`**: Verifica a conexão com a API do Telegram para garantir que o `BOT_TOKEN` esteja correto e funcionando.
+
+**`criar_pastas_arquivos`**: Cria os diretórios e arquivos de log necessários, caso não existam, para garantir o funcionamento adequado do sistema de logs.
+
+**`enviar_alerta`**: Envia uma mensagem de alerta para o Telegram, com base no conteúdo especificado.
+
+**`verificar_status_site`**: Verifica o status do site (código HTTP) e registra o resultado nos logs, indicando se o site está online ou offline.
+
+**`verificar_portas`**: Verifica se as portas 80 (HTTP) e 443 (HTTPS) estão abertas e funcionando corretamente no servidor.
+
+**`reiniciar_nginx`**: Verifica o status do Nginx e, caso esteja inativo, tenta reiniciá-lo, verificando novamente o status das portas e do site.
+
+**`verificar_status_nginx`**: Verifica o status do Nginx e executa a função `reiniciar_nginx` se necessário.
+
+**`exibir_saida_terminal`**: Exibe no terminal as informações organizadas sobre o status das portas, Nginx, site e logs.
+
+**`executar_script`**: Chama todas as funções necessárias para executar o processo completo de verificação e monitoramento.
+
+**`MENSAGEM`**: Cria uma mensagem com informações detalhadas sobre o status do sistema, como as portas, o Nginx, o site e os logs, para envio ao Telegram.
+
+**`enviar_alerta`**: Envia a mensagem consolidada (gerada pela variável `MENSAGEM`) para o Telegram.
+
+**`exibir_saida_terminal`**: Exibe as informações consolidadas no terminal, incluindo status das portas, do Nginx, do site e dos logs.
 
 #### 2.2. Dando Permissões de Execução ao Script
 
@@ -1047,7 +1587,14 @@ tail -f /var/log/monitoramento/geral.log
 
 # Etapa Bônus: Automação com UserData 🎁 
 
+## ❗Explicação do UserData
+
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/userdata.sh" target="_blank">📎 Arquivo UserData</a>
+
+> O código completo está nesse link, eu vou colocar todo o
+código abaixo, mas explicando cada detalhe. Então se quiser
+copiar ou baixar, abra o link.
+
 
 <p align="center">
   <br>
