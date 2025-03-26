@@ -21,6 +21,31 @@ verificar_configuracao() {
    fi
 }
 
+# Função para verificar a conexão com a API do Telegram
+verificar_conexao_telegram() {
+   local TESTE_CONEXAO=$(curl -s -o /dev/null -w "%{http_code}" "https://api.telegram.org/bot$BOT_TOKEN/getMe")
+   if [ "$TESTE_CONEXAO" != "200" ]; then
+      echo -e "${COR_ALERTA}⛔ Erro: Não foi possível conectar à API do Telegram. Verifique o BOT_TOKEN.${COR_RESET}"
+      exit 1
+   fi
+}
+
+criar_pastas_arquivos() {
+   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
+      if [ ! -e "$log_file" ]; then
+            dir_name=$(dirname "$log_file")
+            if [ ! -d "$dir_name" ]; then
+               echo "⚠️ Diretório ausente: $dir_name"
+               mkdir -p "$dir_name"
+               echo "✅ Diretório criado: $dir_name"
+            fi
+            echo "⚠️ Arquivo ausente: $log_file"
+            touch "$log_file"
+            echo "✅ Arquivo criado: $log_file"
+      fi
+   done
+}
+   
 # Função para enviar alerta para o Telegram
 enviar_alerta() {
    local MENSAGEM="$1"
@@ -98,19 +123,6 @@ verificar_status_nginx() {
    reiniciar_nginx
 }
 
-# Função para criar pastas e arquivos faltantes
-criar_pastas_arquivos() {
-   for log_file in "$LOGS" "$LOG_ONLINE" "$LOG_OFFLINE"; do
-      if [ ! -e "$log_file" ]; then
-            dir_name=$(dirname "$log_file")
-            if [ ! -d "$dir_name" ]; then
-               mkdir -p "$dir_name"  # Cria o diretório
-            fi
-            touch "$log_file"      # Cria o arquivo
-      fi
-   done
-}
-
 # Função para exibir saída no terminal de forma organizada
 exibir_saida_terminal() {
    echo -e "${COR_INFO}🕒 Data e Hora (Virginia): $TIME_VIRGINIA | Data e Hora (Brasil): $TIME_BRASIL${COR_RESET}"
@@ -139,6 +151,7 @@ exibir_saida_terminal() {
 # Função para iniciar o processo completo
 executar_script() {
    verificar_configuracao
+   verificar_conexao_telegram
    criar_pastas_arquivos
    verificar_status_site
    verificar_portas
