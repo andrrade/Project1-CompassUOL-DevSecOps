@@ -363,6 +363,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 ### 1.0. Acessar a Página de Instâncias
 
 1.1. No menu da AWS, clique no **ícone de pesquisa** e digite **EC2**.
+
 1.2. Clique na opção **"Instances"** para acessar a lista de instâncias existentes.
 
 ![img19.png](assets/img19.png)
@@ -379,7 +380,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 ### 3.0. Configurar Detalhes da Instância
 
-Tags
+#### Tags
 
 > [!WARNING]\
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
@@ -437,14 +438,13 @@ Tags
 
 - **VPC**: Escolha a **VPC** criada anteriormente.
 
-  - No meu caso, a VPC criada foi chamada **"project-vpc"**.
+  - No meu caso, a VPC criada foi **"project-vpc"**.
 
 - **Subnet**: Selecione a **sub-rede pública** correspondente à sua região principal.
 
 > [!NOTE]\
 > A **sub-rede pública** é fundamental, pois ela garante que sua instância EC2 tenha conectividade externa, o que é essencial para disponibilizar serviços como um servidor web acessível pela internet.
-
-> [!NOTE]\
+>
 > No meu caso, a VPC foi criada nas regiões **Virgínia (us-east-1)** e **Ohio (us-east-2)**, então escolhi a sub-rede pública de Virgínia: `"public1-us-east-1a"`.
 
 - **Auto-assign Public IP**: Marque **Enable**.
@@ -455,7 +455,7 @@ Tags
   7.3. Em **Firewall (Security Groups)**:
 
 - Escolha a opção **"Select existing security group"**.
-- Selecione o **Security Group** criado anteriormente, chamado **"security-group-project"**.
+- Selecione o **Security Group** criado anteriormente, no meu caso, **"security-group-project"**.
 
 > [!NOTE]\
 > O **Security Group** age como um firewall virtual, controlando o tráfego de entrada e saída da instância EC2. Ele garante que apenas o tráfego autorizado, como acesso SSH, seja permitido.
@@ -548,10 +548,13 @@ A saída inicial pode ser algo como:
 ```
 
 > [!NOTE]\
-> O primeiro conjunto de caracteres representa as permissões do arquivo:
->
+> - O primeiro caractere indica o tipo: `-` (arquivo), `d` (diretório), `l` (link simbólico).  
+> - Os próximos nove caracteres representam permissões em três grupos:  
 > - `r` (read), `w` (write) e `x` (execute).
-> - O padrão `-rwxr-xr-x` indica que o arquivo pode ser lido, escrito e executado pelo proprietário, e apenas lido e executado por outros usuários.
+>   - **Usuário (dono)**: `rwx` (leitura, escrita e execução).  
+>   - **Grupo**: `r-x` (leitura e execução, sem escrita).  
+>   - **Outros**: `r-x` (leitura e execução, sem escrita).  
+> - Exemplo: `-rwxr-xr-x` → É um `arquivo` onde: O dono pode tudo, o grupo e outros podem ler e executar.
 
 1.7. Ajuste as permissões da chave para garantir segurança na conexão:
 
@@ -560,6 +563,9 @@ chmod 400 key-project.pem
 ```
 
 > [!NOTE]\
+> Modo numérico (octal):
+> r = 4, w = 2, x = 1
+> 400 = r
 > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
 
 1.8. Verifique novamente as permissões:
@@ -648,6 +654,7 @@ sudo apt update && sudo apt upgrade -y
 
 ![img36.png](assets/img36.png)
 
+> [!NOTE]\
 > Obs: isso talvez demore um pouco
 
 ### 2.0. Instalação do Nginx:
@@ -659,6 +666,8 @@ sudo apt install nginx -y
 ![img37.png](assets/img37.png)
 
 2.1. Após a atualização, verifique se o Nginx foi instalado corretamente:
+
+> [!IMPORTANT]\
 > **Resultado esperado**: A versão do Nginx instalada será exibida, confirmando que a instalação foi bem-sucedida.
 
 ```bash
@@ -696,29 +705,37 @@ Eu deixei minha pasta com os arquivos do site na pasta:
 `/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/`
 
 > [!NOTE]\
-> Você pode criar o seu site como preferir e lembrar do local onde o guardou.
-> [!IMPORTANT]\
-> Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
+> Você pode criar o seu site como preferir, mas lembre-se do local onde o guardou.
 
-2.1. Abra seu WSL sem ser o que tem a instância, o da sua
-máquina mesmo.
+> [!IMPORTANT]\
+> Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **`meu-site`**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
+
+2.1. Abra seu WSL (não é o que tem a instância, é o da sua
+máquina mesmo.)
 
 ```bash
 scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/" ubuntu@SEU_IP:/home/ubuntu/
 ```
 
+> [!NOTE]\
+> Preencha com o caminho onde você guardou a sua chave e onde está o seu site. Tamém não se esqueça de preencher com
+> o endereço IP da sua instância.
+
 ![img39.png](assets/img39.png)
 
 2.2. Volte para o terminal conectado à instância e execute os comando:
 
+Vai mover sua pasta com o site que está na sua máquina para a sua instância:
 ```bash
 sudo mv /home/ubuntu/site-projeto1-compassuol/* /var/www/html/
 ```
 
+Caminhe até a pasta onde você enviou a pasta com os arquivos do site:
 ```bash
 cd /var/www/html
 ```
 
+Liste para conferir se está lá:
 ```bash
 ls
 ```
@@ -779,7 +796,8 @@ curl http://localhost
 
 ### 4.0. Acessando o Site
 
-4.1. Agora, você pode acessar sua página web digitando o `IP público` da sua instância EC2 no navegador ou utilizando `localhost` caso esteja testando localmente.
+4.1. Agora, você pode acessar sua página web digitando o `IP público` da sua instância EC2 no navegador,
+ou utilizando `localhost` caso esteja testando localmente.
 
 Se o servidor Nginx estiver em execução corretamente, você verá a página com as informações sobre o projeto.
 
@@ -842,11 +860,11 @@ sudo kill -9 <PID>
 ```
 
 > [!NOTE]\
-> O comando kill -9 é usado em sistemas Unix/Linux para forçar o encerramento de um processo.
+> O comando `kill -9` é usado em sistemas Unix/Linux para forçar o encerramento de um processo.
 >
-> kill: É um comando utilizado para enviar sinais a processos. Por padrão, o comando envia o sinal SIGTERM (sinal 15), que solicita que o processo termine de maneira graciosa, permitindo que ele faça a limpeza de recursos e finalize suas atividades.
+> `kill`: É um comando utilizado para enviar sinais a processos. Por padrão, o comando envia o sinal SIGTERM (sinal 15), que solicita que o processo termine de maneira graciosa, permitindo que ele faça a limpeza de recursos e finalize suas atividades.
 >
-> -9: Representa o sinal SIGKILL (sinal 9), que é um sinal mais forte e imediato. Ele força a finalização do processo sem dar a chance de o processo realizar qualquer tipo de limpeza. Isso significa que o processo será encerrado imediatamente, sem aviso ou chance de salvar dados.
+> `-9`: Representa o sinal SIGKILL (sinal 9), que é um sinal mais forte e imediato. Ele força a finalização do processo sem dar a chance de o processo realizar qualquer tipo de limpeza. Isso significa que o processo será encerrado imediatamente, sem aviso ou chance de salvar dados.
 
 - Substitua `<PID>` pelo ID do processo mestre do Nginx.
 - Verifique o status do Nginx:
@@ -871,56 +889,66 @@ Assim que a reinicialização estiver completa, o Nginx voltará a ficar ativo e
 
 ## 🤖 Criando o Bot no Telegram
 
-Abra o Telegram e pesquise por `BotFather` e clique.
+Abra o Telegram e pesquise por `BotFather` e clique nele:
+
 ![img-bot1.png](assets/img-bot1.png)
 
-Dê um `/newbot` para criar um novo bot
-Escolha um nome para o bot, no meu caso `teste`
-Escolha um username pro seu bot, tem que terminar com `_bot`. No
-meu caso `exemploTestePB2503_bot`
-Ele vai te mandar uma mensagem e você vai clicar nesse link com a setinha.
-
-> [!WARNING]\
-> ⚠️ SALVE o token to access the HTTP API, no meu caso, está borrado por
-segurança.
+- Dê um `/newbot` para criar um novo bot
+- Escolha um nome para o bot, no meu caso `teste`
+- Escolha um username pro seu bot (tem que terminar com `_bot`). 
+   - No meu caso `exemploTestePB2503_bot`
+- Ele vai te mandar uma mensagem e você vai clicar nesse link com a setinha:
 
 ![img-bot2.png](assets/img-bot2.png)
 
-Clique em `Start`
+> [!WARNING]\
+> ⚠️ SALVE o token `to access the HTTP API`, no meu caso, está borrado por
+segurança.
+
+Clique em `Start`:
+
 ![img-bot3.png](assets/img-bot3.png)
 
-No Ubuntu execute os comandos:
-
+Instale o utilitário jq (para manipular JSON): 
 ```bash
 sudo apt install jq -y 
 ```
 
+Faz uma requisição à API do Telegram para obter atualizações do bot e formata a resposta JSON usando jq:
 ```bash
 curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
 ```
 
 Sua mensagem pode sair algo tipo: 
-{"ok":true,"result":[]}
+`
+{
+   "ok":true,
+   "result":[]
+}
+`
 
 ![img47.png](assets/img47.png)
 
-Mande uma mensagem de teste para iniciar o chat do seu bot
+Mande uma mensagem de teste para iniciar o chat do seu bot:
+
 ![img-bot4.png](assets/img-bot4.png)
 
-Volte par o terminal e refaça o comando:
+Volte para o terminal e execute novamente o comando:
+
 ```
 curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
 ```
 
-Agora nessa saída aparecerá o chat_id:
+Agora nessa saída aparecerá o chat_id (apontado com a setinha):
 
 ![img48](assets/img48.png)
 
 > [!WARNING]\
-> ⚠️ SALVAR o chat_id, no meu caso está borrado por
-segurança.
+> ⚠️ SALVE o chat_id, você precisará lembrar dele para usar no script!
+>
+> no meu caso está borrado por segurança.
 
-## 🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.
+## 🌐 1. Criação de um script em Bash para monitorar a disponibilidade do site.
 
 [🔼 Voltar ao Sumário](#sumário-)
 
@@ -956,6 +984,11 @@ sudo chmod -R 755 /var/log/monitoramento
 
 > [!NOTE]\
 > Altera as permissões para garantir que você tenha permissão para ler, escrever e executar arquivos nessa pasta, enquanto outros usuários podem apenas ler e executar.
+> r = 4, w = 2, x = 1
+> 7 = 4 + 2 + 1 = rwx
+> 5 = 4 + 1 = r-x
+> Permissão de leitura e escrita e execução para propritário
+> Permissão de leitura e execução para grupo e outros
 
 Verifique novamente os arquivos e permissões:
 
@@ -970,10 +1003,14 @@ Mude também a permissão dos arquivos:
 ``` bash
 sudo chmod 666 /var/log/monitoramento/geral.log /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log
 ```
+> [!NOTE]\
+> r = 4, w = 2, x = 1
+> 6 = 4 + 2 = rw-
+> Permissão de leitura e escrita para propritário, grupo e outros
 
 #### 1.3. Criação da Pasta para Scripts
 
-Criando a pasta onde você armazenará os scripts de monitoramento: pasta `/usr/local/bin/monitoramento/scripts`
+Criando a pasta onde você armazenará os scripts de monitoramento: `/usr/local/bin/monitoramento/scripts`
 
 ```bash
 sudo mkdir -p /usr/local/bin/monitoramento/scripts
@@ -1019,12 +1056,12 @@ LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
 - Isso define qual interpretador será usado para executar o script.  
 - Neste caso, ele usa **`bash`**, e o comando `env` garante que o shell correto seja encontrado no ambiente, independentemente do caminho exato do `bash` no sistema.  
 
-2. Definição das `variáveis de configuração`
+2. Definição das `variáveis de configuração`.
 O script define algumas variáveis importantes que serão usadas mais tarde.
 
 ##### 🔹 **Variáveis do Telegram**  
 - **`BOT_TOKEN`**: Token de autenticação do bot no Telegram (fornecido pelo BotFather).  
-- **`CHAT_ID`**: ID do chat ou grupo onde os alertas serão enviados.  
+- **`CHAT_ID`**: ID do chat ou grupo onde os alertas serão enviados. (obtido pelo arquivo json utilizando jq)
 
 Se esses valores não forem preenchidos corretamente, o script não conseguirá enviar mensagens para o Telegram.
 
@@ -1035,7 +1072,7 @@ Se esses valores não forem preenchidos corretamente, o script não conseguirá 
 
 Esses arquivos serão criados automaticamente se não existirem.
 
-### 2️⃣ - `variáveis de cor` e Função `verificar_configuracao`
+### 2️⃣ - `Variáveis de cor` e Função `verificar_configuracao`
 ```bash
 # Defina as variáveis de cor
 COR_OK="\033[32m"
@@ -1194,7 +1231,7 @@ Enviar um alerta para o Telegram no chat definido, com a mensagem fornecida à f
 # Função para verificar o status do site
 verificar_status_site() {
    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-   TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
+   TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
    TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")  # Hora no Brasil
    
    case $STATUS in
@@ -1225,8 +1262,8 @@ Esse bloco define a função **`verificar_status_site`**, responsável por verif
    - O parâmetro `-s` silencia a saída, enquanto `-o /dev/null` descarta o conteúdo do site.
    - A opção `-w "%{http_code}"` faz com que o `curl` retorne apenas o código HTTP da resposta (por exemplo, `200` para sucesso ou outros códigos de erro).
 
-2. **`TIME_VIRGINIA=$(date "+%d-%m-%Y %H:%M:%S")`**  
-   - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` (hora de Virginia, sem fuso horário especificado).
+2. **`TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")`**  
+   - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` no fuso horário de Nova Iorque (EUA), definindo o `TZ` para o fuso horário de Nova Iorque.
 
 3. **`TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")`**  
    - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` no fuso horário de São Paulo (Brasil), definindo o `TZ` para o fuso horário de São Paulo.
@@ -1236,17 +1273,21 @@ Esse bloco define a função **`verificar_status_site`**, responsável por verif
 
 5. **Se o status for `200`** (site online):
    - Define a variável `SITE_STATUS="✅ O site está ONLINE!"`.
-   - Registra a mensagem nos logs de "online" e "geral", incluindo a hora de Virginia e Brasil, com cor verde definida pela variável `${COR_OK}`.
+   - Registra a mensagem nos logs de "online" e "geral", incluindo a hora de Virgínia e Brasil, com cor verde definida pela variável `${COR_OK}`.
 
 6. **Se o status for diferente de `200`** (site offline ou erro):
    - Define a variável `SITE_STATUS="⛔ O serviço está OFFLINE! Status: $STATUS"`, onde o código de status é mostrado.
+
+> [!NOTE]\
+> Esses `status` são códigos de resposta que o servidor envia para indicar o resultado de uma requisição HTTP.
+
    - Registra a mensagem nos logs de "offline" e "geral", com cor vermelha (alerta) definida por `${COR_ALERTA}`.
 
 ### **Resumindo**:
-✔ **`verificar_status_site`** → Verifica o status do site `localhost`, obtém as horas em Virginia e Brasil, e registra o status nos logs de online ou offline.
+✔ **`verificar_status_site`** → Verifica o status do site `localhost`, obtém as horas em Virgínia e Brasil, e registra o status nos logs de online ou offline.
   - Se o status for `200`, o site está online e a mensagem é registrada em verde.
   - Se o status for outro código, o site está offline e a mensagem é registrada em vermelho.
-  - A data e a hora são registradas tanto em Virginia quanto no Brasil.
+  - A data e a hora são registradas tanto em Virgínia quanto no Brasil.
 
 Esse bloco funciona para monitorar a disponibilidade de um site e manter um histórico no formato de logs!
 
@@ -1284,8 +1325,6 @@ verificar_portas() {
 3. O mesmo processo é feito para a **porta 443 (HTTPS)**:
    - Verifica se a porta 443 está aberta e acessível.
    - Dependendo do resultado, a variável `PORTA_443` é atualizada com a mensagem correspondente.
-
-Essas verificações são úteis para garantir que as portas essenciais para comunicação web estejam abertas e funcionando corretamente!
 
 ### **Função `reiniciar_nginx`**
 ```bash
@@ -1328,7 +1367,7 @@ reiniciar_nginx() {
 
 Essa função garante que o serviço do Nginx esteja sempre funcionando corretamente e, se necessário, tenta reiniciar o serviço para restaurar a funcionalidade.
 
-Essas funções ajudam a manter a infraestrutura web operando corretamente, reiniciando o Nginx e verificando o estado das portas essenciais. 
+Essas funções ajudam a manter a infraestrutura web operando corretamente, reiniciando o Nginx e verificando o estado das portas.
 
 ### 7️⃣ - Funções `verificar_status_nginx` e `exibir_saida_terminal`
 
@@ -1389,7 +1428,7 @@ exibir_saida_terminal() {
 
 2. **Status das Portas**:
    - Exibe o status das portas 80 (HTTP) e 443 (HTTPS), armazenados nas variáveis `PORTA_80` e `PORTA_443`.
-   - A função `verificar_portas` deve ter sido chamada anteriormente para definir essas variáveis.
+   - A função `verificar_portas` é chamada anteriormente para definir essas variáveis.
 
 3. **Status do Nginx**:
    - Exibe o status do Nginx, armazenado na variável `NGINX_STATUS`. 
@@ -1481,7 +1520,7 @@ $SITE_STATUS
 
 - **Objetivo**: Aqui, uma mensagem consolidada é criada para enviar ao Telegram. 
 - **Variáveis utilizadas**:
-  - **`$TIME_VIRGINIA`** e **`$TIME_BRASIL`**: Exibem as horas de Virginia e Brasil, respectivamente.
+  - **`$TIME_VIRGINIA`** e **`$TIME_BRASIL`**: Exibem as horas de Virgínia e Brasil, respectivamente.
   - **`$PORTA_80`** e **`$PORTA_443`**: Exibem o status das portas 80 (HTTP) e 443 (HTTPS).
   - **`$NGINX_STATUS`**: Exibe o status atual do Nginx.
   - **`$NGINX_REINICIADO`**: Exibe o status de reinício do Nginx.
@@ -1504,7 +1543,7 @@ enviar_alerta "$MENSAGEM"
 exibir_saida_terminal
 ```
 
-📌 **Objetivo**: Após enviar o alerta para o Telegram, a função `exibir_saida_terminal` é chamada para exibir as informações no terminal de forma organizada e detalhada. Essa função mostrará todas as informações de status e log geradas durante a execução do script.
+📌 **Objetivo**: Após enviar o alerta para o Telegram, a função `exibir_saida_terminal` é chamada para exibir as informações no terminal de forma organizada e detalhada. Essa função mostrará todas as informações de status e log geradas durante a execução do script (apenas caso ele seja executado manualmente).
 
 Esse bloco finaliza o processo, garantindo que a execução do script seja concluída com sucesso e que o usuário seja notificado tanto no terminal quanto no Telegram.
 
