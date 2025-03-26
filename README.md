@@ -39,28 +39,33 @@
 - [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
 
 ## Etapa 3: Monitoramento e Notificações
+
 - [🤖 Criando o Bot no Telegram](#-criando-o-bot-no-telegram)
-- [🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.](#-1-criar-um-script-em-bash-ou-python-para-monitorar-a-disponibilidade-do-site)
+- [🌐 1. Criação de um script em Bash para monitorar a disponibilidade do site.](#-1-criação-de-um-script-em-bash-para-monitorar-a-disponibilidade-do-site)
 - [🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.](#-21-o-script-deve-verificar-se-o-site-responde-corretamente-a-uma-requisição-http)
 - [❗Explicação do Script](#explicação-do-script)
 - [2.2. Dando Permissões de Execução ao Script](#22-dando-permissões-de-execução-ao-script)
-- [🌐 3. Configurar o script para rodar automaticamente](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron-ou-systemd-timers)
+- [🌐 3. Configurar o script para rodar automaticamente a cada 1 minuto usando cron.](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron)
 
 ## Etapa 4: Automação e Testes
+
 - [🌐 Automação](#-automação)
 - [🌐 Testes](#-testes)
 
 ## Etapa Bônus
+
 - [❗Explicação do UserData](#explicação-do-userdata)
 - [💡 Como usar o UserData](#-como-usar-o-userdata)
 
 ## Experiência sobre o Projeto
+
 - [📈 Experiência sobre o Projeto](#-experiência-sobre-o-projeto)
 
 ## Extra - Exemplo
+
 - [🔗 Extra - Exemplo](#-extra---exemplo)
 
---- 
+---
 
 ## 🔧 Ferramentas Úteis
 
@@ -123,20 +128,20 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 > [!NOTE]\
 > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
 
-   - Marque "Auto-generate"
+- Marque "Auto-generate"
 
 > [!NOTE]\
 > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
 
-   - Defina um nome para sua VPC (exemplo: "project")
-   - Defina o **IPv4 CIDR block** como **10.0.0.0/16**
+- Defina um nome para sua VPC (exemplo: "project")
+- Defina o **IPv4 CIDR block** como **10.0.0.0/16**
 
 > [!NOTE]\
 > **O que é IPv4 CIDR block?**
 >
 > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
 
-   ![image03](assets/img03.png)
+![image03](assets/img03.png)
 
 4. Nas configurações:
 
@@ -147,22 +152,22 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 >
 > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
 
-   - **Tenancy**: "Default"
+- **Tenancy**: "Default"
 
 > [!NOTE]\
 > **O que é Tenancy?**
 >
 > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
 
-   - **Número de AZs (Availability Zones)**: 2
-   - Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
+- **Número de AZs (Availability Zones)**: 2
+- Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
 
 > [!NOTE]\
 > **O que são Availability Zones (AZs)?**
 >
 > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
 
-   ![image04](assets/img04.png)
+![image04](assets/img04.png)
 
 5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
 
@@ -171,7 +176,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 >
 > **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
 
-   ![image05](assets/img05.png)
+![image05](assets/img05.png)
 
 6. Configure o CIDR block das subnets como **10.0.0.0/20**.
 
@@ -180,7 +185,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 >
 > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
 
-   ![image06](assets/img06.png)
+![image06](assets/img06.png)
 
 7. Configure as opções adicionais:
 
@@ -191,21 +196,21 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 >
 > Um NAT Gateway permite que instâncias em subnets privadas acessem a internet sem serem diretamente acessíveis por ela.
 
-   - **VPC Endpoints:** Selecione "S3 Gateway"
+- **VPC Endpoints:** Selecione "S3 Gateway"
 
 > [!NOTE]\
 > **O que são VPC Endpoints e S3 Gateway?**
 >
 > Um **VPC Endpoint** permite que recursos dentro da VPC se comuniquem com serviços da AWS sem passar pela internet. O **S3 Gateway** é um tipo de endpoint usado para acessar o Amazon S3 de forma segura e eficiente.
 
-   - **Habilitar DNS:** Marque as opções "Enable DNS hostnames" e "Enable DNS resolution"
+- **Habilitar DNS:** Marque as opções "Enable DNS hostnames" e "Enable DNS resolution"
 
 > [!NOTE]\
 > **O que é DNS e por que habilitá-lo?**
 >
 > O DNS (Domain Name System) traduz endereços IP em nomes legíveis. Habilitá-lo permite que instâncias dentro da VPC se comuniquem mais facilmente usando nomes ao invés de IPs.
 
-   - **Tags:** Não adicionei tags extras
+- **Tags:** Não adicionei tags extras
 
 > [!NOTE]\
 > **O que são Tags?**
@@ -309,12 +314,12 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
 > [!NOTE]\
 > Permite que **apenas o seu IP atual** acesse a instância via SSH. Isso evita acessos indesejados.
 
-   - **HTTP (porta 80)**
-     - **Tipo**: HTTP
-     - **Protocolo**: TCP
-     - **Port Range**: 80
-     - **Source (Origem)**: **My IP** (inicialmente por causa da segurança,
-       após todas as configurações, deixaremos como **0.0.0.0/0**)
+- **HTTP (porta 80)**
+  - **Tipo**: HTTP
+  - **Protocolo**: TCP
+  - **Port Range**: 80
+  - **Source (Origem)**: **My IP** (inicialmente por causa da segurança,
+    após todas as configurações, deixaremos como **0.0.0.0/0**)
 
 > [!NOTE]\
 > Permite apenas o seu IP acessar o servidor web (por enquanto).
@@ -322,7 +327,7 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
 > Após todas as configurações será necessário mudar a origem do HTTP para
 > **0.0.0.0/0**, permitindo que qualquer usuário da internet acesse a página hospedada na instância.
 
-   ![image16](assets/img16.png)
+![image16](assets/img16.png)
 
 #### Configuração das Regras de Saída (Outbound Rules)
 
@@ -341,11 +346,11 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 > Isso permite que a instância **acesse qualquer serviço na internet**, como atualizações de pacotes e APIs externas.
 
 8. **Tags (Opcional)**  
-   Não adicionei nenhuma tag.
+    Não adicionei nenhuma tag.
 
    - Se desejar, adicione **tags** para melhor organização.
-> [!NOTE]\
-> As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.
+     > [!NOTE]\
+     > As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.
 
 9. Clique em **"Create security group"**.
 
@@ -455,7 +460,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 > [!NOTE]\
 > Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
 
-  7.3. Em **Firewall (Security Groups)**:
+7.3. Em **Firewall (Security Groups)**:
 
 - Escolha a opção **"Select existing security group"**.
 - Selecione o **Security Group** criado anteriormente, no meu caso, **"security-group-project"**.
@@ -551,13 +556,19 @@ A saída inicial pode ser algo como:
 ```
 
 > [!NOTE]\
-> - O primeiro caractere indica o tipo: `-` (arquivo), `d` (diretório), `l` (link simbólico).  
-> - Os próximos nove caracteres representam permissões em três grupos:  
-> - `r` (read), `w` (write) e `x` (execute).
->   - **Usuário (dono)**: `rwx` (leitura, escrita e execução).  
->   - **Grupo**: `r-x` (leitura e execução, sem escrita).  
->   - **Outros**: `r-x` (leitura e execução, sem escrita).  
-> - Exemplo: `-rwxr-xr-x` → É um `arquivo` onde: O dono pode tudo, o grupo e outros podem ler e executar.
+> O primeiro caractere indica o tipo: `-` (arquivo), `d` (diretório), `l` (link simbólico).
+>
+> Os próximos nove caracteres representam permissões em três grupos:
+>
+> `r` (read), `w` (write) e `x` (execute).
+>
+> **Usuário (dono)**: `rwx` (leitura, escrita e execução).
+>
+> **Grupo**: `r-x` (leitura e execução, sem escrita).
+>
+> **Outros**: `r-x` (leitura e execução, sem escrita).
+>
+> Exemplo: `-rwxr-xr-x` → É um `arquivo` onde: O dono pode tudo, o grupo e outros podem ler e executar.
 
 1.7. Ajuste as permissões da chave para garantir segurança na conexão:
 
@@ -611,7 +622,7 @@ telnet SEU_IP_AQUI 22
 
 3.2. Se a conexão for bem-sucedida, aparecerá uma mensagem do tipo:
 
-```Connected to SEU_IP_AQUI```
+`Connected to SEU_IP_AQUI`
 
 3.3. Digite `q` e pressione **Enter** para sair.
 
@@ -629,7 +640,7 @@ ssh -i key-project.pem ubuntu@SEU_IP_AQUI
 
 4.3. Se a conexão for bem-sucedida, a saída incluirá uma mensagem similar a:
 
-```Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)```
+`Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1021-aws x86_64)`
 
 ![img35.png](assets/img35.png)
 
@@ -676,7 +687,6 @@ sudo apt install nginx -y
 ```bash
 nginx -v
 ```
-
 
 2.3. Agora, vamos iniciar o Nginx e verificar se está funcionando corretamente:
 
@@ -729,16 +739,19 @@ scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-A
 2.2. Volte para o terminal conectado à instância e execute os comando:
 
 Vai mover sua pasta com o site que está na sua máquina para a sua instância:
+
 ```bash
 sudo mv /home/ubuntu/site-projeto1-compassuol/* /var/www/html/
 ```
 
 Caminhe até a pasta onde você enviou a pasta com os arquivos do site:
+
 ```bash
 cd /var/www/html
 ```
 
 Liste para conferir se está lá:
+
 ```bash
 ls
 ```
@@ -826,7 +839,7 @@ Isso assegura que o serviço seja inicializado automaticamente no boot do sistem
 sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
 ```
 
-  ![img44.png](assets/img44.png)
+![img44.png](assets/img44.png)
 
 - Adicione as seguintes linhas à seção `[Service]`:
 
@@ -835,12 +848,12 @@ Restart=always
 RestartSec=30
 ```
 
-  ![img45.png](assets/img45.png)
+![img45.png](assets/img45.png)
 
-  > [!NOTE]\
-  > **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
-  >
-  > **RestartSec=30**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
+> [!NOTE]\
+> **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
+>
+> **RestartSec=30**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
 
 Recarregue o sistema para aplicar as alterações:
 
@@ -851,9 +864,11 @@ sudo systemctl daemon-reload
 5.4. Teste se a reinicialização automática funcionou simulando uma falha da seguinte maneira:
 
 - Obtenha o ID do processo (PID) do Nginx com o comando:
+
 ```bash
 ps aux | grep nginx
 ```
+
 - O PID do processo mestre do Nginx será o número exibido antes de `nginx: master process`.
 
 Mate o processo do Nginx (simulando uma falha) com o comando:
@@ -892,43 +907,45 @@ Assim que a reinicialização estiver completa, o Nginx voltará a ficar ativo e
 
 ## 🤖 Criando o Bot no Telegram
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 Abra o Telegram e pesquise por `BotFather` e clique nele:
 
 ![img-bot1.png](assets/img-bot1.png)
 
 - Dê um `/newbot` para criar um novo bot
 - Escolha um nome para o bot, no meu caso `teste`
-- Escolha um username pro seu bot (tem que terminar com `_bot`). 
-   - No meu caso `exemploTestePB2503_bot`
+- Escolha um username pro seu bot (tem que terminar com `_bot`).
+  - No meu caso `exemploTestePB2503_bot`
 - Ele vai te mandar uma mensagem e você vai clicar nesse link com a setinha:
 
 ![img-bot2.png](assets/img-bot2.png)
 
 > [!WARNING]\
 > ⚠️ SALVE o token `to access the HTTP API`, no meu caso, está borrado por
-segurança.
+> segurança.
 
 Clique em `Start`:
 
 ![img-bot3.png](assets/img-bot3.png)
 
-Instale o utilitário jq (para manipular JSON): 
+Instale o utilitário jq (para manipular JSON):
+
 ```bash
-sudo apt install jq -y 
+sudo apt install jq -y
 ```
 
 Faz uma requisição à API do Telegram para obter atualizações do bot e formata a resposta JSON usando jq:
+
 ```bash
 curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
 ```
 
-Sua mensagem pode sair algo tipo: 
-`
-{
+Sua mensagem pode sair algo tipo:
+`{
    "ok":true,
    "result":[]
-}
-`
+}`
 
 ![img47.png](assets/img47.png)
 
@@ -956,14 +973,16 @@ Agora nessa saída aparecerá o chat_id (apontado com a setinha):
 [🔼 Voltar ao Sumário](#sumário-)
 
 ### 1.1. Criação das Pastas de Logs
+
 Criando a pasta `monitoramento` dentro de `/var/log`
 
 ```bash
 sudo mkdir -p /var/log/monitoramento
 ```
 
-Criando os três arquivos de log: 
-1. Arquivo `servico_online.log`: 
+Criando os três arquivos de log:
+
+1. Arquivo `servico_online.log`:
 2. Arquivo `servico_offline.log`:
 3. Arquivo `geral.log`:
 
@@ -987,10 +1006,15 @@ sudo chmod -R 755 /var/log/monitoramento
 
 > [!NOTE]\
 > Altera as permissões para garantir que você tenha permissão para ler, escrever e executar arquivos nessa pasta, enquanto outros usuários podem apenas ler e executar.
+>
 > r = 4, w = 2, x = 1
+>
 > 7 = 4 + 2 + 1 = rwx
+>
 > 5 = 4 + 1 = r-x
+>
 > Permissão de leitura e escrita e execução para propritário
+>
 > Permissão de leitura e execução para grupo e outros
 
 Verifique novamente os arquivos e permissões:
@@ -1003,12 +1027,15 @@ ls -l /var/log/monitoramento/
 
 Mude também a permissão dos arquivos:
 
-``` bash
+```bash
 sudo chmod 666 /var/log/monitoramento/geral.log /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log
 ```
+
 > [!NOTE]\
 > r = 4, w = 2, x = 1
+>
 > 6 = 4 + 2 = rw-
+>
 > Permissão de leitura e escrita para propritário, grupo e outros
 
 #### 1.3. Criação da Pasta para Scripts
@@ -1021,6 +1048,8 @@ sudo mkdir -p /usr/local/bin/monitoramento/scripts
 
 ## 🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 Criando o arquivo de script `monitorar_site.sh`.
 
 ```bash
@@ -1028,6 +1057,7 @@ sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 ## ❗Explicação do Script
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 [🦘 Pular para o fim da Explicação](#22-dando-permissões-de-execução-ao-script)
@@ -1038,8 +1068,8 @@ Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL
 
 > [!IMPORTANT]\
 > O código completo está nesse link, eu vou colocar todo o
-código abaixo, mas explicando cada detalhe. Então se quiser
-copiar ou baixar, abra o link.
+> código abaixo, mas explicando cada detalhe. Então se quiser
+> copiar ou baixar, abra o link.
 
 ### 1️⃣ - `Shebang` e `variáveis de configuração`
 
@@ -1055,27 +1085,32 @@ LOG_OFFLINE="/var/log/monitoramento/servico_offline.log"
 ```
 
 #### 📌 Passo a passo:
+
 1. Shebang `#!/usr/bin/env bash`
-- Isso define qual interpretador será usado para executar o script.  
-- Neste caso, ele usa **`bash`**, e o comando `env` garante que o shell correto seja encontrado no ambiente, independentemente do caminho exato do `bash` no sistema.  
+
+- Isso define qual interpretador será usado para executar o script.
+- Neste caso, ele usa **`bash`**, e o comando `env` garante que o shell correto seja encontrado no ambiente, independentemente do caminho exato do `bash` no sistema.
 
 2. Definição das `variáveis de configuração`.
-O script define algumas variáveis importantes que serão usadas mais tarde.
+   O script define algumas variáveis importantes que serão usadas mais tarde.
 
-##### 🔹 **Variáveis do Telegram**  
-- **`BOT_TOKEN`**: Token de autenticação do bot no Telegram (fornecido pelo BotFather).  
+##### 🔹 **Variáveis do Telegram**
+
+- **`BOT_TOKEN`**: Token de autenticação do bot no Telegram (fornecido pelo BotFather).
 - **`CHAT_ID`**: ID do chat ou grupo onde os alertas serão enviados. (obtido pelo arquivo json utilizando jq)
 
 Se esses valores não forem preenchidos corretamente, o script não conseguirá enviar mensagens para o Telegram.
 
-##### 🔹 **Variáveis de logs**  
-- **`LOGS`**: Arquivo principal de log, onde todas as verificações serão registradas.  
-- **`LOG_ONLINE`**: Guarda apenas os registros quando o site estiver **online**.  
-- **`LOG_OFFLINE`**: Guarda apenas os registros quando o site estiver **offline**.  
+##### 🔹 **Variáveis de logs**
+
+- **`LOGS`**: Arquivo principal de log, onde todas as verificações serão registradas.
+- **`LOG_ONLINE`**: Guarda apenas os registros quando o site estiver **online**.
+- **`LOG_OFFLINE`**: Guarda apenas os registros quando o site estiver **offline**.
 
 Esses arquivos serão criados automaticamente se não existirem.
 
 ### 2️⃣ - `Variáveis de cor` e Função `verificar_configuracao`
+
 ```bash
 # Defina as variáveis de cor
 COR_OK="\033[32m"
@@ -1093,21 +1128,23 @@ verificar_configuracao() {
 ```
 
 #### 📌 Passo a passo:
+
 1. Definição das `Variáveis de Cor`
 
 Essas variáveis são **códigos de escape ANSI** que definem cores para exibir mensagens coloridas no terminal.  
 Cada uma representa uma cor diferente:
 
-- **`COR_OK="\033[32m"`** → **Verde** (usado para mensagens de sucesso ✅)  
-- **`COR_ALERTA="\033[31m"`** → **Vermelho** (usado para erros ⚠️)  
-- **`COR_INFO="\033[34m"`** → **Azul** (usado para informações ℹ️)  
-- **`COR_RESET="\033[0m"`** → **Restaura a cor original do terminal**  
+- **`COR_OK="\033[32m"`** → **Verde** (usado para mensagens de sucesso ✅)
+- **`COR_ALERTA="\033[31m"`** → **Vermelho** (usado para erros ⚠️)
+- **`COR_INFO="\033[34m"`** → **Azul** (usado para informações ℹ️)
+- **`COR_RESET="\033[0m"`** → **Restaura a cor original do terminal**
 
-Exemplo de uso:  
+Exemplo de uso:
 
 ```bash
 echo -e "${COR_OK}Tudo certo!${COR_RESET}"
 ```
+
 A razão para usar duas variáveis de cor (${COR_OK} e ${COR_RESET}) é garantir que somente o texto desejado fique colorido, sem afetar o restante do terminal.
 
 ${COR_OK} → Muda a cor do texto para verde (\033[32m).
@@ -1118,7 +1155,8 @@ ${COR_RESET} → Restaura a cor padrão do terminal (\033[0m), garantindo que qu
 
 2. Função `verificar_configuracao()`
 
-🔍 **O que essa função faz?**  
+🔍 **O que essa função faz?**
+
 - **Verifica se as variáveis `BOT_TOKEN` e `CHAT_ID` estão preenchidas corretamente.**
 - Se **alguma delas estiver vazia** (`-z "$VARIAVEL"` verifica se a variável está vazia) **ou ainda contiver o valor padrão** (`PREENCHA AQUI O TOKEN GERADO PELO BOT`), significa que o usuário esqueceu de configurar as credenciais.
 - Nesse caso, o script exibe uma mensagem de erro em **vermelho** (`COR_ALERTA`) e finaliza a execução com `exit 1`.
@@ -1126,6 +1164,7 @@ ${COR_RESET} → Restaura a cor padrão do terminal (\033[0m), garantindo que qu
 Esse erro impede que o script continue, garantindo que as credenciais estejam corretas antes de tentar enviar mensagens.
 
 ### 3️⃣ - Função `verificar_conexao_telegram` e `criar_pastas_arquivos`
+
 ```bash
 # Função para verificar a conexão com a API do Telegram
 verificar_conexao_telegram() {
@@ -1153,12 +1192,12 @@ criar_pastas_arquivos() {
 }
 ```
 
-
 ### 1. Função `verificar_conexao_telegram`
 
 Essa função verifica se a conexão com a API do Telegram está funcionando corretamente.
 
 📌 **Passo a passo**:
+
 1. **`curl -s -o /dev/null -w "%{http_code}"`** → Faz uma requisição HTTP para a API do Telegram sem exibir a saída no terminal.
    - `-s` → Modo silencioso (sem exibir detalhes).
    - `-o /dev/null` → Descarta a resposta da API, já que só queremos o código HTTP.
@@ -1170,29 +1209,37 @@ Essa função verifica se a conexão com a API do Telegram está funcionando cor
 🔹 **Objetivo**: Garantir que o BOT_TOKEN seja válido antes de seguir para outras etapas.
 
 ### 2. Função `criar_pastas_arquivos`
+
 Essa função garante que os diretórios e arquivos de log existam antes de serem usados.
 
 📌 **Passo a passo**:
-1. **Loop sobre os arquivos de log**  
+
+1. **Loop sobre os arquivos de log**
+
    - `$LOGS`, `$LOG_ONLINE` e `$LOG_OFFLINE` são verificados um por um.
 
-2. **Verifica se o arquivo existe (`! -e "$log_file"`)**  
+2. **Verifica se o arquivo existe (`! -e "$log_file"`)**
+
    - Se **não** existir, continua a execução.
 
-3. **Obtém o diretório do arquivo**  
+3. **Obtém o diretório do arquivo**
+
    - `dirname "$log_file"` pega apenas o caminho do diretório (sem o nome do arquivo).
 
-4. **Verifica se o diretório existe (`! -d "$dir_name"`)**  
+4. **Verifica se o diretório existe (`! -d "$dir_name"`)**
+
    - Se **não** existir, exibe uma mensagem ⚠️ e cria o diretório com `mkdir -p`.
 
-5. **Cria o arquivo de log se necessário**  
+5. **Cria o arquivo de log se necessário**
    - Se o arquivo de log não existir, ele é criado com `touch "$log_file"`.
 
-🔹 **Objetivo**:  
-- Evitar erros por falta de arquivos ou diretórios.  
-- Criar os arquivos/diretórios dinamicamente, garantindo que o script rode sem problemas.  
+🔹 **Objetivo**:
+
+- Evitar erros por falta de arquivos ou diretórios.
+- Criar os arquivos/diretórios dinamicamente, garantindo que o script rode sem problemas.
 
 ### 4️⃣ - Função `enviar alerta`
+
 ```bash
 # Função para enviar alerta para o Telegram
 enviar_alerta() {
@@ -1208,35 +1255,38 @@ Esse bloco contém a função **`enviar_alerta`**, que é responsável por envia
 
 📌 **Passo a passo**:
 
-1. **`local MENSAGEM="$1"`**  
+1. **`local MENSAGEM="$1"`**
+
    - O primeiro argumento passado para a função (`$1`) é armazenado na variável `MENSAGEM`. Essa será a mensagem que será enviada para o Telegram.
 
-2. **`echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"`**  
+2. **`echo -e "${COR_INFO}🔔 Enviando alerta para o Telegram...${COR_RESET}"`**
+
    - Antes de enviar a mensagem, a função exibe uma mensagem de status informando que o alerta está sendo enviado para o Telegram.
    - A cor da mensagem é azul (definido por `${COR_INFO}`), e o reset de cor é feito no final com `${COR_RESET}`.
 
-3. **`curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage"`**  
+3. **`curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage"`**
+
    - Utiliza o `curl` para fazer uma requisição `POST` para a API do Telegram.
    - O `-s` faz com que o `curl` rode de forma silenciosa (sem mostrar detalhes da requisição).
 
 4. **Parâmetros da requisição**:
    - **`-d "chat_id=$CHAT_ID"`**: Envia o ID do chat para o qual a mensagem será enviada.
    - **`-d "text=$MENSAGEM"`**: Envia o texto da mensagem (definido pela variável `MENSAGEM`).
-   
-5. **`> /dev/null 2>&1`**  
+5. **`> /dev/null 2>&1`**
    - Essa parte redireciona a saída da requisição para `/dev/null`, ou seja, descarta qualquer saída ou erro gerado pela requisição do `curl`.
 
 🔹 **Objetivo**:  
 Enviar um alerta para o Telegram no chat definido, com a mensagem fornecida à função.
 
 ### 5️⃣ Função `verificar_status_site`
+
 ```bash
 # Função para verificar o status do site
 verificar_status_site() {
    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
    TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")  # Hora em Virginia
    TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")  # Hora no Brasil
-   
+
    case $STATUS in
       200)
             SITE_STATUS="✅ O site está ONLINE!"
@@ -1260,21 +1310,26 @@ Esse bloco define a função **`verificar_status_site`**, responsável por verif
 
 📌 **Passo a passo**:
 
-1. **`STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)`**  
-   - O comando `curl` verifica a resposta do site no endereço `http://localhost`. 
+1. **`STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)`**
+
+   - O comando `curl` verifica a resposta do site no endereço `http://localhost`.
    - O parâmetro `-s` silencia a saída, enquanto `-o /dev/null` descarta o conteúdo do site.
    - A opção `-w "%{http_code}"` faz com que o `curl` retorne apenas o código HTTP da resposta (por exemplo, `200` para sucesso ou outros códigos de erro).
 
-2. **`TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")`**  
+2. **`TIME_VIRGINIA=$(TZ="America/New_York" date "+%d-%m-%Y %H:%M:%S")`**
+
    - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` no fuso horário de Nova Iorque (EUA), definindo o `TZ` para o fuso horário de Nova Iorque.
 
-3. **`TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")`**  
+3. **`TIME_BRASIL=$(TZ="America/Sao_Paulo" date "+%d-%m-%Y %H:%M:%S")`**
+
    - Obtém a hora atual no formato `dd-mm-yyyy hh:mm:ss` no fuso horário de São Paulo (Brasil), definindo o `TZ` para o fuso horário de São Paulo.
 
-4. **`case $STATUS in`**  
+4. **`case $STATUS in`**
+
    - A estrutura `case` verifica o código de status HTTP recebido.
 
 5. **Se o status for `200`** (site online):
+
    - Define a variável `SITE_STATUS="✅ O site está ONLINE!"`.
    - Registra a mensagem nos logs de "online" e "geral", incluindo a hora de Virgínia e Brasil, com cor verde definida pela variável `${COR_OK}`.
 
@@ -1284,19 +1339,22 @@ Esse bloco define a função **`verificar_status_site`**, responsável por verif
 > [!NOTE]\
 > Esses `status` são códigos de resposta que o servidor envia para indicar o resultado de uma requisição HTTP.
 
-   - Registra a mensagem nos logs de "offline" e "geral", com cor vermelha (alerta) definida por `${COR_ALERTA}`.
+- Registra a mensagem nos logs de "offline" e "geral", com cor vermelha (alerta) definida por `${COR_ALERTA}`.
 
 ### **Resumindo**:
+
 ✔ **`verificar_status_site`** → Verifica o status do site `localhost`, obtém as horas em Virgínia e Brasil, e registra o status nos logs de online ou offline.
-  - Se o status for `200`, o site está online e a mensagem é registrada em verde.
-  - Se o status for outro código, o site está offline e a mensagem é registrada em vermelho.
-  - A data e a hora são registradas tanto em Virgínia quanto no Brasil.
+
+- Se o status for `200`, o site está online e a mensagem é registrada em verde.
+- Se o status for outro código, o site está offline e a mensagem é registrada em vermelho.
+- A data e a hora são registradas tanto em Virgínia quanto no Brasil.
 
 Esse bloco funciona para monitorar a disponibilidade de um site e manter um histórico no formato de logs!
 
 ### 6️⃣ - Funções `verificar_portas` e `reiniciar_nginx`
 
 ### **Função `verificar_portas`**
+
 ```bash
 verificar_portas() {
    # Verifica a porta 80 (HTTP)
@@ -1317,24 +1375,25 @@ verificar_portas() {
 
 📌 **Passo a passo**:
 
-1. **`nc -zv 127.0.0.1 80 &> /dev/null`**  
+1. **`nc -zv 127.0.0.1 80 &> /dev/null`**
+
    - O comando `nc` (Netcat) é usado para verificar se a porta 80 (HTTP) está aberta e acessível na máquina local (`127.0.0.1`).
    - O parâmetro `-z` verifica se a porta está aberta, e `-v` torna a execução mais verbosa. A saída é redirecionada para `/dev/null` para não mostrar nada no terminal.
 
 2. **Estrutura de verificação**:
    - Se a porta 80 estiver aberta, a variável `PORTA_80` é definida com a mensagem "✅ Porta 80 (HTTP) está FUNCIONANDO".
    - Caso contrário, é definida como "⛔ Porta 80 (HTTP) está INDISPONÍVEL".
-   
 3. O mesmo processo é feito para a **porta 443 (HTTPS)**:
    - Verifica se a porta 443 está aberta e acessível.
    - Dependendo do resultado, a variável `PORTA_443` é atualizada com a mensagem correspondente.
 
 ### **Função `reiniciar_nginx`**
+
 ```bash
 reiniciar_nginx() {
    if ! sudo systemctl is-active --quiet nginx; then
       NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"
-      
+
       # Tenta reiniciar o Nginx
       echo -e "${COR_INFO}🔄 Tentando reiniciar o Nginx...${COR_RESET}"
       if sudo systemctl restart nginx > /dev/null 2>&1; then
@@ -1354,11 +1413,13 @@ reiniciar_nginx() {
 📌 **Passo a passo**:
 
 1. **Verificar se o Nginx está ativo**:
-   - **`if ! sudo systemctl is-active --quiet nginx`**: 
+
+   - **`if ! sudo systemctl is-active --quiet nginx`**:
      - Verifica se o serviço do Nginx está ativo. O comando `systemctl is-active --quiet nginx` retorna um status silencioso.
      - Se o serviço não estiver ativo, o comando dentro do `if` é executado.
 
 2. **Se o Nginx estiver inativo ou com problema**:
+
    - Define a variável `NGINX_STATUS="⛔ Nginx está INATIVO ou com problema!"`.
    - Em seguida, tenta reiniciar o Nginx com o comando `sudo systemctl restart nginx`.
    - Se o reinício for bem-sucedido, a variável `NGINX_REINICIADO` é atualizada para "✅ Nginx foi REINICIADO com SUCESSO!".
@@ -1375,6 +1436,7 @@ Essas funções ajudam a manter a infraestrutura web operando corretamente, rein
 ### 7️⃣ - Funções `verificar_status_nginx` e `exibir_saida_terminal`
 
 ### **Função `verificar_status_nginx`**
+
 ```bash
 verificar_status_nginx() {
    NGINX_STATUS=""
@@ -1386,10 +1448,8 @@ verificar_status_nginx() {
 📌 **Passo a passo**:
 
 - **Objetivo**: A função `verificar_status_nginx` chama a função `reiniciar_nginx` para garantir que o status do serviço do Nginx seja verificado e, caso necessário, reiniciado.
-  
 - **Variável `NGINX_STATUS`**:
   - A variável `NGINX_STATUS` é inicialmente limpa para garantir que o status mais recente seja exibido.
-  
 - **Chamada de função**:
   - A função `reiniciar_nginx` é chamada para:
     - Verificar se o Nginx está ativo ou não.
@@ -1397,6 +1457,7 @@ verificar_status_nginx() {
     - Realizar verificações posteriores de status do site e das portas.
 
 ### **Função `exibir_saida_terminal`**
+
 ```bash
 exibir_saida_terminal() {
    echo -e "${COR_INFO}🕒 Data e Hora (Virginia): $TIME_VIRGINIA | Data e Hora (Brasil): $TIME_BRASIL${COR_RESET}"
@@ -1426,26 +1487,32 @@ exibir_saida_terminal() {
 📌 **Passo a passo**:
 
 1. **Exibição da Data e Hora**:
+
    - Exibe as datas e horas atuais em Virginia e no Brasil.
    - Utiliza as variáveis `TIME_VIRGINIA` e `TIME_BRASIL` que são formatadas anteriormente.
 
 2. **Status das Portas**:
+
    - Exibe o status das portas 80 (HTTP) e 443 (HTTPS), armazenados nas variáveis `PORTA_80` e `PORTA_443`.
    - A função `verificar_portas` é chamada anteriormente para definir essas variáveis.
 
 3. **Status do Nginx**:
-   - Exibe o status do Nginx, armazenado na variável `NGINX_STATUS`. 
+
+   - Exibe o status do Nginx, armazenado na variável `NGINX_STATUS`.
    - Esta variável é atualizada com base na verificação feita pela função `reiniciar_nginx`.
 
 4. **Reinício do Nginx**:
-   - Exibe o status do reinício do Nginx, com base na variável `NGINX_REINICIADO`. 
+
+   - Exibe o status do reinício do Nginx, com base na variável `NGINX_REINICIADO`.
    - Essa variável é definida dentro da função `reiniciar_nginx`, dependendo de o Nginx ter sido ou não reiniciado com sucesso.
 
 5. **Status do Site**:
-   - Exibe o status do site, armazenado na variável `SITE_STATUS`. 
+
+   - Exibe o status do site, armazenado na variável `SITE_STATUS`.
    - Essa variável é preenchida pela função `verificar_status_site`.
 
 6. **Logs**:
+
    - Exibe os caminhos para os arquivos de log, utilizando as variáveis `LOGS`, `LOG_ONLINE`, e `LOG_OFFLINE`.
 
 7. **Mensagem de Sucesso**:
@@ -1456,6 +1523,7 @@ exibir_saida_terminal() {
 ### 8️⃣ - Função `executar_script` e `mensagem para o Telegram`
 
 ### **Função `executar_script`**
+
 ```bash
 executar_script() {
    verificar_configuracao
@@ -1470,7 +1538,7 @@ executar_script() {
 📌 **Passo a passo**:
 
 - **Objetivo**: A função `executar_script` chama todas as funções anteriores em sequência para realizar a execução completa do processo de verificação e configuração.
-  
+
   - **Funções chamadas**:
     - **`verificar_configuracao`**: Verifica a configuração do ambiente.
     - **`verificar_conexao_telegram`**: Verifica a conexão com a API do Telegram.
@@ -1482,6 +1550,7 @@ executar_script() {
 ---
 
 ### **Chamada da Função Principal**
+
 ```bash
 # Chama a função principal para executar o script
 executar_script
@@ -1492,6 +1561,7 @@ executar_script
 ---
 
 ### **Criação da Mensagem Consolidada para o Telegram**
+
 ```bash
 MENSAGEM="
 🕒 Hora (Virginia): $TIME_VIRGINIA
@@ -1521,18 +1591,20 @@ $SITE_STATUS
 
 📌 **Passo a passo**:
 
-- **Objetivo**: Aqui, uma mensagem consolidada é criada para enviar ao Telegram. 
+- **Objetivo**: Aqui, uma mensagem consolidada é criada para enviar ao Telegram.
 - **Variáveis utilizadas**:
+
   - **`$TIME_VIRGINIA`** e **`$TIME_BRASIL`**: Exibem as horas de Virgínia e Brasil, respectivamente.
   - **`$PORTA_80`** e **`$PORTA_443`**: Exibem o status das portas 80 (HTTP) e 443 (HTTPS).
   - **`$NGINX_STATUS`**: Exibe o status atual do Nginx.
   - **`$NGINX_REINICIADO`**: Exibe o status de reinício do Nginx.
   - **`$SITE_STATUS`**: Exibe o status do site.
   - **`$LOGS`, `$LOG_ONLINE`, `$LOG_OFFLINE`**: Exibem os caminhos dos arquivos de log.
-  
+
   O texto é formatado com emojis e informações para facilitar a leitura do alerta enviado.
 
 ### **Envio da Mensagem para o Telegram**
+
 ```bash
 # Enviar a mensagem consolidada para o Telegram
 enviar_alerta "$MENSAGEM"
@@ -1541,6 +1613,7 @@ enviar_alerta "$MENSAGEM"
 📌 **Objetivo**: Aqui, a função `enviar_alerta` é chamada para enviar a mensagem consolidada ao Telegram. A variável `$MENSAGEM` criada anteriormente é passada como parâmetro para essa função.
 
 ### **Exibição das Informações no Terminal**
+
 ```bash
 # Exibe as informações no terminal
 exibir_saida_terminal
@@ -1585,10 +1658,12 @@ Esse bloco finaliza o processo, garantindo que a execução do script seja concl
 ```bash
 sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+
 > [!NOTE]\
 > O comando `sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh` torna o script `monitorar_site.sh` executável, concedendo permissão de execução (`+x`) ao arquivo.
 
 Chame o script para testar:
+
 ```bash
 sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
@@ -1597,7 +1672,6 @@ sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 
 > [!NOTE]\
 > Dá para ver que o script funciona corretamente e que o Telegram notifica.
-
 
 [🔼 Voltar ao Sumário](#sumário-)
 
@@ -1613,7 +1687,7 @@ sudo apt install cron -y
 > O **cron** é uma ferramenta no Linux usada para agendar a execução automática de tarefas ou comandos em horários específicos ou intervalos regulares, como backups, atualizações ou scripts, sem a necessidade de intervenção manual.
 
 Após a instalação, inicie e habilite o serviço do **cron** para que ele inicie automaticamente com o sistema:
-    
+
 ```bash
 sudo systemctl enable cron
 ```
@@ -1625,7 +1699,7 @@ sudo systemctl status cron
 ```
 
 ![img51](assets/img51.png)
- 
+
 Edite o arquivo **crontab** para adicionar o agendamento de execução do script a cada minuto:
 
 ```bash
@@ -1679,11 +1753,11 @@ Agora tente acessar, por exemplo, do seu celular, abrindo o navegador e digitand
 
 > [!NOTE]\
 > Obs: O Script já está automatizado, eu só chamei o arquivo de monitoramento
-do script para poder tirar os prints das telas de forma mais rápida e não ter
-que ficar esperando 1 minuto todas as vezes.
+> do script para poder tirar os prints das telas de forma mais rápida e não ter
+> que ficar esperando 1 minuto todas as vezes.
 >
 > Se você fizer esses passos e quiser ver a automação, é só esperar 1 minuto em
-cada teste.
+> cada teste.
 
 ## 🌐 Testes:
 
@@ -1698,6 +1772,7 @@ cada teste.
 ![img-teste02](assets/img-teste02.png)
 
 ### 3. Não criei o diretório nem os arquivos de log:
+
 ![img-teste03](assets/img-teste03.png)
 
 ### 4. Não criei apenas os arquivos de log:
@@ -1713,9 +1788,11 @@ cada teste.
 ![img-teste06](assets/img-teste06.png)
 
 ### 6.2. A notificação recebida pelo Telegram
+
 ![img-teste07](assets/img-teste07.png)
 
 ### 6.3. A mensagem que aparece no Telegram:
+
 ![img-teste08](assets/img-teste08.png)
 
 ### 7.1. Removi os arquivos de log da pasta do nginx para ele não ser capaz de reiniciar
@@ -1727,11 +1804,13 @@ cada teste.
 ![img-teste10](assets/img-teste10.png)
 
 ### 8.1. Para corrigir o erro acima, desinstalei o nginx e instalei novamente.
+
 Após isso, parei o serviço para testar:
 
 ![img-teste11](assets/img-teste11.png)
 
 ### 8.2. Mensagem recebida pelo Telegram
+
 ![img-teste12](assets/img-teste12.png)
 
 ### 9. Verificando os arquivos de log em tempo real
@@ -1742,53 +1821,64 @@ tail -f /var/log/monitoramento/geral.log
 
 ![img-teste13](assets/img-teste13.png)
 
-# Etapa Bônus: Automação com UserData 🎁 
+# Etapa Bônus: Automação com UserData 🎁
 
 ## ❗Explicação do UserData
+
+[🔼 Voltar ao Sumário](#sumário-)
+
 [🦘 Pular para o fim da Explicação](#-como-usar-o-userdata)
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/userdata.sh" target="_blank">📎 Arquivo UserData</a>
 
 > [!IMPORTANT]\
 > O código completo está nesse link, eu vou colocar todo o
-código abaixo, mas explicando cada detalhe. Então se quiser
-copiar ou baixar, abra o link.
+> código abaixo, mas explicando cada detalhe. Então se quiser
+> copiar ou baixar, abra o link.
 
 O script `userdata` descrito é utilizado para configurar um servidor Linux (Ubuntu) com Nginx e preparar a infraestrutura para monitoramento de um site.
 
 ---
 
 ### **1. Atualizar o Sistema e Instalar Pacotes Necessários**
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
+
 - **Objetivo:** Atualiza a lista de pacotes disponíveis (`apt update`) e instala as atualizações de pacotes (`apt upgrade -y`) para garantir que o sistema esteja com as versões mais recentes de todos os pacotes.
 
 ---
 
 ### **2. Instalar o Nginx**
+
 ```bash
 sudo apt install nginx -y
 ```
+
 - **Objetivo:** Instala o servidor web Nginx no sistema. O `-y` permite que a instalação seja realizada sem solicitar confirmação.
 
 ---
 
 ### **3. Iniciar o Nginx**
+
 ```bash
 sudo systemctl start nginx
 ```
+
 - **Objetivo:** Inicia o serviço Nginx, permitindo que ele comece a responder às requisições HTTP.
 
 ---
 
 ### **4. Configurar o Git para Sparse-Checkout**
+
 ```bash
 cd /tmp
 git init
 git remote add origin https://github.com/andrrade/Project1-CompassUOL-DevSecOps.git
 git config core.sparseCheckout true
 ```
+
 - **Objetivo:** Prepara o ambiente para fazer o **sparse-checkout**, uma técnica que permite fazer o download de uma parte específica de um repositório Git, em vez de todo o repositório.
   - `git init`: Inicializa um repositório Git local.
   - `git remote add origin`: Adiciona o repositório remoto do GitHub.
@@ -1797,30 +1887,37 @@ git config core.sparseCheckout true
 ---
 
 ### **5. Garantir que o conteúdo da pasta `meu-site/` seja baixado**
+
 ```bash
 echo "meu-site/*" >> .git/info/sparse-checkout
 ```
+
 - **Objetivo:** Especifica que o conteúdo dentro do diretório `meu-site/` deve ser baixado do repositório Git.
 
 ---
 
 ### **6. Baixar os Arquivos da Branch Main**
+
 ```bash
 git pull origin main
 ```
+
 - **Objetivo:** Baixa os arquivos da branch `main` do repositório Git e os coloca no diretório local do repositório.
 
 ---
 
 ### **7. Mover os Arquivos para o Diretório do Nginx**
+
 ```bash
 sudo mv /tmp/meu-site/* /var/www/html/
 ```
+
 - **Objetivo:** Move os arquivos do diretório `meu-site/` (baixados do repositório) para o diretório padrão do Nginx (`/var/www/html/`), onde os arquivos de site são armazenados.
 
 ---
 
 ### **8. Configurar o Nginx para Servir os Arquivos**
+
 ```bash
 sudo nano /etc/nginx/sites-available/default <<EOF
 server {
@@ -1836,27 +1933,33 @@ server {
 }
 EOF
 ```
+
 - **Objetivo:** Configura o Nginx para servir o conteúdo do diretório `/var/www/html/`, incluindo a configuração de escuta na porta 80 e a tentativa de resolver arquivos e diretórios solicitados.
 
 ---
 
 ### **9. Reiniciar o Nginx para Aplicar as Configurações**
+
 ```bash
 sudo systemctl restart nginx
 ```
+
 - **Objetivo:** Reinicia o serviço Nginx para aplicar as novas configurações feitas no arquivo de configuração.
 
 ---
 
 ### **10. Habilitar o Nginx para Iniciar no Boot**
+
 ```bash
 sudo systemctl enable nginx
 ```
+
 - **Objetivo:** Configura o Nginx para iniciar automaticamente sempre que o sistema for reiniciado.
 
 ---
 
 ### **11. Configurar o Nginx para Reiniciar Automaticamente em Caso de Falhas**
+
 ```bash
 sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service <<EOF
 [Service]
@@ -1864,92 +1967,114 @@ Restart=always
 RestartSec=30
 EOF
 ```
+
 - **Objetivo:** Configura o Nginx para reiniciar automaticamente caso ocorra uma falha. O parâmetro `RestartSec=30` define um intervalo de 30 segundos antes da tentativa de reinício.
 
 ---
 
 ### **12. Atualizar o Sistema de Serviços**
+
 ```bash
 sudo systemctl daemon-reload
 ```
+
 - **Objetivo:** Atualiza o sistema de serviços para que ele reconheça as novas configurações do Nginx.
 
 ---
 
 ### **13. Criar Diretórios e Arquivos de Log**
+
 ```bash
 sudo mkdir -p /var/log/monitoramento
 sudo touch /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log /var/log/monitoramento/geral.log
 ```
+
 - **Objetivo:** Cria diretórios e arquivos de log necessários para monitoramento do serviço, como logs de status online e offline do site.
 
 ---
 
 ### **14. Ajustar Permissões dos Arquivos de Log**
+
 ```bash
 sudo chmod -R 755 /var/log/monitoramento
 sudo chmod 666 /var/log/monitoramento/geral.log /var/log/monitoramento/servico_online.log /var/log/monitoramento/servico_offline.log
 ```
+
 - **Objetivo:** Ajusta as permissões dos diretórios e arquivos de log para garantir que o sistema possa escrever nesses arquivos.
 
 ---
 
 ### **15. Criar Diretório para Scripts de Monitoramento**
+
 ```bash
 sudo mkdir -p /usr/local/bin/monitoramento/scripts
 ```
+
 - **Objetivo:** Cria um diretório onde scripts de monitoramento serão armazenados.
 
 ---
 
 ### **16. Baixar o Script de Monitoramento**
+
 ```bash
 cd /tmp
 curl -o /usr/local/bin/monitoramento/scripts/monitorar_site.sh https://raw.githubusercontent.com/andrrade/Project1-CompassUOL-DevSecOps/main/monitorar_site.sh
 ```
+
 - **Objetivo:** Baixa o script de monitoramento a partir do repositório GitHub e o salva no diretório `/usr/local/bin/monitoramento/scripts/`.
 
 ---
 
 ### **17. Tornar o Script Executável**
+
 ```bash
 sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+
 - **Objetivo:** Torna o script de monitoramento executável.
 
 ---
 
 ### **18. Instalar o Cron**
+
 ```bash
 sudo apt install cron -y
 ```
+
 - **Objetivo:** Instala o serviço de agendamento de tarefas `cron` no sistema, permitindo agendar a execução de tarefas repetitivas.
 
 ---
 
 ### **19. Habilitar o Serviço Cron para Iniciar no Boot**
+
 ```bash
 sudo systemctl enable cron
 ```
+
 - **Objetivo:** Configura o cron para iniciar automaticamente quando o sistema for reiniciado.
 
 ---
 
 ### **20. Configurar o Cron para Executar o Script a Cada 1 Minuto**
+
 ```bash
 echo "*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh" | sudo crontab -
 ```
+
 - **Objetivo:** Configura o cron para executar o script de monitoramento a cada 1 minuto.
 
 ---
 
 ### **21. Finalização**
+
 ```bash
 echo "Configuração completa. O servidor está pronto."
 ```
+
 - **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
 
 ### 💡 Como usar o UserData
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 Na hora que você estiver criando a instância EC2, a Última opção será `Advanced details`.
@@ -1966,15 +2091,19 @@ só criar a instância.
 > ⚠️ Lembre-se de executar os seguintes passos também:
 
 1. **Configuração do Security Group:**
+
    - Ao criar o Security Group, configure a regra HTTP para permitir acesso de qualquer IP (`0.0.0.0/0`).
 
 2. **Seguir a Documentação:**
+
    - Execute o passo a passo da documentação, mas pare antes da **Etapa 2**, pois a partir desse ponto, o processo é automatizado com o uso do `UserData`.
 
 3. **Criação do Bot do Telegram:**
+
    - Execute os passos para criar o bot do Telegram.
 
 4. **Acessar a Instância e Configurar o Script:**
+
    - Acesse a instância pelo terminal e edite o script de monitoramento:
 
      ```bash
@@ -1984,6 +2113,7 @@ só criar a instância.
    - Preencha as variáveis `BOT_TOKEN` e `CHAT_ID` com seus dados.
 
 5. **Testar o Script:**
+
    - Você pode aguardar o script rodar automaticamente, já que ele está configurado para ser executado automaticamente.
    - Para testar manualmente, execute o seguinte comando:
 
@@ -1992,15 +2122,17 @@ só criar a instância.
      ```
 
 ## 📈 Experiência sobre o Projeto
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 Gostei bastante de participar do Projeto 1 da trilha! Foi uma experiência bastante desafiadora, mas extremamente gratificante. Durante o projeto, tive a oportunidade de aprender muitas coisas novas, especialmente sobre a configuração de servidores, monitoramento e automação de processos, que eram áreas com as quais eu ainda não tinha muita familiaridade.
 
 O projeto me incentivou a estudar mais e a buscar entender cada detalhe do processo. Cada desafio foi uma oportunidade de aprofundar meu conhecimento e de aplicar novas habilidades de forma prática. Também percebi como a documentação é essencial, então me dediquei a detalhar cada passo do processo para garantir que tudo fosse bem compreendido, tanto por mim quanto por outras pessoas que possam acompanhar o projeto no futuro. Detalhar cada etapa me ajudou a consolidar o que aprendi e a criar um material útil para futuras implementações ou ajustes.
 
-Esse projeto realmente despertou em mim a vontade de continuar estudando e explorando novas tecnologias e soluções. 
+Esse projeto realmente despertou em mim a vontade de continuar estudando e explorando novas tecnologias e soluções.
 
 ## 🔗 Extra - Exemplo
+
 [🔼 Voltar ao Sumário](#sumário-)
 
 Esse é um link exemplo para você ver como estava meu site no servidor: [Projeto 1 - Servidor](https://project1-compass-uol-dev-sec-ops.vercel.app/)
