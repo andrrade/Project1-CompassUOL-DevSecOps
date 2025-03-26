@@ -578,8 +578,11 @@ chmod 400 key-project.pem
 
 > [!NOTE]\
 > Modo numérico (octal):
+>
 > r = 4, w = 2, x = 1
+>
 > 400 = r
+>
 > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
 
 1.8. Verifique novamente as permissões:
@@ -731,8 +734,9 @@ scp -i "~/key-project.pem" -r "/mnt/c/Users/andra/OneDrive/Documentos/Project1-A
 ```
 
 > [!NOTE]\
-> Preencha com o caminho onde você guardou a sua chave e onde está o seu site. Tamém não se esqueça de preencher com
-> o endereço IP da sua instância.
+> Preencha com o caminho onde você guardou a sua chave e onde está o seu site.
+>
+> Tamém não se esqueça de preencher com o endereço IP da sua instância.
 
 ![img39.png](assets/img39.png)
 
