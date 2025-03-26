@@ -901,7 +901,7 @@ sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
-[📎 Arquivo Script](https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh){:target="_blank"}
+<a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
 
 #### 2.2. Dando Permissões de Execução ao Script
 
