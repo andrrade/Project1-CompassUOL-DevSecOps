@@ -83,8 +83,7 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 > [!IMPORTANT]\
 > **Observação:** Minha console está em inglês. Caso os nomes dos menus estejam diferentes na sua, pode ser devido ao idioma configurado.
-
-> [!IMPORTANT]\
+>
 > Tudo que aparecer borrado foi para priorizar a segurança
 
 ---
@@ -124,6 +123,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 > [!NOTE]\
 > **O que é IPv4 CIDR block?**
+>
 > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
 
    ![image03](assets/img03.png)
@@ -134,18 +134,22 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 > [!NOTE]\
 > **O que é IPv6 CIDR block?**
+>
 > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
 
    - **Tenancy**: "Default"
+
 > [!NOTE]\
 > **O que é Tenancy?**
+>
 > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
 
    - **Número de AZs (Availability Zones)**: 2
    - Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
 
-> **O que são Availability Zones (AZs)?**
 > [!NOTE]\
+> **O que são Availability Zones (AZs)?**
+>
 > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
 
    ![image04](assets/img04.png)
@@ -174,24 +178,28 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 > [!NOTE]\
 > **O que é NAT Gateway?**
+>
 > Um NAT Gateway permite que instâncias em subnets privadas acessem a internet sem serem diretamente acessíveis por ela.
 
    - **VPC Endpoints:** Selecione "S3 Gateway"
 
 > [!NOTE]\
 > **O que são VPC Endpoints e S3 Gateway?**
+>
 > Um **VPC Endpoint** permite que recursos dentro da VPC se comuniquem com serviços da AWS sem passar pela internet. O **S3 Gateway** é um tipo de endpoint usado para acessar o Amazon S3 de forma segura e eficiente.
 
    - **Habilitar DNS:** Marque as opções "Enable DNS hostnames" e "Enable DNS resolution"
 
 > [!NOTE]\
 > **O que é DNS e por que habilitá-lo?**
+>
 > O DNS (Domain Name System) traduz endereços IP em nomes legíveis. Habilitá-lo permite que instâncias dentro da VPC se comuniquem mais facilmente usando nomes ao invés de IPs.
 
    - **Tags:** Não adicionei tags extras
 
 > [!NOTE]\
 > **O que são Tags?**
+>
 > Tags são rótulos personalizáveis usados para organizar e identificar recursos dentro da AWS, facilitando a administração.
 
 8. Clique em **"Create VPC"** para finalizar a configuração.
@@ -236,9 +244,9 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 
 5. O download da chave privada será feito automaticamente.
 
-   > [!WARNING]\
-   > ⚠️ **Guarde esse arquivo em um local seguro** e LEMBRE do lugar que você
-   > a armazenar, pois ele será necessário para acessar a instância EC2 posteriormente.
+> [!WARNING]\
+> ⚠️ **Guarde esse arquivo em um local seguro** e LEMBRE do lugar que você
+> a armazenar, pois ele será necessário para acessar a instância EC2 posteriormente.
 
 6. Não adicionei nenhuma tag
 
@@ -287,8 +295,9 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
      - **Protocolo**: TCP
      - **Port Range**: 22
      - **Source (Origem)**: **My IP** (recomendado por causa da seguraça)
-       > [!NOTE]\
-       > Permite que **apenas o seu IP atual** acesse a instância via SSH. Isso evita acessos indesejados.
+
+> [!NOTE]\
+> Permite que **apenas o seu IP atual** acesse a instância via SSH. Isso evita acessos indesejados.
 
    - **HTTP (porta 80)**
      - **Tipo**: HTTP
@@ -296,10 +305,12 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
      - **Port Range**: 80
      - **Source (Origem)**: **My IP** (inicialmente por causa da segurança,
        após todas as configurações, deixaremos como **0.0.0.0/0**)
-       > [!NOTE]\
-       > Permite apenas o seu IP acessar o servidor web (por enquanto).
-       > Após todas as configurações será necessário mudar a origem do HTTP para
-       > **0.0.0.0/0**, permitindo que qualquer usuário da internet acesse a página hospedada na instância.
+
+> [!NOTE]\
+> Permite apenas o seu IP acessar o servidor web (por enquanto).
+>
+> Após todas as configurações será necessário mudar a origem do HTTP para
+> **0.0.0.0/0**, permitindo que qualquer usuário da internet acesse a página hospedada na instância.
 
    ![image16](assets/img16.png)
 
@@ -423,16 +434,16 @@ Tags
 
 - **Subnet**: Selecione a **sub-rede pública** correspondente à sua região principal.
 
-  > [!NOTE]\
-  > A **sub-rede pública** é fundamental, pois ela garante que sua instância EC2 tenha conectividade externa, o que é essencial para disponibilizar serviços como um servidor web acessível pela internet.
+> [!NOTE]\
+> A **sub-rede pública** é fundamental, pois ela garante que sua instância EC2 tenha conectividade externa, o que é essencial para disponibilizar serviços como um servidor web acessível pela internet.
 
-  > [!NOTE]\
-  > No meu caso, a VPC foi criada nas regiões **Virgínia (us-east-1)** e **Ohio (us-east-2)**, então escolhi a sub-rede pública de Virgínia: `"public1-us-east-1a"`.
+> [!NOTE]\
+> No meu caso, a VPC foi criada nas regiões **Virgínia (us-east-1)** e **Ohio (us-east-2)**, então escolhi a sub-rede pública de Virgínia: `"public1-us-east-1a"`.
 
 - **Auto-assign Public IP**: Marque **Enable**.
 
-  > [!NOTE]\
-  > Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
+> [!NOTE]\
+> Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
 
   7.3. Em **Firewall (Security Groups)**:
 
@@ -824,8 +835,10 @@ sudo kill -9 <PID>
 ```
 
 > [!NOTE]\
-> O comando kill -9 é usado em sistemas Unix/Linux para forçar o encerramento de um processo. Vamos quebrar o comando:
+> O comando kill -9 é usado em sistemas Unix/Linux para forçar o encerramento de um processo.
+>
 > kill: É um comando utilizado para enviar sinais a processos. Por padrão, o comando envia o sinal SIGTERM (sinal 15), que solicita que o processo termine de maneira graciosa, permitindo que ele faça a limpeza de recursos e finalize suas atividades.
+>
 > -9: Representa o sinal SIGKILL (sinal 9), que é um sinal mais forte e imediato. Ele força a finalização do processo sem dar a chance de o processo realizar qualquer tipo de limpeza. Isso significa que o processo será encerrado imediatamente, sem aviso ou chance de salvar dados.
 
 - Substitua `<PID>` pelo ID do processo mestre do Nginx.
@@ -846,6 +859,7 @@ Assim que a reinicialização estiver completa, o Nginx voltará a ficar ativo e
 
 > [!NOTE]\
 > Usar curl no Bash ou requests no Python para testar a resposta do site
+>
 > Configurar um bot do Telegram ou webhook do Discord/Slack para receber alertas
 
 ## 🤖 Criando o Bot no Telegram
@@ -859,9 +873,10 @@ Escolha um username pro seu bot, tem que terminar com `_bot`. No
 meu caso `exemploTestePB2503_bot`
 Ele vai te mandar uma mensagem e você vai clicar nesse link com a setinha.
 
-> [!ALERT]\
+> [!WARNING]\
 > ⚠️ SALVE o token to access the HTTP API, no meu caso, está borrado por
 segurança.
+
 ![img-bot2.png](assets/img-bot2.png)
 
 Clique em `Start`
@@ -894,10 +909,9 @@ Agora nessa saída aparecerá o chat_id:
 
 ![img48](assets/img48.png)
 
-> [!ALERT]\
-> ⚠️ SALVA o chat_id, no meu caso está borrado por
+> [!WARNING]\
+> ⚠️ SALVAR o chat_id, no meu caso está borrado por
 segurança.
-
 
 ## 🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.
 
@@ -1488,8 +1502,8 @@ exibir_saida_terminal
 Esse bloco finaliza o processo, garantindo que a execução do script seja concluída com sucesso e que o usuário seja notificado tanto no terminal quanto no Telegram.
 
 ### **📜 Resumo**:
-- **`verificar_configuracao`**: Verifica se as variáveis essenciais (`BOT_TOKEN` e `CHAT_ID`) estão corretamente preenchidas.
 
+**`verificar_configuracao`**: Verifica se as variáveis essenciais (`BOT_TOKEN` e `CHAT_ID`) estão corretamente preenchidas.
 
 **`verificar_conexao_telegram`**: Verifica a conexão com a API do Telegram para garantir que o `BOT_TOKEN` esteja correto e funcionando.
 
@@ -1575,7 +1589,7 @@ Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme 
 
 Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
 
-> [!ALERT]\
+> [!WARNING]\
 > ⚠️ Deixar HTTP do security group como 0.0.0.0/0
 
 Agora que as configurações já foram feitas, podemos deixar o
@@ -1600,12 +1614,10 @@ http://IP_DA_INSTANCIA
 [🔼 Voltar ao Sumário](#sumário-)
 
 > [!NOTE]\
-> ⚠️ Deixar HTTP do security group como 0.0.0.0/0
 > Obs: O Script já está automatizado, eu só chamei o arquivo de monitoramento
 do script para poder tirar os prints das telas de forma mais rápida e não ter
 que ficar esperando 1 minuto todas as vezes.
-
-> [!NOTE]\
+>
 > Se você fizer esses passos e quiser ver a automação, é só esperar 1 minuto em
 cada teste.
 
