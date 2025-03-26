@@ -54,6 +54,9 @@
 ## Experiência sobre o Projeto
 - [📈 Experiência sobre o Projeto](#-experiência-sobre-o-projeto)
 
+## Extra - Exemplo
+- [📈 Experiência sobre o Projeto](#-experiência-sobre-o-projeto)
+
 --- 
 
 ## 🔧 Ferramentas Úteis
@@ -1902,6 +1905,35 @@ só criar a instância.
 
 ![img-ud2](assets/img-ud2.png)
 
+> [!WARNING]\
+> ⚠️ Lembre-se de executar os seguintes passos também:
+
+1. **Configuração do Security Group:**
+   - Ao criar o Security Group, configure a regra HTTP para permitir acesso de qualquer IP (`0.0.0.0/0`).
+
+2. **Seguir a Documentação:**
+   - Execute o passo a passo da documentação, mas pare antes da **Etapa 2**, pois a partir desse ponto, o processo é automatizado com o uso do `UserData`.
+
+3. **Criação do Bot do Telegram:**
+   - Execute os passos para criar o bot do Telegram.
+
+4. **Acessar a Instância e Configurar o Script:**
+   - Acesse a instância pelo terminal e edite o script de monitoramento:
+
+     ```bash
+     sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+     ```
+
+   - Preencha as variáveis `BOT_TOKEN` e `CHAT_ID` com seus dados.
+
+5. **Testar o Script:**
+   - Você pode aguardar o script rodar automaticamente, já que ele está configurado para ser executado automaticamente.
+   - Para testar manualmente, execute o seguinte comando:
+
+     ```bash
+     sudo /usr/local/bin/monitoramento/scripts/monitorar_site.sh
+     ```
+
 ## 📈 Experiência sobre o Projeto
 [🔼 Voltar ao Sumário](#sumário-)
 
@@ -1914,7 +1946,8 @@ Esse projeto realmente despertou em mim a vontade de continuar estudando e explo
 Esse é um link exemplo para você ver como estava meu site no servidor:
 https://project1-compass-uol-dev-sec-ops.vercel.app/
 
-## 🔗 Extra
+## 🔗 Extra - Exemplo
+[🔼 Voltar ao Sumário](#sumário-)
 Esse é um link exemplo para você ver como estava meu site no servidor: [Projeto 1 - Servidor](https://project1-compass-uol-dev-sec-ops.vercel.app/)
 
 <p align="center">
