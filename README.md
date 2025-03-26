@@ -5,6 +5,7 @@
 
 # Documentação do 1º Projeto - DevSecOps ♾️
 
+> [!NOTE]\
 > Orientações:
 >
 > - Explicar os comandos usados na documentação.
@@ -43,8 +44,8 @@
 - [🌐 3. Configurar o script para rodar automaticamente](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron-ou-systemd-timers)
 
 ## Etapa 4: Autmoação e Testes
-- [🌐 Automação:](#-automação)
-- [🌐 Testes:](#-testes)
+- [🌐 Automação](#-automação)
+- [🌐 Testes](#-testes)
 
 ## Etapa Bônus
 - [❗Explicação do UserData](#explicação-do-userdata)
@@ -69,19 +70,23 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 - **Conta ativa na AWS**
 
+  > [!NOTE]\
   > **O que é AWS?**
   > Amazon Web Services (AWS) é uma plataforma de computação em nuvem que fornece infraestrutura sob demanda, como servidores, armazenamento e bancos de dados, permitindo que desenvolvedores criem e escalem aplicações rapidamente.
 
 - **WSL instalado no PC (caso esteja utilizando Windows)**
 
+  > [!NOTE]\
   > **O que é WSL?**
   > O Windows Subsystem for Linux (WSL) permite rodar um ambiente Linux diretamente no Windows sem precisar de uma máquina virtual, facilitando o desenvolvimento e administração de servidores remotos.
 
 - Guia de instalação do Ubuntu no Windows: [How to install Ubuntu on Windows 10 from Microsoft Store](https://www.youtube.com/watch?v=La8jIAAANSA&t=203s)
 - Documentação do WSL: [Documentação do Subsistema Windows para Linux | Microsoft Learn](https://learn.microsoft.com/pt-br/windows/wsl/)
 
+> [!IMPORTANT]\
 > **Observação:** Minha console está em inglês. Caso os nomes dos menus estejam diferentes na sua, pode ser devido ao idioma configurado.
 
+> [!IMPORTANT]\
 > Tudo que aparecer borrado foi para priorizar a segurança
 
 ---
@@ -107,11 +112,18 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 3. Nas configurações:
 
    - Selecione **"VPC and more"**.
+     > [!NOTE]\
      > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
+
    - Marque "Auto-generate"
+
+     > [!NOTE]\
      > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
+
    - Defina um nome para sua VPC (exemplo: "project")
    - Defina o **IPv4 CIDR block** como **10.0.0.0/16**
+
+     > [!NOTE]\
      > **O que é IPv4 CIDR block?**
      > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
 
@@ -121,11 +133,12 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - Selecione **No IPv6 CIDR block**
 
+     > [!NOTE]\
      > **O que é IPv6 CIDR block?**
      > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
 
    - **Tenancy**: "Default"
-
+     > [!NOTE]\
      > **O que é Tenancy?**
      > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
 
@@ -133,12 +146,14 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
    - Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
 
    > **O que são Availability Zones (AZs)?**
+   > [!NOTE]\
    > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
 
    ![image04](assets/img04.png)
 
 5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
 
+   > [!NOTE]\
    > **O que são subnets públicas e privadas?**
    >
    > - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
@@ -148,6 +163,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 6. Configure o CIDR block das subnets como **10.0.0.0/20**.
 
+   > [!NOTE]\
    > **O que significa CIDR block das subnets como 10.0.0.0/20?**
    > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
 
@@ -157,21 +173,25 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - **NAT Gateways ($):** "None"
 
+   > [!NOTE]\
    > **O que é NAT Gateway?**
    > Um NAT Gateway permite que instâncias em subnets privadas acessem a internet sem serem diretamente acessíveis por ela.
 
    - **VPC Endpoints:** Selecione "S3 Gateway"
 
+   > [!NOTE]\
    > **O que são VPC Endpoints e S3 Gateway?**
    > Um **VPC Endpoint** permite que recursos dentro da VPC se comuniquem com serviços da AWS sem passar pela internet. O **S3 Gateway** é um tipo de endpoint usado para acessar o Amazon S3 de forma segura e eficiente.
 
    - **Habilitar DNS:** Marque as opções "Enable DNS hostnames" e "Enable DNS resolution"
 
+   > [!NOTE]\
    > **O que é DNS e por que habilitá-lo?**
    > O DNS (Domain Name System) traduz endereços IP em nomes legíveis. Habilitá-lo permite que instâncias dentro da VPC se comuniquem mais facilmente usando nomes ao invés de IPs.
 
    - **Tags:** Não adicionei tags extras
 
+   > [!NOTE]\
    > **O que são Tags?**
    > Tags são rótulos personalizáveis usados para organizar e identificar recursos dentro da AWS, facilitando a administração.
 
@@ -194,6 +214,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 - **Chave pública**: Fica armazenada na AWS e é associada à instância.
 - **Chave privada**: Deve ser baixada e armazenada localmente pelo usuário. Ela é necessária para autenticação SSH.
 
+> [!ALERT]\
 > ⚠️ **Atenção**: Se você perder a chave privada, **não poderá acessar sua instância EC2**.
 
 ### Passo a passo::
@@ -216,6 +237,7 @@ As **Key Pairs** (pares de chaves) são utilizadas para acessar a instância EC2
 
 5. O download da chave privada será feito automaticamente.
 
+   > [!ALERT]\
    > ⚠️ **Guarde esse arquivo em um local seguro** e LEMBRE do lugar que você
    > a armazenar, pois ele será necessário para acessar a instância EC2 posteriormente.
 
@@ -266,6 +288,7 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
      - **Protocolo**: TCP
      - **Port Range**: 22
      - **Source (Origem)**: **My IP** (recomendado por causa da seguraça)
+       > [!NOTE]\
        > Permite que **apenas o seu IP atual** acesse a instância via SSH. Isso evita acessos indesejados.
 
    - **HTTP (porta 80)**
@@ -274,6 +297,7 @@ As **Inbound Rules** determinam quais conexões externas podem acessar a instân
      - **Port Range**: 80
      - **Source (Origem)**: **My IP** (inicialmente por causa da segurança,
        após todas as configurações, deixaremos como **0.0.0.0/0**)
+       > [!NOTE]\
        > Permite apenas o seu IP acessar o servidor web (por enquanto).
        > Após todas as configurações será necessário mudar a origem do HTTP para
        > **0.0.0.0/0**, permitindo que qualquer usuário da internet acesse a página hospedada na instância.
@@ -293,12 +317,14 @@ As **Outbound Rules** definem quais conexões **a instância pode iniciar** para
 
    ![image17](assets/img17.png)
 
+   > [!NOTE]\
    > Isso permite que a instância **acesse qualquer serviço na internet**, como atualizações de pacotes e APIs externas.
 
 8. **Tags (Opcional)**  
    Não adicionei nenhuma tag.
 
    - Se desejar, adicione **tags** para melhor organização.
+     > [!NOTE]\
      > As tags são úteis para identificar recursos, especialmente em ambientes grandes com várias instâncias.
 
 9. Clique em **"Create security group"**.
@@ -338,6 +364,7 @@ A **instância EC2 (Elastic Compute Cloud)** é um **servidor virtual na nuvem**
 
 Tags
 
+> [!ALERT]\
 > ⚠️ **Nota**: No meu caso, utilizei **tags privadas**, então não posso mostrá-las.  
 > No entanto, é **altamente recomendado** que você adicione suas próprias tags para facilitar a identificação dos recursos na AWS, especialmente em ambientes de produção.
 
@@ -351,6 +378,7 @@ Tags
 
 - Escolha a imagem **Ubuntu Server 24.04 LTS**.
 
+> [!NOTE]\
 > A **AMI (Amazon Machine Image)** é uma imagem pré-configurada que contém o sistema operacional e, opcionalmente, aplicativos necessários para iniciar a instância EC2. O **Ubuntu Server** foi escolhido devido à sua popularidade, leveza, segurança e suporte comunitário robusto. Além disso, a distribuição Ubuntu é amplamente utilizada em ambientes de produção, o que a torna uma escolha sólida para este projeto.
 
 ![img22.png](assets/img22.png)
@@ -363,6 +391,7 @@ Tags
 
 - Escolha **t2.micro**.
 
+> [!NOTE]\
 > A instância **t2.micro** é parte do **Free Tier da AWS**, permitindo que novos usuários utilizem esta instância gratuitamente por até **750 horas mensais**. Com **1 vCPU e 1 GiB de memória RAM**, essa instância é adequada para rodar um servidor web simples com Nginx e o script de monitoramento. A **família T2** também oferece **créditos de CPU burstável**, permitindo que a instância lide com picos de uso sem impactar o desempenho.
 
 ![img24.png](assets/img24.png)
@@ -376,6 +405,7 @@ Tags
 - Escolha a **Key Pair** que foi criada anteriormente.
 - No meu caso, escolhi a chave **"key-project"**.
 
+> [!NOTE]\
 > A **Key Pair** é necessária para acessar a instância via SSH. Sem essa chave, você não conseguirá realizar o login na instância.
 
 ![img25.png](assets/img25.png)
@@ -394,12 +424,15 @@ Tags
 
 - **Subnet**: Selecione a **sub-rede pública** correspondente à sua região principal.
 
+  > [!NOTE]\
   > A **sub-rede pública** é fundamental, pois ela garante que sua instância EC2 tenha conectividade externa, o que é essencial para disponibilizar serviços como um servidor web acessível pela internet.
 
+  > [!NOTE]\
   > No meu caso, a VPC foi criada nas regiões **Virgínia (us-east-1)** e **Ohio (us-east-2)**, então escolhi a sub-rede pública de Virgínia: `"public1-us-east-1a"`.
 
 - **Auto-assign Public IP**: Marque **Enable**.
 
+  > [!NOTE]\
   > Isso atribui um IP público à instância, permitindo que você a acesse via **SSH** e também a torne acessível externamente (essencial para um servidor web).
 
   7.3. Em **Firewall (Security Groups)**:
@@ -407,6 +440,7 @@ Tags
 - Escolha a opção **"Select existing security group"**.
 - Selecione o **Security Group** criado anteriormente, chamado **"security-group-project"**.
 
+> [!NOTE]\
 > O **Security Group** age como um firewall virtual, controlando o tráfego de entrada e saída da instância EC2. Ele garante que apenas o tráfego autorizado, como acesso SSH, seja permitido.
 
 7.4. Em **Advanced networking configuration**, **não alterei nada** (deixei os valores padrão).
@@ -419,6 +453,7 @@ Tags
 
 8.1. Em **Configure Storage**, defina o armazenamento para **1x8 GiB gp3**.
 
+> [!NOTE]\
 > A **gp3** é uma opção de armazenamento sólido (SSD) com bom custo-benefício, adequada para a maioria dos casos de uso, incluindo servidores web simples.
 
 8.2. Clique em **"Launch Instance"** para finalizar o processo de criação da instância.
@@ -439,6 +474,7 @@ Tags
 
 1.1. Abra o seu WSL e navegue até o diretório onde a chave de acesso (Key Pair) foi armazenada:
 
+> [!IMPORTANT]\
 > Lembre-se de onde você armazenou a chave no começo
 
 No meu caso, foi:
@@ -471,6 +507,7 @@ Ou:
 cd ~
 ```
 
+> [!NOTE]\
 > Prefiro e utilizo o cd por ser mais rápido e dar mais agilidade
 
 1.5. Liste os arquivos para confirmar se a chave foi copiada corretamente:
@@ -493,6 +530,7 @@ A saída inicial pode ser algo como:
 -rwxr-xr-x 1 root root ...
 ```
 
+> [!NOTE]\
 > O primeiro conjunto de caracteres representa as permissões do arquivo:
 >
 > - `r` (read), `w` (write) e `x` (execute).
@@ -504,6 +542,7 @@ A saída inicial pode ser algo como:
 chmod 400 key-project.pem
 ```
 
+> [!NOTE]\
 > Isso restringe as permissões para que apenas o usuário dono da chave possa lê-la, garantindo maior segurança.
 
 1.8. Verifique novamente as permissões:
@@ -572,6 +611,7 @@ ssh -i key-project.pem ubuntu@SEU_IP_AQUI
 
 [🔼 Voltar ao Sumário](#sumário-)
 
+> [!NOTE]\
 > Orientações:
 >
 > - Personalizar a página com informações sobre o projeto.
@@ -625,6 +665,7 @@ sudo systemctl status nginx
 
 ![img38.png](assets/img38.png)
 
+> [!IMPORTANT]\
 > **Resultado esperado**: O Nginx deve estar ativo e em execução.
 
 ---
@@ -637,8 +678,9 @@ Eu deixei minha pasta com os arquivos do site na pasta:
 
 `/mnt/c/Users/andra/OneDrive/Documentos/Project1-AWS/site-projeto1-compassuol/`
 
+> [!NOTE]\
 > Você pode criar o seu site como preferir e lembrar do local onde o guardou.
->
+> [!IMPORTANT]\
 > Também disponibilizei nessa documentação os arquivos que criei na pasta chamada **"meu-site"**, que contém o mesmo conteúdo dos resultados apresentados a seguir.
 
 2.1. Abra seu WSL sem ser o que tem a instância, o da sua
@@ -757,6 +799,7 @@ RestartSec=30
 
   ![img45.png](assets/img45.png)
 
+  > [!NOTE]\
   > **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
   >
   > **RestartSec=30**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
@@ -780,7 +823,11 @@ Mate o processo do Nginx (simulando uma falha) com o comando:
 ```bash
 sudo kill -9 <PID>
 ```
-> Explicar o kill -9
+
+> [!NOTE]\
+> O comando kill -9 é usado em sistemas Unix/Linux para forçar o encerramento de um processo. Vamos quebrar o comando:
+> kill: É um comando utilizado para enviar sinais a processos. Por padrão, o comando envia o sinal SIGTERM (sinal 15), que solicita que o processo termine de maneira graciosa, permitindo que ele faça a limpeza de recursos e finalize suas atividades.
+> -9: Representa o sinal SIGKILL (sinal 9), que é um sinal mais forte e imediato. Ele força a finalização do processo sem dar a chance de o processo realizar qualquer tipo de limpeza. Isso significa que o processo será encerrado imediatamente, sem aviso ou chance de salvar dados.
 
 - Substitua `<PID>` pelo ID do processo mestre do Nginx.
 - Verifique o status do Nginx:
@@ -798,6 +845,7 @@ Assim que a reinicialização estiver completa, o Nginx voltará a ficar ativo e
 
 [🔼 Voltar ao Sumário](#sumário-)
 
+> [!NOTE]\
 > Usar curl no Bash ou requests no Python para testar a resposta do site
 > Configurar um bot do Telegram ou webhook do Discord/Slack para receber alertas
 
@@ -811,6 +859,8 @@ Escolha um nome para o bot, no meu caso `teste`
 Escolha um username pro seu bot, tem que terminar com `_bot`. No
 meu caso `exemploTestePB2503_bot`
 Ele vai te mandar uma mensagem e você vai clicar nesse link com a setinha.
+
+> [!ALERT]\
 > ⚠️ SALVE o token to access the HTTP API, no meu caso, está borrado por
 segurança.
 ![img-bot2.png](assets/img-bot2.png)
@@ -844,6 +894,8 @@ curl https://api.telegram.org/botSEU_TOKEN/getUpdates | jq
 Agora nessa saída aparecerá o chat_id:
 
 ![img48](assets/img48.png)
+
+> [!ALERT]\
 > ⚠️ SALVA o chat_id, no meu caso está borrado por
 segurança.
 
@@ -882,6 +934,7 @@ Mudando a propriedade dos arquivos e pastas para o usuário atual.
 sudo chmod -R 755 /var/log/monitoramento
 ```
 
+> [!NOTE]\
 > Altera as permissões para garantir que você tenha permissão para ler, escrever e executar arquivos nessa pasta, enquanto outros usuários podem apenas ler e executar.
 
 Verifique novamente os arquivos e permissões:
@@ -923,6 +976,7 @@ Script que verifica se o serviço está online ou offline e grava a informação
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
 
+> [!IMPORTANT]\
 > O código completo está nesse link, eu vou colocar todo o
 código abaixo, mas explicando cada detalhe. Então se quiser
 copiar ou baixar, abra o link.
@@ -1522,7 +1576,9 @@ Adicione a seguinte linha para rodar o script a cada 5 minutos (ajuste conforme 
 
 Para salvar e sair do editor `nano`, pressione `CTRL + X`, depois `Y` e `ENTER`.
 
-⚠️ Deixar HTTP do security group como 0.0.0.0/0
+> [!ALERT]\
+> ⚠️ Deixar HTTP do security group como 0.0.0.0/0
+
 Agora que as configurações já foram feitas, podemos deixar o
 aberto para todos.
 
@@ -1540,14 +1596,17 @@ http://IP_DA_INSTANCIA
 
 # Etapa 4: Automação e Testes ☁️
 
-[🔼 Voltar ao Sumário](#sumário-)
-
 ## 🌐 Automação:
 
+[🔼 Voltar ao Sumário](#sumário-)
+
+> [!NOTE]\
+> ⚠️ Deixar HTTP do security group como 0.0.0.0/0
 > Obs: O Script já está automatizado, eu só chamei o arquivo de monitoramento
 do script para poder tirar os prints das telas de forma mais rápida e não ter
 que ficar esperando 1 minuto todas as vezes.
 
+> [!NOTE]\
 > Se você fizer esses passos e quiser ver a automação, é só esperar 1 minuto em
 cada teste.
 
@@ -1615,6 +1674,7 @@ tail -f /var/log/monitoramento/geral.log
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/userdata.sh" target="_blank">📎 Arquivo UserData</a>
 
+> [!IMPORTANT]\
 > O código completo está nesse link, eu vou colocar todo o
 código abaixo, mas explicando cada detalhe. Então se quiser
 copiar ou baixar, abra o link.
