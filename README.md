@@ -70,13 +70,13 @@ Antes de iniciar a configuração, certifique-se de que possui os seguintes requ
 
 - **Conta ativa na AWS**
 
-  > [!NOTE]\
-  > **O que é AWS?** Amazon Web Services (AWS) é uma plataforma de computação em nuvem que fornece infraestrutura sob demanda, como servidores, armazenamento e bancos de dados, permitindo que desenvolvedores criem e escalem aplicações rapidamente.
+> [!NOTE]\
+> **O que é AWS?** Amazon Web Services (AWS) é uma plataforma de computação em nuvem que fornece infraestrutura sob demanda, como servidores, armazenamento e bancos de dados, permitindo que desenvolvedores criem e escalem aplicações rapidamente.
 
 - **WSL instalado no PC (caso esteja utilizando Windows)**
 
-  > [!NOTE]\
-  > **O que é WSL?** O Windows Subsystem for Linux (WSL) permite rodar um ambiente Linux diretamente no Windows sem precisar de uma máquina virtual, facilitando o desenvolvimento e administração de servidores remotos.
+> [!NOTE]\
+> **O que é WSL?** O Windows Subsystem for Linux (WSL) permite rodar um ambiente Linux diretamente no Windows sem precisar de uma máquina virtual, facilitando o desenvolvimento e administração de servidores remotos.
 
 - Guia de instalação do Ubuntu no Windows: [How to install Ubuntu on Windows 10 from Microsoft Store](https://www.youtube.com/watch?v=La8jIAAANSA&t=203s)
 - Documentação do WSL: [Documentação do Subsistema Windows para Linux | Microsoft Learn](https://learn.microsoft.com/pt-br/windows/wsl/)
@@ -111,20 +111,20 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - Selecione **"VPC and more"**.
 
-   > [!NOTE]\
-   > Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
+> [!NOTE]\
+> Essa opção permite criar não apenas uma VPC, mas também configurar automaticamente subnets, tabelas de roteamento e gateways necessários para a comunicação da rede. Ao escolher essa opção, a AWS ajuda a configurar um ambiente de rede mais completo sem precisar definir manualmente cada componente.
 
    - Marque "Auto-generate"
 
-   > [!NOTE]\
-   > Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
+> [!NOTE]\
+> Quando essa opção está ativada, a AWS gera automaticamente os CIDR blocks e distribui as subnets nas Availability Zones da região escolhida. Isso simplifica a configuração inicial, garantindo que os endereços IP fiquem organizados corretamente dentro da VPC.
 
    - Defina um nome para sua VPC (exemplo: "project")
    - Defina o **IPv4 CIDR block** como **10.0.0.0/16**
 
-   > [!NOTE]\
-   > **O que é IPv4 CIDR block?**
-   > CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
+> [!NOTE]\
+> **O que é IPv4 CIDR block?**
+> CIDR (Classless Inter-Domain Routing) é um método para definir intervalos de endereços IP. O bloco **10.0.0.0/16** significa que a VPC pode ter até 65.536 endereços IP disponíveis dentro deste intervalo.
 
    ![image03](assets/img03.png)
 
@@ -132,31 +132,30 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
    - Selecione **No IPv6 CIDR block**
 
-   > [!NOTE]\
-   > **O que é IPv6 CIDR block?**
-   > Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
+> [!NOTE]\
+> **O que é IPv6 CIDR block?**
+> Diferente do IPv4, o IPv6 usa um esquema de endereçamento maior e mais complexo. No projeto, optei não utilizar IPv6.
 
    - **Tenancy**: "Default"
-   > [!NOTE]\
-   > **O que é Tenancy?**
-   > Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
+> [!NOTE]\
+> **O que é Tenancy?**
+> Define como os recursos da AWS são alocados. A opção "Default" significa que a VPC compartilhará a infraestrutura física da AWS com outros usuários, reduzindo custos.
 
    - **Número de AZs (Availability Zones)**: 2
    - Customizei para "us-east-1a" (Virgínia) e "us-east-1b" (Ohio)
 
-   > **O que são Availability Zones (AZs)?**
-   > [!NOTE]\
-   > Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
+> **O que são Availability Zones (AZs)?**
+> [!NOTE]\
+> Availability Zones são localizações distintas dentro de uma região AWS. Cada região possui múltiplas AZs, que são centros de dados isolados fisicamente, garantindo maior disponibilidade e tolerância a falhas.
 
    ![image04](assets/img04.png)
 
 5. Como o projeto exige, configurei **duas subnets públicas e duas privadas**.
 
 > [!NOTE]\
-> - **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
-
-> [!NOTE]\
-> - **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
+> **Subnets públicas**: Permitem comunicação direta com a internet através de um Internet Gateway.
+>
+> **Subnets privadas**: Ficam isoladas da internet e precisam de um NAT Gateway para acessar recursos externos.
 
    ![image05](assets/img05.png)
 
@@ -164,6 +163,7 @@ A **Virtual Private Cloud (VPC)** é uma rede virtual isolada dentro da AWS onde
 
 > [!NOTE]\
 > **O que significa CIDR block das subnets como 10.0.0.0/20?**
+>
 > Cada subnet recebe uma parte do bloco de endereços da VPC. **/20** significa que cada subnet pode ter até 4.096 endereços IP disponíveis.
 
    ![image06](assets/img06.png)
