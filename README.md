@@ -1889,7 +1889,7 @@ echo "Configuração completa. O servidor está pronto."
 ```
 - **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
 
-### ## Como usar o UserData?
+### ❔ Como usar o UserData?
 Na hora que você estiver criando a instância EC2, a Última opção será ´Advanced details´.
 Abra essa opção:
 
