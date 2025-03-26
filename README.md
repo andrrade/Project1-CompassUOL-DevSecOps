@@ -898,8 +898,9 @@ Criando o arquivo de script `monitorar_site.sh`.
 ```bash
 sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
+## <details>
+   <summary> ❗Explicação do Script </summary>
 
-## ❗Explicação do Script
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
@@ -1443,6 +1444,10 @@ Esse bloco finaliza o processo, garantindo que a execução do script seja concl
 
 **`exibir_saida_terminal`**: Exibe as informações consolidadas no terminal, incluindo status das portas, do Nginx, do site e dos logs.
 
+</details>
+
+
+
 #### 2.2. Dando Permissões de Execução ao Script
 
 ```bash
@@ -1602,3 +1607,6 @@ copiar ou baixar, abra o link.
 </p>
 
 
+[!IMPORTANT]\
+[!WARNING]\
+[!NOTE]\
