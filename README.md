@@ -35,8 +35,21 @@
 - [🌐 Configurar o Nginx para Servir a Página](#-3-configurar-o-nginx-para-servir-a-página-corretamente)
 
 ## Etapa 3: Monitoramento e Notificações
+- [🤖 Criando o Bot no Telegram](#-criando-o-bot-no-telegram)
+- [🌐 1. Criar um script em Bash ou Python para monitorar a disponibilidade do site.](#-1-criar-um-script-em-bash-ou-python-para-monitorar-a-disponibilidade-do-site)
+- [🌐 2.1. O script deve verificar se o site responde corretamente a uma requisição HTTP.](#-21-o-script-deve-verificar-se-o-site-responde-corretamente-a-uma-requisição-http)
+- [❗Explicação do Script](#explicação-do-script)
+- [2.2. Dando Permissões de Execução ao Script](#22-dando-permissões-de-execução-ao-script)
+- [🌐 3. Configurar o script para rodar automaticamente](#-3-configurar-o-script-para-rodar-automaticamente-a-cada-1-minuto-usando-cron-ou-systemd-timers)
+
 ## Etapa 4: Autmoação e Testes
+- [🌐 Automação:](#-automação)
+- [🌐 Testes:](#-testes)
+
 ## Etapa Bônus
+- [❗Explicação do UserData](#explicação-do-userdata)
+como usar o userdata
+--- 
 
 ## 🔧 Ferramentas Úteis
 
@@ -902,6 +915,10 @@ sudo nano /usr/local/bin/monitoramento/scripts/monitorar_site.sh
 ```
 
 ## ❗Explicação do Script
+[🔼 Voltar ao Sumário](#sumário-)
+
+[🦘 Pular para o fim da Explicação](#22-dando-permissões-de-execução-ao-script)
+
 Script que verifica se o serviço está online ou offline e grava a informação no log:
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/monitorar_site.sh" target="_blank">📎 Arquivo Script</a>
@@ -1417,7 +1434,7 @@ exibir_saida_terminal
 
 Esse bloco finaliza o processo, garantindo que a execução do script seja concluída com sucesso e que o usuário seja notificado tanto no terminal quanto no Telegram.
 
-### **🔥 Resumo**:
+### **📜 Resumo**:
 - **`verificar_configuracao`**: Verifica se as variáveis essenciais (`BOT_TOKEN` e `CHAT_ID`) estão corretamente preenchidas.
 
 
@@ -1446,6 +1463,8 @@ Esse bloco finaliza o processo, garantindo que a execução do script seja concl
 **`exibir_saida_terminal`**: Exibe as informações consolidadas no terminal, incluindo status das portas, do Nginx, do site e dos logs.
 
 #### 2.2. Dando Permissões de Execução ao Script
+
+[🔼 Voltar ao Sumário](#sumário-)
 
 ```bash
 sudo chmod +x /usr/local/bin/monitoramento/scripts/monitorar_site.sh
@@ -1534,6 +1553,8 @@ cada teste.
 
 ## 🌐 Testes:
 
+[🔼 Voltar ao Sumário](#sumário-)
+
 ### 1. Não preenchi os campos de BOT_TOKEN e CHAT_ID:
 
 ![img-teste01](assets/img-teste01.png)
@@ -1590,6 +1611,7 @@ tail -f /var/log/monitoramento/geral.log
 # Etapa Bônus: Automação com UserData 🎁 
 
 ## ❗Explicação do UserData
+[🦘 Pular para o fim da Explicação](#21-finalização)
 
 Abra com Ctrl + Clique: <a href="https://github.com/andrrade/Project1-CompassUOL-DevSecOps/blob/main/userdata.sh" target="_blank">📎 Arquivo UserData</a>
 
@@ -1791,6 +1813,8 @@ echo "*/1 * * * * /usr/local/bin/monitoramento/scripts/monitorar_site.sh" | sudo
 echo "Configuração completa. O servidor está pronto."
 ```
 - **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
+
+## Conclusão
 
 <p align="center">
   <br>
