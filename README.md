@@ -55,7 +55,7 @@
 - [📈 Experiência sobre o Projeto](#-experiência-sobre-o-projeto)
 
 ## Extra - Exemplo
-- [📈 Experiência sobre o Projeto](#-experiência-sobre-o-projeto)
+- [🔗 Extra - Exemplo](#-extra---exemplo)
 
 --- 
 
@@ -1943,11 +1943,9 @@ O projeto me incentivou a estudar mais e a buscar entender cada detalhe do proce
 
 Esse projeto realmente despertou em mim a vontade de continuar estudando e explorando novas tecnologias e soluções. 
 
-Esse é um link exemplo para você ver como estava meu site no servidor:
-https://project1-compass-uol-dev-sec-ops.vercel.app/
-
 ## 🔗 Extra - Exemplo
 [🔼 Voltar ao Sumário](#sumário-)
+
 Esse é um link exemplo para você ver como estava meu site no servidor: [Projeto 1 - Servidor](https://project1-compass-uol-dev-sec-ops.vercel.app/)
 
 <p align="center">
