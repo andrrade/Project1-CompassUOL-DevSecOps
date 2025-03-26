@@ -1792,10 +1792,6 @@ echo "Configuração completa. O servidor está pronto."
 ```
 - **Objetivo:** Exibe uma mensagem de conclusão informando que a configuração foi realizada com sucesso e o servidor está pronto.
 
----
-
-Esse é o passo a passo completo do que o script faz! Se precisar de mais alguma explicação, estou à disposição.
-
 <p align="center">
   <br>
   <img src="assets/compassUol-logo.svg" alt="CompassUOL Logo" width="250">
