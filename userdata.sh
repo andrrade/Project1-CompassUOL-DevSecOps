@@ -49,7 +49,7 @@ sudo systemctl enable nginx
 sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service <<EOF
 [Service]
 Restart=always
-RestartSec=30
+RestartSec=5
 EOF
 
 # Atualizar o sistema de serviços
