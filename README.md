@@ -849,7 +849,7 @@ sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service
 
 ```bash
 Restart=always
-RestartSec=30
+RestartSec=5
 ```
 
 ![img45.png](assets/img45.png)
@@ -857,7 +857,7 @@ RestartSec=30
 > [!NOTE]\
 > **Restart=always**: Garante que o Nginx reinicie sempre que ele falhar.
 >
-> **RestartSec=30**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
+> **RestartSec=5**: Define o tempo de espera (em segundos) antes de tentar reiniciar o Nginx.
 
 Recarregue o sistema para aplicar as alterações:
 
