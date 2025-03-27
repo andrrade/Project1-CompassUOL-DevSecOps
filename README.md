@@ -1968,11 +1968,11 @@ sudo systemctl enable nginx
 sudo nano /etc/systemd/system/multi-user.target.wants/nginx.service <<EOF
 [Service]
 Restart=always
-RestartSec=30
+RestartSec=5
 EOF
 ```
 
-- **Objetivo:** Configura o Nginx para reiniciar automaticamente caso ocorra uma falha. O parâmetro `RestartSec=30` define um intervalo de 30 segundos antes da tentativa de reinício.
+- **Objetivo:** Configura o Nginx para reiniciar automaticamente caso ocorra uma falha. O parâmetro `RestartSec=5` define um intervalo de 30 segundos antes da tentativa de reinício.
 
 ---
 
